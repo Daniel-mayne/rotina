@@ -5,15 +5,15 @@ import { string } from '@ioc:Adonis/Core/Helpers'
 import { DateTime } from 'luxon'
 import { Deal, Export, Notification } from 'App/Models'
 
-const Pusher = require('pusher')
+// const Pusher = require('pusher')
 
-const pusher = new Pusher({
-  appId: '1522784',
-  key: '7fbd89e4e332742eb060',
-  secret: '394afed22ba8cfef2bfa',
-  cluster: 'sa1',
-  useTLS: true,
-})
+// const pusher = new Pusher({
+//   appId: '1522784',
+//   key: '7fbd89e4e332742eb060',
+//   secret: '394afed22ba8cfef2bfa',
+//   cluster: 'sa1',
+//   useTLS: true,
+// })
 
 export default class DealExport implements JobContract {
   public key = 'DealExport'

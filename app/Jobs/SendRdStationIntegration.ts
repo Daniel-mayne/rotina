@@ -2,7 +2,7 @@ import { JobContract } from '@ioc:Rocketseat/Bull'
 import { Customfield, Deal, Integration } from 'App/Models'
 import Env from '@ioc:Adonis/Core/Env'
 const axios = require('axios').default
-import DiscordLogger from '@ioc:Logger/Discord'
+// import DiscordLogger from '@ioc:Logger/Discord'
 
 export default class SendRdStationIntegration implements JobContract {
   public key = 'RdIntegrations'

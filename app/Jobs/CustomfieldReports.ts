@@ -1,15 +1,15 @@
 import { JobContract } from '@ioc:Rocketseat/Bull'
 import { Deal, CustomfieldDeal, CustomfieldReport } from 'App/Models'
 import { DateTime } from 'luxon'
-const Pusher = require('pusher')
+// const Pusher = require('pusher')
 
-const pusher = new Pusher({
-  appId: '1522784',
-  key: '7fbd89e4e332742eb060',
-  secret: '394afed22ba8cfef2bfa',
-  cluster: 'sa1',
-  useTLS: true,
-})
+// const pusher = new Pusher({
+//   appId: '1522784',
+//   key: '7fbd89e4e332742eb060',
+//   secret: '394afed22ba8cfef2bfa',
+//   cluster: 'sa1',
+//   useTLS: true,
+// })
 
 export default class CustomfieldReports implements JobContract {
   public key = 'CustomfieldReports'

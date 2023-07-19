@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import I18n from '@ioc:Adonis/Addons/I18n'
 import { Deal, Pipe } from 'App/Models'
 import Env from '@ioc:Adonis/Core/Env'
-import DiscordLogger from '@ioc:Logger/Discord'
+// import DiscordLogger from '@ioc:Logger/Discord'
 /*
 |--------------------------------------------------------------------------
 | Job setup

@@ -10,7 +10,7 @@ import {
 } from 'App/Models'
 import Bull from '@ioc:Rocketseat/Bull'
 import ValidatePhone from 'App/Jobs/ValidatePhone'
-import DealService from 'App/Services/DealService'
+// import DealService from 'App/Services/DealService'
 /*
 |--------------------------------------------------------------------------
 | Job setup
