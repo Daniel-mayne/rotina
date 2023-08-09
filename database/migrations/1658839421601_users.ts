@@ -8,6 +8,7 @@ export default class UsersSchema extends BaseSchema {
       table.increments('id').primary()
       table.string('name', 255).notNullable()
       table.string('email', 255).notNullable()
+      table.string('phone', 255).notNullable()
       table.string('password', 180).notNullable()
       table.enum('status', ['active', 'deactivated']).notNullable().defaultTo('active')
       table.enum('type', ['user', 'administrator', 'owner']).notNullable().defaultTo('user')

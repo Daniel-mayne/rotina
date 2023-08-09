@@ -10,7 +10,7 @@ export class UpdateValidator {
     email: schema.string.optional({ trim: true }, [rules.email()]),
     type: schema.enum.optional(['user', 'administrator'] as const),
     status: schema.enum.optional(['active', 'deactivated'] as const),
-    defaultPipe: schema.number.optional([rules.exists({ table: 'pipes', column: 'id' })]),
+    // defaultPipe: schema.number.optional([rules.exists({ table: 'pipes', column: 'id' })]),
     password: schema.string.optional({ trim: true }, [
       rules.confirmed('passwordConfirmation'),
       rules.minLength(12),

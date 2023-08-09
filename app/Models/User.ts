@@ -14,7 +14,7 @@ import {
   hasMany,
   HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import { Pipe, Company, Apikey, Deal, Activity } from 'App/Models'
+import {Company, Apikey } from 'App/Models'
 import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -106,8 +106,8 @@ export default class User extends BaseModel {
   @column()
   public picture?: string
 
-  @column()
-  public defaultPipe?: number
+  // @column()
+  // public defaultPipe?: number
 
   @column()
   public rememberMeToken?: string
@@ -128,25 +128,16 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasOne(() => Pipe)
-  public pipeDefault: HasOne<typeof Pipe>
+
 
   @hasMany(() => Apikey)
   public apiKeys: HasMany<typeof Apikey>
 
-  @manyToMany(() => Pipe, {
-    pivotColumns: ['splitter', 'count'],
-  })
-  public pipes: ManyToMany<typeof Pipe>
+ 
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @hasMany(() => Deal)
-  public deals: HasMany<typeof Deal>
-
-  @hasMany(() => Activity)
-  public activities: HasMany<typeof Activity>
 
   @beforeSave()
   public static async hashPassword(user: User) {

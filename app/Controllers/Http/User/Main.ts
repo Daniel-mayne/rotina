@@ -20,11 +20,11 @@ export default class UserController {
       .if(search && search !== 'null' && search !== 'undefined', (query) =>
         query.withScopes((scopes) => scopes.search(search))
       )
-      .if(pipeId && pipeId !== 'null' && pipeId !== 'undefined', (query) =>
-        query.whereHas('pipes', (query) => query.where('pipe_id', pipeId))
-      )
+      // .if(pipeId && pipeId !== 'null' && pipeId !== 'undefined', (query) =>
+      //   query.whereHas('pipes', (query) => query.where('pipe_id', pipeId))
+      // )
       .orderBy(orderColumn, orderDirection)
-      .preload('pipes')
+      // .preload('pipes')
       .preload('company')
       .paginate(page, limit)
   }
@@ -38,17 +38,18 @@ export default class UserController {
 
     await auth.user?.load('company', (query) => query.preload('users'))
 
-    if(auth.user!.company.stripeSubscriptionId){
-      const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
-      const sub = await Stripe.subscriptions.retrieve(`${auth.user!.company.stripeSubscriptionId}`)
-      await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
-    }
+    // if(auth.user!.company.stripeSubscriptionId){
+    //   const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
+    //   const sub = await Stripe.subscriptions.retrieve(`${auth.user!.company.stripeSubscriptionId}`)
+    //   await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
+    // }
 
-    await user.load('pipes'), await user.load('company')
+    // await user.load('pipes'),
+     await user.load('company')
 
-    if (user.defaultPipe) {
-      await user.load('pipeDefault')
-    }
+    // if (user.defaultPipe) {
+    //   await user.load('pipeDefault')
+    // }
 
     await Cache.put(`company/${user.company.id}/user/${user.id}`,  user.toJSON())
 
@@ -71,13 +72,13 @@ export default class UserController {
       .andWhere('company_id', auth.user!.companyId)
       .firstOrFail()
 
-    const preloads = [user.load('pipes')]
+    // const preloads = [user.load('pipes')]
 
-    if (user.defaultPipe) {
-      preloads.push(user.load('pipeDefault'))
-    }
+    // if (user.defaultPipe) {
+    //   preloads.push(user.load('pipeDefault'))
+    // }
 
-    await Promise.all(preloads)
+    // await Promise.all(preloads)
 
     await Cache.put(`company/${auth.user!.companyId}/user/${params.id}`,  user.toJSON(), 604800)
 
@@ -122,12 +123,9 @@ export default class UserController {
       }
     }
 
-    const preloads = [user.load('pipes'), user.load('company')]
+    const preloads = [ user.load('company')]
 
-    if (user.defaultPipe) {
-      preloads.push(user.load('pipeDefault'))
-    }
-
+  
     await Promise.all(preloads)
 
     await Cache.put(`company/${auth.user!.companyId}/user/${user.id}`,  user.toJSON(), 604800)

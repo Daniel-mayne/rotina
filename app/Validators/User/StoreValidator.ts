@@ -16,8 +16,8 @@ export class StoreValidator {
       rules.unique({ table: 'users', column: 'email' }),
     ]),
     type: schema.enum(['user', 'administrator'] as const),
-    defaultPipe: schema.number.optional([rules.exists({ table: 'pipes', column: 'id' })]),
-    sendNotificationWhatsapp: schema.boolean.optional()
+    // defaultPipe: schema.number.optional([rules.exists({ table: 'pipes', column: 'id' })]),
+    // sendNotificationWhatsapp: schema.boolean.optional()
   })
 
   public messages: CustomMessages = {

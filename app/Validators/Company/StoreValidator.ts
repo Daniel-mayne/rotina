@@ -17,7 +17,7 @@ export class StoreValidator {
   })
 
   public messages: CustomMessages = {
-    'required': 'O campo {{ field }} é obrigatório.',
+    'required': 'O campo {{ field }} é obrigatório1.',
     'name.unique': 'Já existe uma empresa com esse nome.',
     'userLimit.range': 'O valor de {{ field }} precisa ser entre 1 e 500.',
     'adminEmail.unique': 'Já existe um usuário com esse email.',
