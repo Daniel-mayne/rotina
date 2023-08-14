@@ -22,6 +22,7 @@ export default Env.rules({
   S3_REGION: Env.schema.string(),
   S3_ENDPOINT: Env.schema.string(),
   S3_DOMAIN: Env.schema.string(),
+  SENDGRID_API: Env.schema.string(),
   // STRIPE_SECRET_KEY: Env.schema.string(),
   // STRIPE_PUBLIC_KEY: Env.schema.string(),
   // OPENAI_KEY: Env.schema.string(),

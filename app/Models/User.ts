@@ -5,10 +5,6 @@ import {
   beforeSave,
   afterCreate,
   BaseModel,
-  hasOne,
-  HasOne,
-  manyToMany,
-  ManyToMany,
   belongsTo,
   BelongsTo,
   hasMany,
@@ -105,9 +101,6 @@ export default class User extends BaseModel {
 
   @column()
   public picture?: string
-
-  // @column()
-  // public defaultPipe?: number
 
   @column()
   public rememberMeToken?: string

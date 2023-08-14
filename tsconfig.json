@@ -36,15 +36,15 @@
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/auth",
       "@adonisjs/lucid",
-      "@rocketseat/adonis-bull",
+      // "@rocketseat/adonis-bull",
       "adonis5-swagger",
       "@adonisjs/drive-s3",
       "@adonisjs/mail",
       "@adonisjs/view",
       "@mezielabs/adonis-stripe",
       "@adonisjs/i18n",
-      "@melchyore/adonis-cache",
-      "@adonisjs/redis"
+      // "@melchyore/adonis-cache",
+      // "@adonisjs/redis"
     ]
   }
 }

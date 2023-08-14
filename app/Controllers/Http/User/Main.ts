@@ -2,7 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
 import Stripe from '@ioc:Mezielabs/Stripe'
-import Cache from '@ioc:Adonis/Addons/Cache'
 
 export default class UserController {
   public async index({ request, auth }: HttpContextContract) {
@@ -12,7 +11,6 @@ export default class UserController {
       orderColumn = 'name',
       orderDirection = 'asc',
       search = null,
-      pipeId = null,
     } = request.qs()
 
     return await User.query()
@@ -20,11 +18,7 @@ export default class UserController {
       .if(search && search !== 'null' && search !== 'undefined', (query) =>
         query.withScopes((scopes) => scopes.search(search))
       )
-      // .if(pipeId && pipeId !== 'null' && pipeId !== 'undefined', (query) =>
-      //   query.whereHas('pipes', (query) => query.where('pipe_id', pipeId))
-      // )
       .orderBy(orderColumn, orderDirection)
-      // .preload('pipes')
       .preload('company')
       .paginate(page, limit)
   }
@@ -44,15 +38,7 @@ export default class UserController {
     //   await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
     // }
 
-    // await user.load('pipes'),
-     await user.load('company')
-
-    // if (user.defaultPipe) {
-    //   await user.load('pipeDefault')
-    // }
-
-    await Cache.put(`company/${user.company.id}/user/${user.id}`,  user.toJSON())
-
+    await user.load('company')
     return user
   }
 
@@ -63,24 +49,10 @@ export default class UserController {
       })
     }
 
-    if(await Cache.has(`company/${auth.user!.companyId}/user/${params.id}`)){
-      return await Cache.get<string>(`company/${auth.user!.companyId}/user/${params.id}`)
-    }
-
     const user = await User.query()
       .where('id', params.id)
       .andWhere('company_id', auth.user!.companyId)
       .firstOrFail()
-
-    // const preloads = [user.load('pipes')]
-
-    // if (user.defaultPipe) {
-    //   preloads.push(user.load('pipeDefault'))
-    // }
-
-    // await Promise.all(preloads)
-
-    await Cache.put(`company/${auth.user!.companyId}/user/${params.id}`,  user.toJSON(), 604800)
 
     return user
   }
@@ -116,20 +88,9 @@ export default class UserController {
 
     if (data.status) {
       await auth.user?.load('company', (query) => query.preload('users'))
-      if(auth.user!.company.stripeSubscriptionId){
-        const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
-        const sub = await Stripe.subscriptions.retrieve(`${auth.user!.company.stripeSubscriptionId}`)
-        await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
-      }
     }
 
-    const preloads = [ user.load('company')]
-
-  
-    await Promise.all(preloads)
-
-    await Cache.put(`company/${auth.user!.companyId}/user/${user.id}`,  user.toJSON(), 604800)
-
+    await user.load('company')
     return user
   }
 
@@ -138,18 +99,6 @@ export default class UserController {
       .where('id', params.id)
       .andWhere('company_id', auth.user!.companyId)
       .firstOrFail()
-    await user.delete()
-
-    await auth.user?.load('company', (query) => query.preload('users'))
-
-    if(auth.user!.company.stripeSubscriptionId){
-      const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
-      const sub = await Stripe.subscriptions.retrieve(`${auth.user!.company.stripeSubscriptionId}`)
-      await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
-    }
-
-    await Cache.forget(`company/${auth.user!.companyId}/user/${user.id}`)
-
-    return
+    return await user.delete()
   }
 }

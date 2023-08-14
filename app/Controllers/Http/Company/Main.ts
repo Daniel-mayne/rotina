@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Company } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Company'
-import Encryption from '@ioc:Adonis/Core/Encryption'
 import Stripe from '@ioc:Mezielabs/Stripe'
 import Env from '@ioc:Adonis/Core/Env'
 
@@ -18,9 +17,6 @@ export default class CompanyController {
       .if(status !== 'all', (query) => query.where('status', status))
       .orderBy(orderColumn, orderDirection)
       .preload('users')
-      // .preload('lostReasons')
-      // .preload('customfields')
-      // .preload('products')
       .paginate(page, limit)
   }
 
@@ -50,12 +46,12 @@ export default class CompanyController {
       .merge({
         ...companyData,
         userLimit: 9999,
-        // status: 'waiting_activation',
+        status: 'waiting_activation',
         // stripeCustomerId: custommerStripe.id,
       })
       .save()
 
-    const user = await company.related('users').create({
+    await company.related('users').create({
       name: adminName,
       password: adminPassword,
       phone: adminPhone,
@@ -64,73 +60,30 @@ export default class CompanyController {
       companyId: company.id,
     })
 
-    // await company
-    //   .related('lostReasons')
-    //   .createMany([
-    //     { reason: 'Interesse - Perdeu o interesse' },
-    //     { reason: 'Engano - Cadastrou por engano' },
-    //     { reason: 'Capital - Sem parte do capital' },
-    //     { reason: 'Capital - Sem 100% do capital' },
-    //     { reason: 'Concorrente - Preço' },
-    //     { reason: 'Concorrente - Qualidade' },
-    //     { reason: 'Concorrente - Condição' },
-    //   ])
-
-    // await company.related('products').create({
-    //   name: 'Produto Inicial',
-    //   sku: '######',
-    //   price: 500,
-    // })
-
-    // await company.related('customfields').createMany([
-    //   { name: 'Email', context: 'deal', type: 'text' },
-    //   { name: 'UTM Source', context: 'deal', type: 'text' },
-    //   { name: 'UTM Medium', context: 'deal', type: 'text' },
-    //   { name: 'UTM Campaign', context: 'deal', type: 'text' },
-    //   { name: 'UTM Content', context: 'deal', type: 'text' },
-    //   { name: 'UTM Term', context: 'deal', type: 'text' },
-    // ])
-
-    // const pipe = await user.related('pipes').create({
-    //   name: 'Funil de vendas',
-    //   companyId: company.id,
-    //   orderNr: 1,
-    //   dailyReports: `${user.email}`,
-    // })
-
-    // await pipe.related('stages').createMany([
-    //   { name: 'Novos', orderNr: 1, rottenFlag: true, rottenDays: 3 },
-    //   { name: 'Tentativa de contato', orderNr: 2, rottenFlag: false },
-    //   { name: 'Em negociação', orderNr: 3, rottenFlag: false },
-    // ])
-
-    const preloads = [
-      company.load('users'),
-      // company.load('lostReasons'),
-      // company.load('customfields'),
-      // company.load('products'),
-    ]
+    const preloads = [company.load('users')]
 
     await Promise.all(preloads)
 
-    // const token = await auth.attempt(adminEmail, adminPassword, { expiresIn: '1 day' })
+    const token = await auth.attempt(adminEmail, adminPassword, { expiresIn: '1 day' })
 
-    // const sgMail = require('@sendgrid/mail')
+    const sgMail = require('@sendgrid/mail')
 
-    // sgMail.setApiKey(Env.get('SENDGRID_API', ''))
+    sgMail.setApiKey(Env.get('SENDGRID_API', ''))
 
-    // await sgMail.send({
-    //   to: adminEmail,
-    //   from: 'no-reply@cubocrm.com.br',
-    //   templateId: 'd-ca8a6879a1df4c8ebaebfc22a3bf1f27',
-    //   dynamicTemplateData: {
-    //     // url: `http://localhost/confirmAccount?token=${token.token}`,
-    //     url: `https://app.cubosuite.com.br/confirmAccount?token=${token.token}`,
-    //   },
-    // })
+    await sgMail.send({
+      to: adminEmail,
+      from: 'no-reply@cubocrm.com.br',
+      templateId: 'd-ca8a6879a1df4c8ebaebfc22a3bf1f27',
+      dynamicTemplateData: {
+        url: `http://localhost/confirmAccount?token=${token.token}`,
+        // url: `https://app.cubosuite.com.br/confirmAccount?token=${token.token}`,
+      },
+    })
 
-    return  company 
+    return company
   }
+
+  //TODO: Fazer funcionalidade de ativar conta
 
   // public async activeAccount({ request, auth, response }: HttpContextContract) {
   //   const company = await Company.query().where('id', auth.user!.companyId).firstOrFail()
@@ -200,12 +153,7 @@ export default class CompanyController {
 
     const company = await Company.query().where('id', params.id).firstOrFail()
 
-    const preloads = [
-      company.load('users'),
-      // company.load('lostReasons'),
-      // company.load('customfields'),
-      // company.load('products'),
-    ]
+    const preloads = [company.load('users')]
 
     await Promise.all(preloads)
     return company
@@ -223,12 +171,7 @@ export default class CompanyController {
 
     await company.merge(data).save()
 
-    const preloads = [
-      company.load('users'),
-      // company.load('lostReasons'),
-      // company.load('customfields'),
-      // company.load('products'),
-    ]
+    const preloads = [company.load('users')]
 
     await Promise.all(preloads)
 
