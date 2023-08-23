@@ -97,7 +97,7 @@ export default class User extends BaseModel {
   public status: 'active' | 'deactivated'
 
   @column()
-  public type: 'user' | 'administrator' | 'owner'
+  public type: 'user' | 'guest' | 'administrator' | 'owner'
 
   @column()
   public picture?: string
@@ -150,3 +150,4 @@ export default class User extends BaseModel {
 
   }
 }
+
