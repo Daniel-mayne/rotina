@@ -11,7 +11,7 @@ import {
   HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import {Company, Apikey } from 'App/Models'
-import { search } from 'adosearch'
+// import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 /**
@@ -75,7 +75,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 export default class User extends BaseModel {
   public static namingStrategy = new CamelCaseNamingStrategy()
 
-  public static search = search(this, ['name', 'phone', 'status', 'email', 'type'])
+  // public static search = search(this, ['name', 'phone', 'status', 'email', 'type'])
 
   public serializeExtras = true
   @column({ isPrimary: true })
