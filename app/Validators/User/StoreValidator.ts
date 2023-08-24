@@ -2,7 +2,7 @@ import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class StoreValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     name: schema.string({ trim: true }),
@@ -16,8 +16,11 @@ export class StoreValidator {
       rules.unique({ table: 'users', column: 'email' }),
     ]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
-    // defaultPipe: schema.number.optional([rules.exists({ table: 'pipes', column: 'id' })]),
-    // sendNotificationWhatsapp: schema.boolean.optional()
+    workLoad: schema.date({ format: 'H:m' }),
+    work_start: schema.date({ format: 'H:m' }),
+    work_end: schema.date({ format: 'H:m' }),
+    lunch_start: schema.date({ format: 'H:m' }),
+    lunch_end: schema.date({ format: 'H:m' })
   })
 
   public messages: CustomMessages = {

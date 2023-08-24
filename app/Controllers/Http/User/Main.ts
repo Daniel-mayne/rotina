@@ -15,9 +15,6 @@ export default class UserController {
 
     return await User.query()
       .where('company_id', auth.user!.companyId)
-      .if(search && search !== 'null' && search !== 'undefined', (query) =>
-        query.withScopes((scopes) => scopes.search(search))
-      )
       .orderBy(orderColumn, orderDirection)
       .preload('company')
       .paginate(page, limit)
