@@ -46,7 +46,7 @@ export default class CompanyController {
       .merge({
         ...companyData,
         userLimit: 9999,
-        status: 'waiting_activation',
+        status: 'active',
         // stripeCustomerId: custommerStripe.id,
       })
       .save()

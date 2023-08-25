@@ -10,7 +10,7 @@ import {
   hasMany,
   HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import {Company, Apikey } from 'App/Models'
+import { Company, Apikey } from 'App/Models'
 // import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -102,6 +102,21 @@ export default class User extends BaseModel {
   @column()
   public picture?: string
 
+  @column.dateTime()
+  public workLoad:  DateTime
+
+   @column.dateTime()
+  public workStart: DateTime
+
+   @column.dateTime()
+  public workEnd: DateTime
+
+   @column.dateTime()
+  public lunchStart: DateTime
+
+   @column.dateTime()
+  public lunchEnd: DateTime
+
   @column()
   public rememberMeToken?: string
 
@@ -126,7 +141,7 @@ export default class User extends BaseModel {
   @hasMany(() => Apikey)
   public apiKeys: HasMany<typeof Apikey>
 
- 
+
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

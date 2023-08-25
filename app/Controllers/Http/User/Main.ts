@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
 import Stripe from '@ioc:Mezielabs/Stripe'
+import { DateTime } from 'luxon'
 
 export default class UserController {
   public async index({ request, auth }: HttpContextContract) {
@@ -23,8 +24,15 @@ export default class UserController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
+    const workStart = data.workStart
+    const workEnd = data.workEnd
+    const lunchStart = data.lunchStart
+    const lunchEnd = data.lunchEnd
+
+   
+
     const user = await new User()
-      .merge({ ...data, companyId: auth.user!.companyId, status: 'active' })
+      .merge({ ...data, workLoad: "workLoad", companyId: auth.user!.companyId, status: 'active' })
       .save()
 
     await auth.user?.load('company', (query) => query.preload('users'))

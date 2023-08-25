@@ -10,7 +10,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('email', 255).notNullable()
       table.string('phone', 255).notNullable()
       table.string('password', 180).notNullable()
-      table.enum('status', ['active', 'deactivated']).notNullable().defaultTo('active')
+      table.enum('status', ['active', 'deactivated', 'waiting_activation']).notNullable().defaultTo('active')
       table.enum('type', ['user', 'guest', 'administrator', 'owner']).notNullable().defaultTo('user')
       table.string('picture', 255).nullable()
       table.time('work_load').notNullable().defaultTo('09:00:00')

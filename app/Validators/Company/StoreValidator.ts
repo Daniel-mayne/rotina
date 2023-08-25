@@ -9,6 +9,7 @@ export class StoreValidator {
     smtpHost: schema.string.optional({ trim: true }),
     smtpPort: schema.string.optional({ trim: true }),
     smtpPassword: schema.string.optional({ trim: true }),
+    userLimit: schema.number.optional(),
     adminName: schema.string({ trim: true }),
     adminEmail: schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'email' })]),
     adminPassword: schema.string({ trim: true }),

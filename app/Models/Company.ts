@@ -22,13 +22,13 @@ export default class Company extends BaseModel {
   public smtpPassword?: string
 
   @column()
-  public userLimit: number
+  public userLimit?: number
 
   @column()
   public refferName?: string
 
   @column()
-  public status: 'active' | 'deactivated' | 'waiting_activation'
+  public status?: 'active' | 'deactivated' | 'waiting_activation'
 
   @column()
   public stripeSubscriptionStatus?: 'active' | 'past_due' | 'unpaid' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'trialing'
