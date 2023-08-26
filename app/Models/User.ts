@@ -109,35 +109,35 @@ export default class User extends BaseModel {
       return value.toFormat('HH:mm:ss')
     }
   })
-  public workLoad: DateTime
+  public workLoad?: DateTime
 
   @column.dateTime({
     serialize: (value: DateTime) => {
       return value.toFormat('HH:mm:ss')
     }
   })
-  public workStart: DateTime
+  public workStart?: DateTime
 
   @column.dateTime({
     serialize: (value: DateTime) => {
       return value.toFormat('HH:mm:ss')
     }
   })
-  public workEnd: DateTime
+  public workEnd?: DateTime
 
   @column.dateTime({
     serialize: (value: DateTime) => {
       return value.toFormat('HH:mm:ss')
     }
   })
-  public lunchStart: DateTime
+  public lunchStart?: DateTime
 
   @column.dateTime({
     serialize: (value: DateTime) => {
       return value.toFormat('HH:mm:ss')
     }
   })
-  public lunchEnd: DateTime
+  public lunchEnd?: DateTime
 
   @column()
   public rememberMeToken?: string

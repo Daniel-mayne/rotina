@@ -16,10 +16,10 @@ export class StoreValidator {
       rules.unique({ table: 'users', column: 'email' }),
     ]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
-    workStart: schema.date.optional(),
-    workEnd: schema.date.optional(),
-    lunchStart: schema.date.optional(),
-    lunchEnd: schema.date.optional()
+    workStart: schema.date(),
+    workEnd: schema.date(),
+    lunchStart: schema.date(),
+    lunchEnd: schema.date()
   })
 
   public messages: CustomMessages = {

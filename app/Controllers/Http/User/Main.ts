@@ -24,8 +24,6 @@ export default class UserController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
-
-
     const workStart: DateTime = data.workStart
     const workEnd: DateTime = data.workEnd
     const lunchStart: DateTime = data.lunchStart
