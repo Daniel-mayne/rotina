@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
 import Stripe from '@ioc:Mezielabs/Stripe'
-import { DateTime } from 'luxon'
+import { DateTime, DateTimeFormatOptions, DateTimeOptions, Duration } from 'luxon'
 
 export default class UserController {
   public async index({ request, auth }: HttpContextContract) {
@@ -24,15 +24,28 @@ export default class UserController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
-    const workStart = data.workStart
-    const workEnd = data.workEnd
-    const lunchStart = data.lunchStart
-    const lunchEnd = data.lunchEnd
 
-   
+
+    const workStart: DateTime = data.workStart
+    const workEnd: DateTime = data.workEnd
+    const lunchStart: DateTime = data.lunchStart
+    const lunchEnd: DateTime = data.lunchEnd
+    const BaseInit: DateTime = DateTime.local().startOf('day');
+
+    const firstInterval: Duration = lunchEnd.diff(lunchStart)
+    const secondInterval: Duration = workEnd.diff(workStart)
+
+    const CalculateTime: Duration = secondInterval.minus(firstInterval)
+
+    const workInit: DateTime = BaseInit.plus(CalculateTime)
+    const workLoad: DateTime = workInit
 
     const user = await new User()
-      .merge({ ...data, workLoad: "workLoad", companyId: auth.user!.companyId, status: 'active' })
+
+
+
+
+      .merge({ ...data, workLoad: workLoad, companyId: auth.user!.companyId, status: 'active' })
       .save()
 
     await auth.user?.load('company', (query) => query.preload('users'))

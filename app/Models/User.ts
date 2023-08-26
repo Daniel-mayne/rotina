@@ -9,6 +9,8 @@ import {
   BelongsTo,
   hasMany,
   HasMany,
+  CherryPick,
+  ModelObject,
 } from '@ioc:Adonis/Lucid/Orm'
 import { Company, Apikey } from 'App/Models'
 // import { search } from 'adosearch'
@@ -102,19 +104,39 @@ export default class User extends BaseModel {
   @column()
   public picture?: string
 
-  @column.dateTime()
-  public workLoad:  DateTime
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
+  public workLoad: DateTime
 
-   @column.dateTime()
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
   public workStart: DateTime
 
-   @column.dateTime()
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
   public workEnd: DateTime
 
-   @column.dateTime()
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
   public lunchStart: DateTime
 
-   @column.dateTime()
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
   public lunchEnd: DateTime
 
   @column()
