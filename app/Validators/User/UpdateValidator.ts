@@ -10,12 +10,15 @@ export class UpdateValidator {
     email: schema.string.optional({ trim: true }, [rules.email()]),
     type: schema.enum.optional(['user', 'guest', 'administrator'] as const),
     status: schema.enum.optional(['active', 'deactivated'] as const),
-    // defaultPipe: schema.number.optional([rules.exists({ table: 'pipes', column: 'id' })]),
     password: schema.string.optional({ trim: true }, [
       rules.confirmed('passwordConfirmation'),
       rules.minLength(12),
     ]),
-    sendNotificationWhatsapp: schema.boolean.optional()
+    sendNotificationWhatsapp: schema.boolean.optional(),
+    workStart: schema.date.optional(),
+    workEnd: schema.date.optional(),
+    lunchStart: schema.date.optional(),
+    lunchEnd: schema.date.optional()
   })
 
   public messages: CustomMessages = {

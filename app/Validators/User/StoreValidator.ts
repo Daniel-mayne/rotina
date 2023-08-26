@@ -16,10 +16,10 @@ export class StoreValidator {
       rules.unique({ table: 'users', column: 'email' }),
     ]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
-    workStart: schema.date(),
-    workEnd: schema.date(),
-    lunchStart: schema.date(),
-    lunchEnd: schema.date()
+    workStart: schema.date.optional(),
+    workEnd: schema.date.optional(),
+    lunchStart: schema.date.optional(),
+    lunchEnd: schema.date.optional()
   })
 
   public messages: CustomMessages = {
@@ -28,6 +28,5 @@ export class StoreValidator {
     'phone.mobile': 'Insira um numero de telefone válido.',
     'email.email': 'Insira um email válido.',
     'email.unique': 'Email já cadastrado.',
-    'defaultPipe.exists': 'Esse funil não existe.',
   }
 }
