@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('smtp_port', 255).nullable()
       table.string('smtp_password', 255).nullable()
       table.integer('user_limit').notNullable().defaultTo(5)
-      table.enum('status', ['active', 'deactivated']).notNullable().defaultTo('active')
+      table.enum('status', ['active', 'deactivated', 'waiting_activation']).notNullable().defaultTo('active')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

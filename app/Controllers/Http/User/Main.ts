@@ -39,12 +39,8 @@ export default class UserController {
     const workLoad: DateTime = workInit
 
     const user = await new User()
-
-
-
-
-      .merge({ ...data, workLoad: workLoad, companyId: auth.user!.companyId, status: 'active' })
-      .save()
+    .merge({ ...data, workLoad: workLoad, companyId: auth.user!.companyId, status: 'active' })
+    .save()
 
     await auth.user?.load('company', (query) => query.preload('users'))
 

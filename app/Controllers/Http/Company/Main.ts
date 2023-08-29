@@ -46,7 +46,7 @@ export default class CompanyController {
       .merge({
         ...companyData,
         userLimit: 9999,
-        status: 'active',
+        status: 'waiting_activation',
         // stripeCustomerId: custommerStripe.id,
       })
       .save()
@@ -75,29 +75,26 @@ export default class CompanyController {
       from: 'no-reply@cubocrm.com.br',
       templateId: 'd-ca8a6879a1df4c8ebaebfc22a3bf1f27',
       dynamicTemplateData: {
-        url: `http://localhost/confirmAccount?token=${token.token}`,
-        // url: `https://app.cubosuite.com.br/confirmAccount?token=${token.token}`,
+        url: `http://127.0.0.1:3333/confirmAccount?token=${token.token}`,
       },
     })
 
     return company
   }
 
-  //TODO: Fazer funcionalidade de ativar conta
+  public async activeAccount({ request, auth, response }: HttpContextContract) {
+    const company = await Company.query().where('id', auth.user!.companyId).firstOrFail()
 
-  // public async activeAccount({ request, auth, response }: HttpContextContract) {
-  //   const company = await Company.query().where('id', auth.user!.companyId).firstOrFail()
+    if (company.status !== 'waiting_activation') {
+      response.badRequest({
+        errors: [{ message: 'Conta já confirmada.' }],
+      })
+    }
 
-  //   if (company.status !== 'waiting_activation') {
-  //     response.badRequest({
-  //       errors: [{ message: 'Conta já confirmada.' }],
-  //     })
-  //   }
+    await company.merge({ status: 'active' }).save()
 
-  //   await company.merge({ status: 'active' }).save()
-
-  //   return true
-  // }
+    return true
+  }
 
   // public async sendInvoice({ auth }: HttpContextContract) {
   //   const company = await Company.query().where('id', auth.user!.companyId).firstOrFail()

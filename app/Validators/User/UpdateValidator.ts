@@ -15,10 +15,10 @@ export class UpdateValidator {
       rules.minLength(12),
     ]),
     sendNotificationWhatsapp: schema.boolean.optional(),
-    workStart: schema.date.optional(),
-    workEnd: schema.date.optional(),
-    lunchStart: schema.date.optional(),
-    lunchEnd: schema.date.optional()
+    workStart: schema.date.optional({}, [rules.trim]),
+    workEnd: schema.date.optional({}, [rules.trim]),
+    lunchStart: schema.date.optional({}, [rules.trim]),
+    lunchEnd: schema.date.optional({}, [rules.trim])
   })
 
   public messages: CustomMessages = {
