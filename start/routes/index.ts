@@ -5,6 +5,7 @@ import './apikey'
 import './company'
 import './file'
 import './user'
+import './customer'
 
 Route.get('/', async () => {
   return { hello: 'world' }
