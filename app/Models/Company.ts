@@ -3,6 +3,7 @@ import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { User } from 'App/Models'
 
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
+import Customer from './Customer'
 
 export default class Company extends BaseModel {
   public static namingStrategy = new CamelCaseNamingStrategy()
@@ -47,5 +48,8 @@ export default class Company extends BaseModel {
 
   @hasMany(() => User)
   public users: HasMany<typeof User>
+
+  @hasMany(()=> Customer)
+  public customers: HasMany<typeof Customer>
 
 }
