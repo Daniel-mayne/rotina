@@ -2,7 +2,7 @@ import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class UpdateValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     name: schema.string.optional({ trim: true }),
@@ -15,16 +15,15 @@ export class UpdateValidator {
       rules.minLength(12),
     ]),
     sendNotificationWhatsapp: schema.boolean.optional(),
-    workStart: schema.date.optional({}, [rules.trim]),
-    workEnd: schema.date.optional({}, [rules.trim]),
-    lunchStart: schema.date.optional({}, [rules.trim]),
-    lunchEnd: schema.date.optional({}, [rules.trim])
+    workStart: schema.date.optional({}),
+    workEnd: schema.date.optional({}),
+    lunchStart: schema.date.optional({}),
+    lunchEnd: schema.date.optional({})
   })
 
   public messages: CustomMessages = {
     'required': 'O campo {{ field }} é obrigatório.',
     'phone.mobile': 'Insira um numero de telefone válido.',
     'email.email': 'Insira um email válido.',
-    'defaultPipe.exists': 'Esse funil não existe.',
   }
 }
