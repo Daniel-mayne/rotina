@@ -5,7 +5,7 @@ Route.resource('/customers', 'Customer/Main')
     .middleware({
         index: ['auth', 'acl:owner,administrator,user'],
         store: ['auth', 'acl:administrator,user'],
-        show: ['auth', 'acl:owner,administrator,user'],
+        show: ['auth', 'acl:administrator,user'],
         update: ['auth', 'acl:administrator,user'],
-        destroy: ['auth', 'acl:administrator'],
+        destroy: ['auth', 'acl:administrator,user'],
     })
