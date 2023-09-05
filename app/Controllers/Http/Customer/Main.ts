@@ -19,7 +19,7 @@ export default class CustomersController {
   }
 
 
-  public async store({ request, auth }: HttpContextContract) {
+  public async store({ request, auth}: HttpContextContract) {
     const customerData = await request.validate(StoreValidator)
     const customer = await new Customer()
       .merge({ ...customerData, companyId: auth.user!.companyId, createdBy: auth.user!.id, accountManagerId: auth.user!.id, fillingPercentage: 0.0, status: 'active' })
@@ -34,7 +34,7 @@ export default class CustomersController {
   }
 
   public async show({ params, auth, response }: HttpContextContract) {
-    if (auth.user?.type !== 'administrator' && auth.user?.type !== "user") {
+    if (auth.user?.type !== 'administrator' && auth.user?.type !== "user" && auth.user?.type !== "owner") {
       response.unauthorized({
         error: { message: 'Você não tem permissão para acessar esse recurso.' },
       })
@@ -42,7 +42,11 @@ export default class CustomersController {
 
     const customer = await Customer.query().where('id', params.id).firstOrFail()
 
-    const preloads = [customer.load('company')]
+    const preloads = [
+    customer.load('company'),
+    customer.load('personas'),
+  ]
+
 
     await Promise.all(preloads)
     return customer
@@ -50,7 +54,7 @@ export default class CustomersController {
   }
 
   public async update({ params, auth, request, response }: HttpContextContract) {
-    if (auth.user?.type !== 'administrator' && auth.user?.type !== 'user') {
+    if (auth.user?.type !== 'administrator' && auth.user?.type !== 'user' && auth.user?.type !== "owner") {
       response.unauthorized({
         error: { message: 'Você não tem permissão para acessar esse recurso.' },
       })
@@ -67,7 +71,7 @@ export default class CustomersController {
 
   }
 
-  public async destroy({ params }: HttpContextContract) { 
+  public async destroy({ params }: HttpContextContract) {
     const customer = await Customer.query().where('id', params.id).firstOrFail()
     customer.merge({ status: 'deactivated' }).save()
     return

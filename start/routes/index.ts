@@ -6,6 +6,7 @@ import './company'
 import './file'
 import './user'
 import './customer'
+import './persona'
 
 Route.get('/', async () => {
   return { hello: 'world' }

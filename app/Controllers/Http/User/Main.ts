@@ -1,8 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
-import Stripe from '@ioc:Mezielabs/Stripe'
-import { DateTime, DateTimeFormatOptions, DateTimeOptions, Duration } from 'luxon'
+// import Stripe from '@ioc:Mezielabs/Stripe'
+import { DateTime, Duration } from 'luxon'
 
 export default class UserController {
   public async index({ request, auth }: HttpContextContract) {
@@ -11,7 +11,6 @@ export default class UserController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      search = null,
     } = request.qs()
 
     return await User.query()

@@ -1,6 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('/customers', 'Customer/Main')
+Route.resource('/personas', 'Persona/Main')
     .apiOnly()
     .middleware({
         index: ['auth', 'acl:owner,administrator,user'],
