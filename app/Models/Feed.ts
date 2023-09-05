@@ -1,9 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, BelongsTo, belongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo, } from '@ioc:Adonis/Lucid/Orm'
 import { Company, Customer, User } from 'App/Models'
 
-
-export default class Persona extends BaseModel {
+export default class Feed extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -11,19 +10,19 @@ export default class Persona extends BaseModel {
   public name: string
 
   @column()
-  public description: string
+  public url: string
 
   @column()
-  public pains: string
-
-  @column()
-  public objections: number
+  public status: 'active' | 'deactivated'
 
   @column()
   public companyId: number
-  
+
   @column()
   public customerId: number
+
+  @column()
+  public createdBy: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -37,9 +36,6 @@ export default class Persona extends BaseModel {
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>
 
-  @hasMany(() => User)
-  public users: HasMany<typeof User>
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }
-
-
-

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { User } from 'App/Models'
+import { Feed, Persona, User } from 'App/Models'
 
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import Customer from './Customer'
@@ -51,5 +51,11 @@ export default class Company extends BaseModel {
 
   @hasMany(()=> Customer)
   public customers: HasMany<typeof Customer>
+
+  @hasMany(()=> Feed)
+  public feeds: HasMany<typeof Feed>
+
+  @hasMany(()=> Persona)
+  public personas: HasMany<typeof Persona>
 
 }

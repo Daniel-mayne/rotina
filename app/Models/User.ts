@@ -12,7 +12,7 @@ import {
   CherryPick,
   ModelObject,
 } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Apikey, Customer } from 'App/Models'
+import { Company, Apikey, Customer, Persona, Feed } from 'App/Models'
 // import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -166,10 +166,15 @@ export default class User extends BaseModel {
   @hasMany(() => Customer)
   public customers: HasMany<typeof Customer>
 
+  @hasMany(() => Persona)
+  public personas: HasMany<typeof Persona>
 
+  @hasMany(() => Feed)
+  public feeds: HasMany<typeof Feed>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
 
 
   @beforeSave()
