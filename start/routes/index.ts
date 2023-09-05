@@ -7,6 +7,8 @@ import './file'
 import './user'
 import './customer'
 import './persona'
+import './feed'
+import './post'
 
 Route.get('/', async () => {
   return { hello: 'world' }
