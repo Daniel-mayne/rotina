@@ -8,7 +8,8 @@
     "@rocketseat/adonis-bull/build/commands",
     "adonis5-swagger/build/commands",
     "@adonisjs/mail/build/commands",
-    "@melchyore/adonis-cache/build/commands"
+    "@melchyore/adonis-cache/build/commands",
+    "adonis-lucid-filter/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -36,7 +37,8 @@
     "@adonisjs/view",
     "./providers/PusherProvider",
     "@mezielabs/adonis-stripe",
-    "@melchyore/adonis-cache"
+    "@melchyore/adonis-cache",
+    "adonis-lucid-filter"
   ],
   "aceProviders": [
     "@adonisjs/repl"

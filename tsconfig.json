@@ -13,6 +13,7 @@
     ],
     "skipLibCheck": true,
     "outDir": "build",
+    "baseUrl": "./",
     "rootDir": "./",
     "checkJs": false,
     "sourceMap": true,
@@ -41,6 +42,7 @@
       "@adonisjs/mail",
       "@adonisjs/view",
       "@mezielabs/adonis-stripe",
+      "adonis-lucid-filter"
     ]
   }
 }

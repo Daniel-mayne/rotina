@@ -9,11 +9,10 @@ export default class CustomersController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      status = 'all',
+      ...input
     } = request.qs()
 
-    return await Customer.query()
-      .if(status !== 'all', (query) => query.where('status', status))
+    return await Customer.filter(input)
       .orderBy(orderColumn, orderDirection)
       .preload('company')
       .paginate(page, limit)
@@ -30,13 +29,7 @@ export default class CustomersController {
     return customer
   }
 
-  public async show({ params, auth, response }: HttpContextContract) {
-    if (auth.user?.type !== 'administrator' && auth.user?.type !== "user" && auth.user?.type !== "owner") {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
-
+  public async show({ params }: HttpContextContract) {
     const customer = await Customer.query().where('id', params.id).preload('company').preload('personas').firstOrFail()
     return customer
   }

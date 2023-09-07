@@ -38,6 +38,9 @@ dependencies:
   '@sendgrid/mail':
     specifier: ^7.7.0
     version: 7.7.0
+  adonis-lucid-filter:
+    specifier: ^4.1.1
+    version: 4.1.1
   adonis5-swagger:
     specifier: ^1.4.1
     version: 1.4.1(openapi-types@12.1.3)
@@ -2664,6 +2667,12 @@ packages:
       dyngoose: 3.1.3(aws-sdk@2.1452.0)
     transitivePeerDependencies:
       - aws-sdk
+    dev: false
+
+  /adonis-lucid-filter@4.1.1:
+    resolution: {integrity: sha512-6UgbcsGTVwj+NRKdf63nV+5LOXkWboom09MdsmOl6ZRMe9vyxIdAH+isTtFeGij2geaedew59Phej+Zy0/wIxg==}
+    dependencies:
+      type-fest: 2.19.0
     dev: false
 
   /adonis-preset-ts@2.1.0:
@@ -7664,6 +7673,11 @@ packages:
   /type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
+
+  /type-fest@2.19.0:
+    resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
+    engines: {node: '>=12.20'}
+    dev: false
 
   /type-fest@3.13.1:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
