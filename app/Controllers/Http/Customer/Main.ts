@@ -11,6 +11,7 @@ export default class CustomersController {
       orderDirection = 'asc',
       status = 'all',
     } = request.qs()
+
     return await Customer.query()
       .if(status !== 'all', (query) => query.where('status', status))
       .orderBy(orderColumn, orderDirection)
@@ -19,17 +20,13 @@ export default class CustomersController {
   }
 
 
-  public async store({ request, auth}: HttpContextContract) {
+  public async store({ request, auth }: HttpContextContract) {
     const customerData = await request.validate(StoreValidator)
     const customer = await new Customer()
       .merge({ ...customerData, companyId: auth.user!.companyId, createdBy: auth.user!.id, accountManagerId: auth.user!.id, fillingPercentage: 0.0, status: 'active' })
       .save()
-    await auth.user?.load('company')
 
-    const preloads = [customer.load('company')]
-
-    await Promise.all(preloads)
-
+    await customer.load(loader => loader.preload('company'))
     return customer
   }
 
@@ -40,32 +37,15 @@ export default class CustomersController {
       })
     }
 
-    const customer = await Customer.query().where('id', params.id).firstOrFail()
-
-    const preloads = [
-    customer.load('company'),
-    customer.load('personas'),
-  ]
-
-
-    await Promise.all(preloads)
+    const customer = await Customer.query().where('id', params.id).preload('company').preload('personas').firstOrFail()
     return customer
-
   }
 
-  public async update({ params, auth, request, response }: HttpContextContract) {
-    if (auth.user?.type !== 'administrator' && auth.user?.type !== 'user' && auth.user?.type !== "owner") {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
-
+  public async update({ params, request }: HttpContextContract) {
     const customerData = await request.validate(UpdateValidator)
     const customer = await Customer.query().where('id', params.id).firstOrFail()
     await customer.merge(customerData).save()
-
-    const preloads = [customer.load('company')]
-    await Promise.all(preloads)
+    await customer.load(loader => loader.preload('company'))
 
     return customer
 
@@ -73,7 +53,7 @@ export default class CustomersController {
 
   public async destroy({ params }: HttpContextContract) {
     const customer = await Customer.query().where('id', params.id).firstOrFail()
-    customer.merge({ status: 'deactivated' }).save()
-    return
+    await customer.merge({ status: 'deactivated' }).save()
+    return true
   }
 }

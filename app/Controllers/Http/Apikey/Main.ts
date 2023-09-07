@@ -8,19 +8,10 @@ export default class AnnotationController {
 
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
-
-    const apikey = new Apikey()
-
     const { id } = auth.user!
-
     const key = Encryption.encrypt({ id })
-
-    apikey.merge({ ...data, companyId: auth.user!.companyId, userId: auth.user!.id, value: key })
-
-    await apikey.save()
-
+    const apikey = await new Apikey().merge({ ...data, companyId: auth.user!.companyId, userId: auth.user!.id, value: key }).save()
     await apikey.load('user')
-
     return apikey
   }
 

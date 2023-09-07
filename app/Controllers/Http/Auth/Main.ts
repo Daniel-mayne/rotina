@@ -22,12 +22,6 @@ export default class UsersController {
       })
     }
 
-    // if (token.user.type === 'user' && token.user.company.stripeSubscriptionStatus === 'past_due') {
-    //   return response.badRequest({
-    //     errors: [{ message: 'Desativado por falta de pagamento, consulte seu administrador.' }],
-    //   })
-    // }
-
     return {
       token: token.token,
       expiresAt: token.expiresAt,

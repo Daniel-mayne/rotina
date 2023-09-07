@@ -60,9 +60,7 @@ export default class CompanyController {
       companyId: company.id,
     })
 
-    const preloads = [company.load('users')]
-
-    await Promise.all(preloads)
+    await company.load(loader => loader.preload('users'))
 
     const token = await auth.attempt(adminEmail, adminPassword, { expiresIn: '1 day' })
 
@@ -148,11 +146,7 @@ export default class CompanyController {
       })
     }
 
-    const company = await Company.query().where('id', params.id).firstOrFail()
-
-    const preloads = [company.load('users')]
-
-    await Promise.all(preloads)
+    const company = await Company.query().where('id', params.id).preload('users').firstOrFail()
     return company
   }
 
@@ -164,13 +158,9 @@ export default class CompanyController {
     }
 
     const data = await request.validate(UpdateValidator)
-    const company = await Company.query().where('id', params.id).firstOrFail()
+    const company = await Company.query().where('id', params.id).preload('users').firstOrFail()
 
     await company.merge(data).save()
-
-    const preloads = [company.load('users')]
-
-    await Promise.all(preloads)
 
     return company
   }

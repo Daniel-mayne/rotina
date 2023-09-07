@@ -36,9 +36,7 @@
     "@adonisjs/view",
     "./providers/PusherProvider",
     "@mezielabs/adonis-stripe",
-    "@adonisjs/i18n",
-    "@melchyore/adonis-cache",
-    "@adonisjs/redis"
+    "@melchyore/adonis-cache"
   ],
   "aceProviders": [
     "@adonisjs/repl"

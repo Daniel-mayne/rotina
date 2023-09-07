@@ -2,8 +2,6 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { User, Company } from 'App/Models'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
-
-// import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 /**
  *  @swagger
  *  components:
@@ -37,7 +35,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 
 export default class Apikey extends BaseModel {
   public static namingStrategy = new CamelCaseNamingStrategy()
-  // public static namingStrategy = new CamelCaseNamingStrategy()
+
   @column({ isPrimary: true })
   public id: number
 

@@ -3,6 +3,8 @@ import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { Feed, Persona, User } from 'App/Models'
 
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
+
+//TODO
 import Customer from './Customer'
 
 export default class Company extends BaseModel {
