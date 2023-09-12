@@ -21,9 +21,7 @@ import Server from '@ioc:Adonis/Core/Server'
 |
 */
 Server.middleware.register([
-  // () => import('@ioc:Adonis/Prometheus/Middlewares/CollectPerformanceMetrics'),
   () => import('@ioc:Adonis/Core/BodyParser'),
-  () => import('App/Middleware/DetectUserLocale'),
 ])
 
 /*
@@ -46,5 +44,4 @@ Server.middleware.registerNamed({
   auth: 'App/Middleware/Auth',
   acl: 'App/Middleware/Acl',
   apikey: 'App/Middleware/ApiKey',
-  keyAndBearer: 'App/Middleware/KeyAndBearer',
 })

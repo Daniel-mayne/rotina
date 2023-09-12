@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Company } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Company'
-import Stripe from '@ioc:Mezielabs/Stripe'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class CompanyController {

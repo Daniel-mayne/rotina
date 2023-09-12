@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
-// import Stripe from '@ioc:Mezielabs/Stripe'
 import { DateTime, Duration } from 'luxon'
 
 export default class UserController {
