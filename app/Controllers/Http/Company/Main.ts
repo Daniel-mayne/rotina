@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Company } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Company'
+// import Stripe from '@ioc:Mezielabs/Stripe'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class CompanyController {
@@ -11,9 +12,10 @@ export default class CompanyController {
       orderColumn = 'name',
       orderDirection = 'asc',
       status = 'all',
+      ...input
     } = request.qs()
-    return await Company.query()
-      .if(status !== 'all', (query) => query.where('status', status))
+
+    return await Company.filter(input)
       .orderBy(orderColumn, orderDirection)
       .preload('users')
       .paginate(page, limit)
@@ -79,7 +81,7 @@ export default class CompanyController {
     return company
   }
 
-  public async activeAccount({ request, auth, response }: HttpContextContract) {
+  public async activeAccount({ auth, response }: HttpContextContract) {
     const company = await Company.query().where('id', auth.user!.companyId).firstOrFail()
 
     if (company.status !== 'waiting_activation') {
@@ -138,29 +140,16 @@ export default class CompanyController {
   //   })
   // }
 
-  public async show({ params, auth, response }: HttpContextContract) {
-    if (Number(auth.user?.companyId) !== Number(params.id) && auth.user?.type !== 'owner') {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
-
+  public async show({ params  }: HttpContextContract) {
     const company = await Company.query().where('id', params.id).preload('users').firstOrFail()
     return company
   }
 
-  public async update({ params, auth, request, response }: HttpContextContract) {
-    if (auth.user?.companyId !== params.id && auth.user?.type !== 'owner') {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
-
+  public async update({ params, request }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
-    const company = await Company.query().where('id', params.id).preload('users').firstOrFail()
-
+    const company = await Company.query().where('id', params.id).firstOrFail()
     await company.merge(data).save()
-
+    await company.load(loader => loader.preload('users'))
     return company
   }
 

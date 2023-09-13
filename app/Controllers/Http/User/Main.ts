@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
+// import Stripe from '@ioc:Mezielabs/Stripe'
 import { DateTime, Duration } from 'luxon'
 
 export default class UserController {
@@ -52,13 +53,7 @@ export default class UserController {
     return user
   }
 
-  public async show({ params, auth, response }: HttpContextContract) {
-    if (auth.user!.type === 'user' && Number(auth.user!.id) !== Number(params.id)) {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
-
+  public async show({ params, auth }: HttpContextContract) {
     const user = await User.query()
       .where('id', params.id)
       .andWhere('company_id', auth.user!.companyId)
@@ -69,13 +64,6 @@ export default class UserController {
 
   public async update({ params, auth, request, response }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
-
-    if (auth.user!.type === 'user' && Number(auth.user!.id) !== Number(params.id)) {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
-
     const user = await User.query()
       .where('id', params.id)
       .andWhere('company_id', auth.user!.companyId)

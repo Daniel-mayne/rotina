@@ -1,14 +1,17 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Feed, Persona, User } from 'App/Models'
-
+import { Feed, File, Persona, User, Customer } from 'App/Models'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { CompanyFilter } from './Filters'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 
-//TODO
-import Customer from './Customer'
+export default class Company extends  compose(BaseModel, Filterable) {
 
-export default class Company extends BaseModel {
+  public static $filter = () => CompanyFilter
+
   public static namingStrategy = new CamelCaseNamingStrategy()
+
   @column({ isPrimary: true })
   public id: number
 
@@ -59,5 +62,8 @@ export default class Company extends BaseModel {
 
   @hasMany(()=> Persona)
   public personas: HasMany<typeof Persona>
+
+  @hasMany(()=> File)
+  public files: HasMany<typeof File>
 
 }

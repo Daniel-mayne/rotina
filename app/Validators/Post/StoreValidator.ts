@@ -6,10 +6,8 @@ export class StoreValidator {
 
   public schema = schema.create({
     name: schema.string({ trim: true }),
-    postDate: schema.date(),
-    status: schema.enum(['waiting_approval', 'approved', 'disapproved'] as const),
-    feedId: schema.number(),
-    createdBy: schema.number()
+    feedId: schema.number()
+    // postDate: schema.date()
   })
 
   public messages: CustomMessages = {

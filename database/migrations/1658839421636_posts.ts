@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .notNullable()
         .defaultTo('waiting_approval')
       table
-        .integer('id_feed')
+        .integer('feed_id')
         .unsigned()
         .notNullable()
         .references('id')

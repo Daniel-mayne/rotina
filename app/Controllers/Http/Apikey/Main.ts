@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Apikey } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Apikey'
-import Encryption from '@ioc:Adonis/Core/Encryption'
+import  Encryption  from '@ioc:Adonis/Core/Encryption'
 
 export default class AnnotationController {
   public async index({}: HttpContextContract) {}
@@ -11,7 +11,7 @@ export default class AnnotationController {
     const { id } = auth.user!
     const key = Encryption.encrypt({ id })
     const apikey = await new Apikey().merge({ ...data, companyId: auth.user!.companyId, userId: auth.user!.id, value: key }).save()
-    await apikey.load('user')
+    await apikey.load(loader => loader.preload('user'))
     return apikey
   }
 
@@ -30,7 +30,7 @@ export default class AnnotationController {
     const key = Encryption.encrypt({ id })
 
     await apikey.merge({ ...data, value: key }).save()
-    await apikey.load('user')
+    await apikey.load(loader => loader.preload('user'))
 
     return apikey
   }

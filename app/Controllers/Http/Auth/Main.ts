@@ -7,8 +7,8 @@ export default class UsersController {
     const { email, password } = request.all()
     const token = await auth.attempt(email, password, { expiresIn: '30 days' })
 
-    await token.user.load('company')
-    await token.user.load('apiKeys')
+    await token.user.load(loader => loader.preload('company'))
+    await token.user.load(loader => loader.preload('apiKeys'))
 
     if (token.user.company.status === 'waiting_activation') {
       return response.badRequest({
@@ -51,7 +51,7 @@ export default class UsersController {
     await auth.logout()
 
     const token = await auth.loginViaId(user.id, { expiresIn: '30 days' })
-    await token.user.load('company')
+    await token.user.load(loader => loader.preload('company'))
 
     return {
       token: token.token,

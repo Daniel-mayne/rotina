@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import { Company, User } from 'App/Models'
+import { Company, Customer, User } from 'App/Models'
 
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 /**
@@ -74,4 +74,7 @@ public static namingStrategy = new CamelCaseNamingStrategy()
 
   @belongsTo(() => User)
   public creator: BelongsTo<typeof User>
+
+  @belongsTo(() => Customer)
+  public customer: BelongsTo<typeof Customer>
 }

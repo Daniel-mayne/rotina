@@ -7,7 +7,7 @@ export class UpdateValidator {
     public schema = schema.create({
         name: schema.string.optional({ trim: true }),
         url: schema.string.optional({ trim: true }),
-        status: schema.enum.optional(['active', 'deactivated'])
+        status: schema.enum.optional(['active', 'deactivated']  as const)
     })
 
     public messages: CustomMessages = {

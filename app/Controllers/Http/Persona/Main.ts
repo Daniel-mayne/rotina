@@ -31,24 +31,14 @@ export default class PersonaController {
     return persona
   }
 
-  public async show({ params, auth, response }: HttpContextContract) {
-    if (auth.user?.type !== 'administrator' && auth.user?.type !== "user" && auth.user?.type !== "owner") {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
+  public async show({ params }: HttpContextContract) {
     const persona = await Persona.query().where('id', params.id).firstOrFail()
     const preloads = [persona.load('customer')]
     await Promise.all(preloads)
     return persona
   }
 
-  public async update({ params, auth, request, response }: HttpContextContract) {
-    if (auth.user?.type !== 'administrator' && auth.user?.type !== 'user' && auth.user?.type !== "owner") {
-      response.unauthorized({
-        error: { message: 'Você não tem permissão para acessar esse recurso.' },
-      })
-    }
+  public async update({ params, request }: HttpContextContract) {
 
     const personaData = await request.validate(UpdateValidator)
     const persona = await Persona.query().where('id', params.id).firstOrFail()
@@ -66,6 +56,6 @@ export default class PersonaController {
       .where('id', params.id)
       .andWhere('company_id', auth.user!.companyId)
       .firstOrFail()
-      return await persona.delete()
+    return await persona.delete()
   }
 }

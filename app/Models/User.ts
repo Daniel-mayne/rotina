@@ -1,18 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import {
-  column,
-  beforeSave,
-  afterCreate,
-  BaseModel,
-  belongsTo,
-  BelongsTo,
-  hasMany,
-  HasMany,
-  CherryPick,
-  ModelObject,
-} from '@ioc:Adonis/Lucid/Orm'
-import { Company, Apikey, Customer, Persona, Feed } from 'App/Models'
+import { column, beforeSave, afterCreate, BaseModel, belongsTo, BelongsTo, HasMany, hasMany, CherryPick, ModelObject } from '@ioc:Adonis/Lucid/Orm'
+import { Company, Apikey, Customer, Persona, Feed, Post, File } from 'App/Models'
 // import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -171,6 +160,12 @@ export default class User extends BaseModel {
 
   @hasMany(() => Feed)
   public feeds: HasMany<typeof Feed>
+
+  @hasMany(() => File)
+  public Files: HasMany<typeof File>
+
+  @hasMany(() => Post)
+  public post: HasMany<typeof Post>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

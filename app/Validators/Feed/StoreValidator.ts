@@ -7,10 +7,7 @@ export class StoreValidator {
     public schema = schema.create({
         name: schema.string({ trim: true }),
         url: schema.string({ trim: true }),
-        status: schema.enum(['active', 'deactivated']),
-        companyId: schema.number(),
-        customerId: schema.number(),
-        createdBy: schema.number(),
+        customerId: schema.number()
     })
 
     public messages: CustomMessages = {
