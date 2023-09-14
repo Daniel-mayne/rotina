@@ -94,11 +94,11 @@ export default class User extends BaseModel {
   public picture?: string
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('HH:mm:ss')
     }
   })
-  public workLoad?: DateTime
+  public workLoad: DateTime
 
   @column.dateTime({
     serialize: (value: DateTime) => {

@@ -23,23 +23,30 @@ export default class UserController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
-    const workStart: DateTime = data.workStart
-    const workEnd: DateTime = data.workEnd
-    const lunchStart: DateTime = data.lunchStart
-    const lunchEnd: DateTime = data.lunchEnd
-    const BaseInit: DateTime = DateTime.local().startOf('day');
+    let workLoad;
+    if (data.workStart && data.workEnd && data.lunchStart && data.lunchEnd) {
 
-    const firstInterval: Duration = lunchEnd.diff(lunchStart)
-    const secondInterval: Duration = workEnd.diff(workStart)
-
-    const CalculateTime: Duration = secondInterval.minus(firstInterval)
-
-    const workInit: DateTime = BaseInit.plus(CalculateTime)
-    const workLoad: DateTime = workInit
+      const workStart: DateTime = data.workStart
+      const workEnd: DateTime = data.workEnd
+      const lunchStart: DateTime = data.lunchStart
+      const lunchEnd: DateTime = data.lunchEnd
+      const BaseInit: DateTime = DateTime.local().startOf('day');
+      const firstInterval: Duration = lunchEnd.diff(lunchStart)
+      const secondInterval: Duration = workEnd.diff(workStart)
+      const CalculateTime: Duration = secondInterval.minus(firstInterval)
+      const workInit: DateTime = BaseInit.plus(CalculateTime)
+      workLoad = workInit
+    } else {
+      if (data.workLoad) {
+        workLoad = DateTime.fromISO(data.workLoad);
+      } else {
+        workLoad = DateTime.fromISO('08:00:00', { zone: 'utc' });
+      }
+    }
 
     const user = await new User()
-    .merge({ ...data, workLoad: workLoad, companyId: auth.user!.companyId, status: 'active' })
-    .save()
+      .merge({ ...data, workLoad: workLoad, companyId: auth.user!.companyId, status: 'active' })
+      .save()
 
     await auth.user?.load('company', (query) => query.preload('users'))
 

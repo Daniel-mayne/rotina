@@ -16,10 +16,11 @@ export class StoreValidator {
       rules.unique({ table: 'users', column: 'email' }),
     ]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
-    workStart: schema.date({}),
-    workEnd: schema.date({}),
-    lunchStart: schema.date({}),
-    lunchEnd: schema.date({})
+    workStart: schema.date.optional({ }),
+    workEnd: schema.date.optional({ }),
+    lunchStart: schema.date.optional({}),
+    lunchEnd: schema.date.optional({}),
+    workLoad: schema.date.optional({})
   })
 
   public messages: CustomMessages = {
@@ -28,5 +29,9 @@ export class StoreValidator {
     'phone.mobile': 'Insira um numero de telefone válido.',
     'email.email': 'Insira um email válido.',
     'email.unique': 'Email já cadastrado.',
+    'workStart.date': 'O campo workLoad deve estar no formato HH:mm:ss',
+    'workEnd.date': 'O campo workLoad deve estar no formato HH:mm:ss',
+    'lunchStart.date': 'O campo workLoad deve estar no formato HH:mm:ss',
+    'lunchEnd.date': 'O campo workLoad deve estar no formato HH:mm:ss',
   }
 }
