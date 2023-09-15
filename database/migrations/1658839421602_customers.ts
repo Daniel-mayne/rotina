@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name', 255).notNullable()
-      table.string('logo', 255).notNullable()
+      table.string('logo', 255).nullable()
       table.enum('status', ['active', 'deactivated']).notNullable().defaultTo('active')
       table.integer('company_id').unsigned().notNullable().references('id').inTable('companies').onDelete('CASCADE')
       table.integer('account_manager_id').unsigned().notNullable().references('id').inTable('users').onDelete('CASCADE')

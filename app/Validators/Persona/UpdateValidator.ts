@@ -8,7 +8,7 @@ export class UpdateValidator {
         name: schema.string.optional({ trim: true }),
         description: schema.string.optional({ trim: true }),
         pains: schema.string.optional({ trim: true }),
-        objections: schema.number.optional()
+        objections: schema.string.optional()
     })
 
     public messages: CustomMessages = {

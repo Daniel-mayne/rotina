@@ -85,6 +85,9 @@ export default class User extends BaseModel {
   public email: string
 
   @column()
+  public theme: 'white' | 'black'
+
+  @column()
   public status: 'active' | 'deactivated'
 
   @column()

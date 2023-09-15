@@ -13,12 +13,12 @@ export class StoreValidator {
     adminName: schema.string({ trim: true }),
     adminEmail: schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'email' })]),
     adminPassword: schema.string({ trim: true }),
-    adminPhone: schema.string.optional({ trim: true }),
+    adminPhone: schema.string({ trim: true }),
     refferName: schema.string.optional({ trim: true }),
   })
 
   public messages: CustomMessages = {
-    'required': 'O campo {{ field }} é obrigatório1.',
+    'required': 'O campo {{ field }} é obrigatório.',
     'name.unique': 'Já existe uma empresa com esse nome.',
     'userLimit.range': 'O valor de {{ field }} precisa ser entre 1 e 500.',
     'adminEmail.unique': 'Já existe um usuário com esse email.',

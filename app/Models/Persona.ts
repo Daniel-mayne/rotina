@@ -17,7 +17,7 @@ export default class Persona extends BaseModel {
   public pains: string
 
   @column()
-  public objections: number
+  public objections: string
 
   @column()
   public companyId: number

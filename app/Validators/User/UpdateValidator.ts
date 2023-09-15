@@ -10,6 +10,7 @@ export class UpdateValidator {
     email: schema.string.optional({ trim: true }, [rules.email()]),
     type: schema.enum.optional(['user', 'guest', 'administrator'] as const),
     status: schema.enum.optional(['active', 'deactivated'] as const),
+    theme: schema.enum.optional(['white', 'black'] as const),
     password: schema.string.optional({ trim: true }, [
       rules.confirmed('passwordConfirmation'),
       rules.minLength(12),

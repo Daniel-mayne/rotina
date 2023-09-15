@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('name', 255).notNullable()
       table.text('description').nullable()
       table.text('pains').nullable()
-      table.integer('objections').nullable()
+      table.text('objections').nullable()
       table
         .integer('company_id')
         .unsigned()
