@@ -9,22 +9,21 @@ export default class FilesController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      status = 'all',
+      ...input
     } = request.qs()
-    return await File.query()
-      .if(status !== 'all', (query) => query.where('status', status))
-      .orderBy(orderColumn, orderDirection)
-      .preload('customer')
-      .paginate(page, limit)
-  }
 
+    return await File.filter(input)
+    .orderBy(orderColumn, orderDirection)
+    .preload('customer')
+    .paginate(page, limit)
+}
   public async store({ request, auth }: HttpContextContract) {
     const fileData = await request.validate(StoreValidator)
     const file = await new File()
       .merge({ ...fileData, companyId: auth.user!.companyId })
       .save()
-    await auth.user?.load('company')
-    const preloads = [file.load('customer')]
+    await auth.user?.load(loader => loader.preload('company'))
+    const preloads = [file.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
     return file
   }

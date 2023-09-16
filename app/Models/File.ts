@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { Company, Customer, User } from 'App/Models'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { FileFilter } from './Filters'
 
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 /**
@@ -40,7 +43,10 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 *            $ref: '#/components/schemas/User'
 */
 
-export default class File extends BaseModel {
+export default class File extends compose(BaseModel, Filterable) {
+
+  public static $filter = () => FileFilter
+
 public static namingStrategy = new CamelCaseNamingStrategy()
   @column({ isPrimary: true })
   public id: number

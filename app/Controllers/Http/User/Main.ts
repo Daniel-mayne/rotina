@@ -11,9 +11,10 @@ export default class UserController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
+      ...input
     } = request.qs()
 
-    return await User.query()
+    return await User.filter(input)
       .where('company_id', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('company')
@@ -61,7 +62,7 @@ export default class UserController {
       //   await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
       // }
 
-      await user.load('company')
+      await user.load(loader => loader.preload('company'))
       return user
     }
   }
@@ -110,7 +111,7 @@ export default class UserController {
       await auth.user?.load('company', (query) => query.preload('users'))
     }
 
-    await user.load('company')
+    await user.load(loader => loader.preload('company'))
     return user
 
   }

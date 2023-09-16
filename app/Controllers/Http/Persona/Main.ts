@@ -3,20 +3,20 @@ import { Persona } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Persona'
 
 export default class PersonaController {
-  public async index({ request }: HttpContextContract) {
+  public async index({ request, auth }: HttpContextContract) {
     const {
       limit = 10,
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      status = 'all',
+      ...input
     } = request.qs()
-    return await Persona.query()
-      .if(status !== 'all', (query) => query.where('status', status))
-      .orderBy(orderColumn, orderDirection)
-      .preload('company')
-      .preload('customer')
-      .paginate(page, limit)
+
+    return await Persona.filter(input)
+    .orderBy(orderColumn, orderDirection)
+    .preload('company')
+    .preload('customer')
+    .paginate(page, limit)
   }
 
 
@@ -25,15 +25,15 @@ export default class PersonaController {
     const persona = await new Persona()
       .merge({ ...personaData, companyId: auth.user!.companyId })
       .save()
-    await auth.user?.load('company')
-    const preloads = [persona.load('customer')]
+    await auth.user?.load(loader => loader.preload('company'))
+    const preloads = [persona.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
     return persona
   }
 
   public async show({ params }: HttpContextContract) {
     const persona = await Persona.query().where('id', params.id).firstOrFail()
-    const preloads = [persona.load('customer')]
+    const preloads = [persona.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
     return persona
   }
@@ -44,7 +44,7 @@ export default class PersonaController {
     const persona = await Persona.query().where('id', params.id).firstOrFail()
     await persona.merge(personaData).save()
 
-    const preloads = [persona.load('company')]
+    const preloads = [persona.load(loader => loader.preload('company'))]
     await Promise.all(preloads)
 
     return persona

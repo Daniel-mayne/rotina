@@ -1,2 +1,7 @@
-export { default as CustomerFilter } from './CustomerFilter'
 export { default as CompanyFilter } from './CompanyFilter'
+export { default as CustomerFilter } from './CustomerFilter'
+export { default as FeedFilter } from './FeedFilter'
+export { default as FileFilter } from './FileFilter'
+export { default as PersonaFilter } from './PersonaFilter'
+export { default as PostFilter } from './PostFilter'
+export { default as UserFilter } from './UserFilter'

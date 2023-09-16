@@ -10,13 +10,13 @@ export default class PostsController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      status = 'all',
+      ...input
     } = request.qs()
-    return await Post.query()
-      .if(status !== 'all', (query) => query.where('status', status))
-      .orderBy(orderColumn, orderDirection)
-      .preload('feeds')
-      .paginate(page, limit)
+
+    return await  Post.filter(input)
+    .orderBy(orderColumn, orderDirection)
+    .preload('feeds')
+    .paginate(page, limit)
   }
 
   public async store({ request, auth }: HttpContextContract) {
@@ -24,9 +24,9 @@ export default class PostsController {
     const post = await new Post()
       .merge({ ...postData, postDate: DateTime.now().setZone(), createdBy: auth.user!.id, status: 'waiting_approval' })
       .save()
-    await auth.user?.load('company')
+    await auth.user?.load(loader => loader.preload('company'))
 
-    const preloads = [post.load('feeds')]
+    const preloads = [post.load(loader => loader.preload('feeds'))]
 
     await Promise.all(preloads)
 
@@ -36,7 +36,7 @@ export default class PostsController {
   public async show({ params }: HttpContextContract) {
     const post = await Post.query().where('id', params.id).firstOrFail()
     const preloads = [
-      post.load('feeds')
+      post.load(loader => loader.preload('feeds'))
     ]
     await Promise.all(preloads)
     return post
@@ -48,7 +48,7 @@ export default class PostsController {
     const post = await Post.query().where('id', params.id).firstOrFail()
     await post.merge(postData).save()
 
-    const preloads = [post.load('feeds')]
+    const preloads = [post.load(loader => loader.preload('feeds'))]
     await Promise.all(preloads)
 
     return post

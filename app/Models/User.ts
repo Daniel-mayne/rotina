@@ -5,6 +5,9 @@ import { Company, Apikey, Customer, Persona, Feed, Post, File } from 'App/Models
 // import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { UserFilter } from './Filters'
 /**
  *  @swagger
  *  components:
@@ -63,10 +66,11 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *             $ref: '#/components/schemas/Activity'
  */
 
-export default class User extends BaseModel {
+export default class User extends compose (BaseModel, Filterable)  {
   public static namingStrategy = new CamelCaseNamingStrategy()
 
   // public static search = search(this, ['name', 'phone', 'status', 'email', 'type'])
+  public static $filter = () => UserFilter
 
   public serializeExtras = true
   @column({ isPrimary: true })

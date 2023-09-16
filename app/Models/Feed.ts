@@ -1,8 +1,15 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import { Company, Customer, Post, User } from 'App/Models'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { FeedFilter } from './Filters'
 
-export default class Feed extends BaseModel {
+
+export default class Feed extends compose(BaseModel, Filterable)  {
+
+  public static $filter = () =>  FeedFilter
+
   @column({ isPrimary: true })
   public id: number
 

@@ -9,23 +9,23 @@ export default class FeedsController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      status = 'all',
+      ...input
     } = request.qs()
-    return await Feed.query()
-      .if(status !== 'all', (query) => query.where('status', status))
-      .orderBy(orderColumn, orderDirection)
-      .preload('customer')
-      .paginate(page, limit)
-  }
+
+    return await Feed.filter(input)
+    .orderBy(orderColumn, orderDirection)
+    .preload('customer')
+    .paginate(page, limit)
+}
 
   public async store({ request, auth }: HttpContextContract) {
     const feedData = await request.validate(StoreValidator)
     const feed = await new Feed()
       .merge({ ...feedData, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
       .save()
-    await auth.user?.load('company')
+    await auth.user?.load(loader => loader.preload('company'))
 
-    const preloads = [feed.load('customer')]
+    const preloads = [feed.load(loader => loader.preload('company'))]
 
     await Promise.all(preloads)
 
@@ -37,14 +37,11 @@ export default class FeedsController {
     const feed = await Feed.query().where('id', params.id).firstOrFail()
 
     const preloads = [
-      feed.load('customer'),
-      feed.load('company'),
+      feed.load(loader => loader.preload('customer')),
+      feed.load(loader => loader.preload('company')),
     ]
-
-
     await Promise.all(preloads)
     return feed
-
   }
 
   public async update({ params, request }: HttpContextContract) {
@@ -53,7 +50,7 @@ export default class FeedsController {
     const feed = await Feed.query().where('id', params.id).firstOrFail()
     await feed.merge(feedData).save()
 
-    const preloads = [feed.load('customer')]
+    const preloads = [feed.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
 
     return feed
