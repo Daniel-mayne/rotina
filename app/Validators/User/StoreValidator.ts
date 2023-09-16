@@ -14,7 +14,7 @@ export class StoreValidator {
       rules.email(),
       rules.unique({ table: 'users', column: 'email' }),
     ]),
-    phone: schema.string.optional({ trim: true }, [rules.mobile({ locale: ['pt-BR'] })]),
+    phone: schema.string({ trim: true }, [rules.mobile({ locale: ['pt-BR'] })]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
     theme: schema.enum.optional(['white', 'black'] as const),
     workStart: schema.date.optional({ }),
