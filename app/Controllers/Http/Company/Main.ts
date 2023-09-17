@@ -11,12 +11,11 @@ export default class CompanyController {
       page = 1,
       orderColumn = 'name',
       orderDirection = 'asc',
-      status = 'all',
       ...input
     } = request.qs()
 
     return await Company.filter(input)
-    .where('companyId', auth.user!.companyId) 
+    .where('id', auth.user!.companyId) 
     .orderBy(orderColumn, orderDirection)
       .preload('users')
       .paginate(page, limit)
@@ -141,21 +140,31 @@ export default class CompanyController {
   //   })
   // }
 
-  public async show({ params  }: HttpContextContract) {
-    const company = await Company.query().where('id', params.id).preload('users').firstOrFail()
+  public async show({ params, auth }: HttpContextContract) {
+    const company = await Company.query()
+    .where('id', params.id)
+    .andWhere('id', auth.user!.companyId)
+    .preload('users').firstOrFail()
     return company
   }
 
-  public async update({ params, request }: HttpContextContract) {
+  public async update({ params, request, auth }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
-    const company = await Company.query().where('id', params.id).firstOrFail()
+    const company = await Company
+    .query()
+    .where('id', params.id)
+    .andWhere('id', auth.user!.companyId)
+    .firstOrFail()
     await company.merge(data).save()
     await company.load(loader => loader.preload('users'))
     return company
   }
 
-  public async destroy({ params }: HttpContextContract) {
-    const company = await Company.query().where('id', params.id).firstOrFail()
+  public async destroy({ params, auth }: HttpContextContract) {
+    const company = await Company.query()
+    .where('id', params.id)
+    .andWhere('id', auth.user!.companyId)
+    .firstOrFail()
     company.merge({ status: 'deactivated' }).save()
     return
   }

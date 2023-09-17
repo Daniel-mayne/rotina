@@ -9,6 +9,7 @@ export class UpdateValidator {
     smtpHost: schema.string.optional({ trim: true }),
     smtpPort: schema.string.optional({ trim: true }),
     smtpPassword: schema.string.optional({ trim: true }),
+    status: schema.enum.optional(['active', 'deactivated'] as const),
   })
 
   public messages: CustomMessages = {

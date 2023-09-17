@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Post } from 'App/Models'
+import { Post, Feed } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Post'
 import { DateTime } from 'luxon'
 
@@ -22,8 +22,15 @@ export default class PostsController {
 
   public async store({ request, auth }: HttpContextContract) {
     const postData = await request.validate(StoreValidator)
+
+    const feedIdExists = await Feed.query()
+      .where('id', postData.feedId)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
+
+    
     const post = await new Post()
-      .merge({ ...postData, postDate: DateTime.now().setZone(), createdBy: auth.user!.id, status: 'waiting_approval' })
+      .merge({ ...postData, postDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, feedId: feedIdExists.id, status: 'waiting_approval' })
       .save()
     await auth.user?.load(loader => loader.preload('company'))
 

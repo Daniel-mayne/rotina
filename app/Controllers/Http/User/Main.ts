@@ -67,14 +67,22 @@ export default class UserController {
     }
   }
 
-  public async show({ params, auth }: HttpContextContract) {
+  public async show({ params, auth, response }: HttpContextContract) {
     const user = await User.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
+      const userTypeShow = auth.user?.type
+      if (userTypeShow == 'user' &&  user.type == 'administrator') {
+        response.unauthorized({
+          error: { message: 'Você não tem permissão para acessar esse recurso.' },
+        })
+      }
+
     return user
   }
+
 
   public async update({ params, auth, request, response }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
@@ -85,7 +93,7 @@ export default class UserController {
       .firstOrFail()
 
     const userTypeUpdate = auth.user?.type
-    if (userTypeUpdate == 'user' && user.type == 'user' || user.type == 'administrator') {
+    if (userTypeUpdate == 'user' && (user.type == 'user' || user.type == 'administrator')) {
       response.unauthorized({
         error: { message: 'Você não tem permissão para acessar esse recurso.' },
       })

@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Feed } from 'App/Models'
+import { Feed, Customer } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Feed'
 
 export default class FeedsController {
@@ -21,8 +21,15 @@ export default class FeedsController {
 
   public async store({ request, auth }: HttpContextContract) {
     const feedData = await request.validate(StoreValidator)
+
+    const customerIdExists = await Customer.query()
+    .where('id', feedData.customerId)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
+
+
     const feed = await new Feed()
-      .merge({ ...feedData, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
+      .merge({ ...feedData, companyId: auth.user!.companyId, createdBy: auth.user!.id, customerId: customerIdExists.id, status: 'active' })
       .save()
     await auth.user?.load(loader => loader.preload('company'))
     const preloads = [feed.load(loader => loader.preload('company'))]
@@ -45,6 +52,7 @@ export default class FeedsController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
+
     const feedData = await request.validate(UpdateValidator)
     const feed = await Feed.query()
     .where('id', params.id)
@@ -63,6 +71,7 @@ export default class FeedsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    return await feed.delete()
+      feed.merge({ status: 'deactivated'}).save()
+    return 
   }
 }

@@ -37,6 +37,9 @@ export default class Post extends compose(BaseModel, Filterable)  {
   @column()
   public createdBy: number
 
+  @column()
+  public companyId: number
+
   @belongsTo(() => Feed)
   public feeds: BelongsTo<typeof Feed>
 
