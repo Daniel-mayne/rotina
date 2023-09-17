@@ -59,6 +59,6 @@ export default class CustomersController {
     .andWhere('companyId', auth.user!.companyId)
     .firstOrFail()
     await customer.merge({ status: 'deactivated' }).save()
-    return true
+    return 
   }
 }
