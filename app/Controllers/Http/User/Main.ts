@@ -15,7 +15,7 @@ export default class UserController {
     } = request.qs()
 
     return await User.filter(input)
-      .where('company_id', auth.user!.companyId)
+      .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('company')
       .paginate(page, limit)
@@ -70,7 +70,7 @@ export default class UserController {
   public async show({ params, auth }: HttpContextContract) {
     const user = await User.query()
       .where('id', params.id)
-      .andWhere('company_id', auth.user!.companyId)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
     return user
@@ -81,7 +81,7 @@ export default class UserController {
 
     const user = await User.query()
       .where('id', params.id)
-      .andWhere('company_id', auth.user!.companyId)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
     const userTypeUpdate = auth.user?.type
@@ -119,7 +119,7 @@ export default class UserController {
   public async destroy({ params, auth }: HttpContextContract) {
     const user = await User.query()
       .where('id', params.id)
-      .andWhere('company_id', auth.user!.companyId)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     return await user.delete()
   }

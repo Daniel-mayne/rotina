@@ -5,7 +5,7 @@ import { StoreValidator, UpdateValidator } from 'App/Validators/Company'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class CompanyController {
-  public async index({ request }: HttpContextContract) {
+  public async index({ request, auth }: HttpContextContract) {
     const {
       limit = 10,
       page = 1,
@@ -16,7 +16,8 @@ export default class CompanyController {
     } = request.qs()
 
     return await Company.filter(input)
-      .orderBy(orderColumn, orderDirection)
+    .where('companyId', auth.user!.companyId) 
+    .orderBy(orderColumn, orderDirection)
       .preload('users')
       .paginate(page, limit)
   }

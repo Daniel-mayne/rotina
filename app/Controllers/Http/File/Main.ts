@@ -3,7 +3,7 @@ import { File } from 'App/Models'
 import { StoreValidator } from 'App/Validators/File'
 
 export default class FilesController {
-  public async index({ request }: HttpContextContract) {
+  public async index({ request, auth }: HttpContextContract) {
     const {
       limit = 10,
       page = 1,
@@ -13,6 +13,7 @@ export default class FilesController {
     } = request.qs()
 
     return await File.filter(input)
+    .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
     .preload('customer')
     .paginate(page, limit)

@@ -13,6 +13,7 @@ export default class PersonaController {
     } = request.qs()
 
     return await Persona.filter(input)
+    .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
     .preload('company')
     .preload('customer')
@@ -31,17 +32,24 @@ export default class PersonaController {
     return persona
   }
 
-  public async show({ params }: HttpContextContract) {
-    const persona = await Persona.query().where('id', params.id).firstOrFail()
+  public async show({ params, auth }: HttpContextContract) {
+    const persona = await Persona.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
+
     const preloads = [persona.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
     return persona
   }
 
-  public async update({ params, request }: HttpContextContract) {
+  public async update({ params, request, auth }: HttpContextContract) {
 
     const personaData = await request.validate(UpdateValidator)
-    const persona = await Persona.query().where('id', params.id).firstOrFail()
+    const persona = await Persona.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
     await persona.merge(personaData).save()
 
     const preloads = [persona.load(loader => loader.preload('company'))]
@@ -54,7 +62,7 @@ export default class PersonaController {
   public async destroy({ params, auth }: HttpContextContract) {
     const persona = await Persona.query()
       .where('id', params.id)
-      .andWhere('company_id', auth.user!.companyId)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     return await persona.delete()
   }

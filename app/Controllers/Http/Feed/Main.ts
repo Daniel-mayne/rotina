@@ -3,7 +3,7 @@ import { Feed } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Feed'
 
 export default class FeedsController {
-  public async index({ request }: HttpContextContract) {
+  public async index({ request, auth }: HttpContextContract) {
     const {
       limit = 10,
       page = 1,
@@ -13,6 +13,7 @@ export default class FeedsController {
     } = request.qs()
 
     return await Feed.filter(input)
+    .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
     .preload('customer')
     .paginate(page, limit)
@@ -24,18 +25,17 @@ export default class FeedsController {
       .merge({ ...feedData, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
       .save()
     await auth.user?.load(loader => loader.preload('company'))
-
     const preloads = [feed.load(loader => loader.preload('company'))]
-
     await Promise.all(preloads)
 
     return feed
   }
 
-  public async show({ params }: HttpContextContract) {
-
-    const feed = await Feed.query().where('id', params.id).firstOrFail()
-
+  public async show({ params, auth }: HttpContextContract) {
+    const feed = await Feed.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
     const preloads = [
       feed.load(loader => loader.preload('customer')),
       feed.load(loader => loader.preload('company')),
@@ -44,12 +44,13 @@ export default class FeedsController {
     return feed
   }
 
-  public async update({ params, request }: HttpContextContract) {
-
+  public async update({ params, request, auth }: HttpContextContract) {
     const feedData = await request.validate(UpdateValidator)
-    const feed = await Feed.query().where('id', params.id).firstOrFail()
+    const feed = await Feed.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
     await feed.merge(feedData).save()
-
     const preloads = [feed.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
 
@@ -60,7 +61,7 @@ export default class FeedsController {
   public async destroy({ params, auth }: HttpContextContract) {
     const feed = await Feed.query()
       .where('id', params.id)
-      .andWhere('company_id', auth.user!.companyId)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     return await feed.delete()
   }

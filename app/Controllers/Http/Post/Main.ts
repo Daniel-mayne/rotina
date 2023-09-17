@@ -4,7 +4,7 @@ import { StoreValidator, UpdateValidator } from 'App/Validators/Post'
 import { DateTime } from 'luxon'
 
 export default class PostsController {
-  public async index({ request }: HttpContextContract) {
+  public async index({ request, auth }: HttpContextContract) {
     const {
       limit = 10,
       page = 1,
@@ -14,6 +14,7 @@ export default class PostsController {
     } = request.qs()
 
     return await  Post.filter(input)
+    .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
     .preload('feeds')
     .paginate(page, limit)
@@ -33,8 +34,11 @@ export default class PostsController {
     return post
   }
 
-  public async show({ params }: HttpContextContract) {
-    const post = await Post.query().where('id', params.id).firstOrFail()
+  public async show({ params, auth }: HttpContextContract) {
+    const post = await Post.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
     const preloads = [
       post.load(loader => loader.preload('feeds'))
     ]
@@ -43,9 +47,12 @@ export default class PostsController {
 
   }
 
-  public async update({ params, request }: HttpContextContract) {
+  public async update({ params, request, auth }: HttpContextContract) {
     const postData = await request.validate(UpdateValidator)
-    const post = await Post.query().where('id', params.id).firstOrFail()
+    const post = await Post.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
     await post.merge(postData).save()
 
     const preloads = [post.load(loader => loader.preload('feeds'))]
@@ -55,9 +62,10 @@ export default class PostsController {
 
   }
 
-  public async destroy({ params }: HttpContextContract) {
+  public async destroy({ params, auth }: HttpContextContract) {
     const post = await Post.query()
       .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     return await post.delete()
   }

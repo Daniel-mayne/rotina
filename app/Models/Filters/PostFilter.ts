@@ -5,7 +5,7 @@ import Post from 'App/Models/Post'
 export default class PostFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Post, Post>
 
-  public status (status: string, auth: any ): void {
-    this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')).whereIn('companyId', auth.user?.companyId))
+  public status (status: string ): void {
+    this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
 }
