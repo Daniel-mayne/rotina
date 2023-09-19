@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Hash from '@ioc:Adonis/Core/Hash'
 import { User } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/User'
 // import Stripe from '@ioc:Mezielabs/Stripe'
@@ -73,19 +74,19 @@ export default class UserController {
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
-      const userTypeShow = auth.user?.type
-      if (userTypeShow == 'user' &&  user.type == 'administrator') {
-        response.unauthorized({
-          error: { message: 'Você não tem permissão para acessar esse recurso.' },
-        })
-      }
+    const userTypeShow = auth.user?.type
+    if (userTypeShow == 'user' && user.type == 'administrator') {
+      response.unauthorized({
+        error: { message: 'Você não tem permissão para acessar esse recurso.' },
+      })
+    }
 
     return user
   }
 
 
   public async update({ params, auth, request, response }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
+    const {  oldPassword: oldPassword, ...data }= await request.validate(UpdateValidator)
 
     const user = await User.query()
       .where('id', params.id)
@@ -99,6 +100,14 @@ export default class UserController {
       })
     }
 
+    if (oldPassword) {
+      if (!(await Hash.verify(user.password, oldPassword))) {
+        response.unauthorized({
+          error: { message: "PassWord antigo Invalido" },
+        });
+        return;
+      }
+    }
 
     if (data.email) {
       const duplicatedEmail = await User.query()

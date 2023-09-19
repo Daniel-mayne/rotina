@@ -15,6 +15,9 @@ export class UpdateValidator {
       rules.confirmed('passwordConfirmation'),
       rules.minLength(12),
     ]),
+    oldPassword: schema.string.optional({ trim: true }, [
+      rules.minLength(12)
+    ]),
     sendNotificationWhatsapp: schema.boolean.optional(),
     workStart: schema.date.optional({}),
     workEnd: schema.date.optional({}),
