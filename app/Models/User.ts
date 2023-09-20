@@ -8,6 +8,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { UserFilter } from './Filters'
+
 /**
  *  @swagger
  *  components:
@@ -37,39 +38,38 @@ import { UserFilter } from './Filters'
  *            example: active
  *          type:
  *            type: string
- *            enum: [user, administrator]
+ *            enum: [user, guest, administrator]
  *            required: true
  *            example: user
+ *          picture:
+ *            type: string
+ *          workLoad:
+ *            type: datetime
+ *          workStart:
+ *            type: datetime
+ *          workEnd:
+ *            type: datetime
+ *          lunchStart:
+ *            type: datetime
+ *          lunchEnd:
+ *            type: datetime
  *          companyId:
  *            type: integer
  *          createdAt:
  *            type: string
  *          updatedAt:
  *            type: string
- *          pipeDefault:
- *            $ref: '#/components/schemas/Pipe'
  *          apiKey:
- *            $ref: '#/components/schemas/Apikey'
- *          pipes:
- *            type: array
- *            items:
- *             $ref: '#/components/schemas/Pipe'
+ *            $ref: '#/components/schemas/Apikey'        
  *          company:
  *            $ref: '#/components/schemas/Company'
- *          deals:
- *            type: array
- *            items:
- *             $ref: '#/components/schemas/Deal'
- *          activities:
- *            type: array
- *            items:
- *             $ref: '#/components/schemas/Activity'
+ *       
  */
 
-export default class User extends compose (BaseModel, Filterable)  {
+export default class User extends compose(BaseModel, Filterable) {
   public static namingStrategy = new CamelCaseNamingStrategy()
 
-  // public static search = search(this, ['name', 'phone', 'status', 'email', 'type'])
+
   public static $filter = () => UserFilter
 
   public serializeExtras = true

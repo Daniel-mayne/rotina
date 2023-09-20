@@ -12,16 +12,16 @@ export default {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'CuboSuite API',
-        version: '1.0.0',
-        description: 'Documentação CuboCRM',
+        title: 'Rotina API',
+        version: '0.0.1',
+        description: 'Documentação Rotina',
         contact: {
-          email: 'contato@cubosuite.com.br',
+          email: 'contato@rotina.com.br',
         },
       },
       servers: [
         {
-          url: 'https://api.cubosuite.com.br',
+          url: 'http://127.0.0.1:3333/',
         },
       ],
       components: {
