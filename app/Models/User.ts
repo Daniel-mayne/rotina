@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, afterCreate, BaseModel, belongsTo, BelongsTo, HasMany, hasMany, CherryPick, ModelObject } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, afterCreate, BaseModel, belongsTo, BelongsTo, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { Company, Apikey, Customer, Persona, Feed, Post, File } from 'App/Models'
-// import { search } from 'adosearch'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import { compose } from '@ioc:Adonis/Core/Helpers'
@@ -10,61 +9,225 @@ import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { UserFilter } from './Filters'
 
 /**
- *  @swagger
- *  components:
- *    schemas:
- *      User:
- *        type: object
- *        properties:
- *          id:
- *            type: integer
- *            required: true
- *          name:
- *            type: string
- *            required: true
- *          email:
- *            type: string
- *            required: true
- *          password:
- *            type: string
- *            format: password
- *            required: true
- *          phone:
- *            type: string
- *          status:
- *            type: string
- *            enum: [active, deactivated]
- *            required: true
- *            example: active
- *          type:
- *            type: string
- *            enum: [user, guest, administrator]
- *            required: true
- *            example: user
- *          picture:
- *            type: string
- *          workLoad:
- *            type: datetime
- *          workStart:
- *            type: datetime
- *          workEnd:
- *            type: datetime
- *          lunchStart:
- *            type: datetime
- *          lunchEnd:
- *            type: datetime
- *          companyId:
- *            type: integer
- *          createdAt:
- *            type: string
- *          updatedAt:
- *            type: string
- *          apiKey:
- *            $ref: '#/components/schemas/Apikey'        
- *          company:
- *            $ref: '#/components/schemas/Company'
- *       
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           required: true
+ *         name:
+ *           type: string
+ *           required: true
+ *         email:
+ *           type: string
+ *           required: true
+ *         password:
+ *           type: string
+ *           format: password
+ *           required: true
+ *         phone:
+ *           type: string
+ *         status:
+ *           type: string
+ *           enum: [active, deactivated]
+ *           required: true
+ *           example: active
+ *         type:
+ *           type: string
+ *           enum: [user, guest, administrator]
+ *           required: true
+ *           example: user
+ *         picture:
+ *           type: string
+ *         workLoad:
+ *           type: datetime
+ *         workStart:
+ *           type: datetime
+ *         workEnd:
+ *           type: datetime
+ *         lunchStart:
+ *           type: datetime
+ *         lunchEnd:
+ *           type: datetime
+ *         companyId:
+ *           type: integer
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
+ *         apiKey:
+ *           $ref: '#/components/schemas/Apikey'        
+ *         customer:
+ *           $ref: '#/components/schemas/Customer'
+ *         persona:
+ *           $ref: '#/components/schemas/Persona'
+ *         feed:
+ *           $ref: '#/components/schemas/Feed'
+ *         file:
+ *           $ref: '#/components/schemas/File'
+ *         post:
+ *           $ref: '#/components/schemas/Post'
+ *         company:
+ *           $ref: '#/components/schemas/Company'
+ *       required:
+ *         - id
+ *         - name 
+ *         - email 
+ *         - password 
+ *         - passwordConfirmation 
+ *         - status   [active, deactivated]
+ *         - type  [user, guest, administrator]
+ *         - companyId 
+ *       example:
+ *         id: 1
+ *         name: "Usuário Rotina 1"
+ *         email:  "email@rotina.digital"
+ *         password: "************"
+ *         phone: "17999999999"
+ *         status:  "active"
+ *         type: "user"
+ *         theme: "white"
+ *         picture: "imagem string"
+ *         workLoad: "08:00:00"
+ *         workStart: "08:30:00"
+ *         workEnd: "18:00:00"
+ *         lunchStart: "12:00:00"
+ *         lunchEnd: "13:30:00"
+ *         companyId: 5
+ *         createdAt: "2023-09-17T16:19:16.000-03:00"
+ *         updatedAt: "2023-09-17T16:35:40.000-03:00"
  */
+
+/**
+   @swagger
+   * paths:
+   *   /users:
+   *     get:
+   *       tags:
+   *        - User
+   *       summary: Lista todos os usuários
+   *       responses:
+   *         '200':
+   *           description: Lista de usuários obtida com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 type: array
+   *                 items:
+   *                   $ref: '#/components/schemas/User'
+   *     post:
+   *       tags:
+   *        - User
+   *       summary: Cria um novo usuário
+   *       requestBody:
+   *         required: true
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/User'
+   *       responses:
+   *         '201':
+   *           description: Usuário criado com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/User'
+   *   /users/{id}:
+   *     get:
+   *       tags:
+   *        - User
+   *       summary: Obtém um usuário por ID
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: integer
+   *             format: int64
+   *             minimum: 1
+   *       responses:
+   *         '200':
+   *           description: Usuário obtido com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/User'
+   *     put:
+   *       tags:
+   *        - User
+   *       summary: Atualiza um usuário por ID
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: integer
+   *             format: int64
+   *             minimum: 1
+   *       requestBody:
+   *         required: true
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 name:
+   *                   type: string
+   *                 phone:
+   *                   type: string
+   *                 email:
+   *                   type: string
+   *                 type:
+   *                   type: string
+   *                 status:
+   *                   type: string
+   *                 theme:
+   *                   type: string
+   *                 password:
+   *                   type: string
+   *                 passwordConfirmation:
+   *                   type: string
+   *                 oldPassword:
+   *                   type: string
+   *                 workStart:
+   *                   type: string
+   *                   format: date-time
+   *                 workEnd:
+   *                   type: string
+   *                   format: date-time
+   *                 lunchStart:
+   *                   type: string
+   *                   format: date-time
+   *                 lunchEnd:
+   *                   type: string
+   *                   format: date-time
+   *       responses:
+   *         '200':
+   *           description: Usuário atualizado com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/User'
+   *     delete:
+   *       tags:
+   *        - User
+   *       summary: Deleta um usuário por ID
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: integer
+   *             format: int64
+   *             minimum: 1
+   *       responses:
+   *         '204':
+   *           description: Usuário deletado com sucesso
+   */
+
 
 export default class User extends compose(BaseModel, Filterable) {
   public static namingStrategy = new CamelCaseNamingStrategy()

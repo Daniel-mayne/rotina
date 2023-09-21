@@ -7,47 +7,76 @@ import { FileFilter } from './Filters'
 
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 /**
-*  @swagger
-*  components:
-*    schemas:
-*      File:
-*        type: object
-*        properties:
-*          id:
-*            type: integer
-*            required: true
-*          name:
-*            type: string
-*            required: true
-*          extension:
-*            type: string
-*            required: true
-*          size:
-*            type: integer
-*            required: true
-*          link:
-*            type: string
-*            required: true
-*          companyId:
-*            type: integer
-*            required: true
-*          createdAt:
-*            type: string
-*          createdBy:
-*            type: string
-*          updatedAt:
-*            type: string
-*          company:
-*            $ref: '#/components/schemas/Deal'
-*          creator:
-*            $ref: '#/components/schemas/User'
+* @swagger
+* components:
+*   schemas:
+*     File:
+*       type: object
+*       properties:
+*         id:
+*           type: integer
+*           format: int64
+*         name:
+*           type: string
+*         extension:
+*           type: string
+*         size:
+*           type: integer
+*           format: int64
+*         link:
+*           type: string
+*         companyId:
+*           type: integer
+*           format: int64
+*         customerId:
+*           type: integer
+*           format: int64
+*         createdBy:
+*           type: integer
+*           format: int64
+*         createdAt:
+*           type: string
+*           format: date-time
+*         updatedAt:
+*           type: string
+*           format: date-time
+*         company:
+*           $ref: '#/components/schemas/Company' 
+*         user:
+*           $ref: '#/components/schemas/User' 
+*         customer:
+*           $ref: '#/components/schemas/Customer'
+*       required:
+*         - id
+*         - name 
+*         - extension 
+*         - size  
+*         - link 
+*         - companyId  
+*         - customerId 
+*         - createdBy 
+*         - createdAt  
+*         - updatedAt  
+*       example:
+*         id: 1
+*         name: "Arquivo"
+*         extension: "jpg"    
+*         size: 30       
+*         link: "https://teste.com"       
+*         companyId: 2       
+*         customerId: 2      
+*         createdBy: 2       
+*         createdAt: "2023-09-17T16:19:16.000-03:00"
+*         updatedAt: "2023-09-17T16:35:40.000-03:00" 
 */
+
+
 
 export default class File extends compose(BaseModel, Filterable) {
 
   public static $filter = () => FileFilter
 
-public static namingStrategy = new CamelCaseNamingStrategy()
+  public static namingStrategy = new CamelCaseNamingStrategy()
   @column({ isPrimary: true })
   public id: number
 

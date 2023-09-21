@@ -7,56 +7,53 @@ import { PostFilter } from './Filters'
 
 {
   /**
-   * @swagger
-   * components:
-   *   schemas:
-   *     Post:
-   *       type: object
-   *       properties:
-   *         id:
-   *           type: integer
-   *           required: true
-   *         name:
-   *           type: string
-   *           required: true
-   *         postDate:
-   *           type: string
-   *           format: datetime
-   *         status:
-   *           type: string
-   *           enum: [waiting_approval, approved, disapproved]
-   *           required: true
-   *           example: waiting_approval
-   *         feedId:
-   *           type: integer
-   *         createdBy:
-   *           type: integer
-   *         companyId:
-   *           type: integer
-   *         createdAt:
-   *           type: string
-   *           format: datetime
-   *         updatedAt:
-   *           type: string
-   *           format: datetime
-   *       required:
-   *         - id
-   *         - name
-   *         - status
-   *       example:
-   *         id: 1
-   *         name: "Post 1"
-   *         status: "waiting_approval"
-   *         feedId: 123
-   *         createdBy: 456
-   *         companyId: 789
-  //  *         postDate: "2023-09-19T10:00:00Z"
-  //  *         createdAt: "2023-09-19T12:00:00Z"
-  //  *         updatedAt: "2023-09-19T12:30:00Z"
-   */
+ * @swagger
+ * components:
+ *   schemas:
+ *     Post:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           required: true
+ *         name:
+ *           type: string
+ *           required: true
+ *         postDate:
+ *           type: string
+ *           format: datetime
+ *         status:
+ *           type: string
+ *           enum: [waiting_approval, approved, disapproved]
+ *           required: true
+ *           example: waiting_approval
+ *         feedId:
+ *           type: integer
+ *         createdBy:
+ *           type: integer
+ *         companyId:
+ *           type: integer
+ *         createdAt:
+ *           type: string
+ *           format: datetime
+ *         updatedAt:
+ *           type: string
+ *           format: datetime
+ *       required:
+ *         - id
+ *         - name
+ *         - status
+ *       example:
+ *         id: 1
+ *         name: "Post 1"
+ *         status: "waiting_approval"
+ *         feedId: 123
+ *         createdBy: 456
+ *         companyId: 789
+ */
 
   /**
-   @swagger
+   * @swagger
    * paths:
    *   /posts:
    *     get:
@@ -89,7 +86,7 @@ import { PostFilter } from './Filters'
    *             application/json:
    *               schema:
    *                 $ref: '#/components/schemas/Post'
-        /posts/{id}:
+   *   /posts/{id}:
    *     get:
    *       tags:
    *        - Post
@@ -155,6 +152,7 @@ import { PostFilter } from './Filters'
    *         '204':
    *           description: Postagem deletada com sucesso
    */
+
 }
 
 

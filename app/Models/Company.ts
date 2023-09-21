@@ -5,6 +5,77 @@ import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CompanyFilter } from './Filters'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Company:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           required: true
+ *         name:
+ *           type: string
+ *           required: true
+ *         smtpHost:
+ *           type: string
+ *         smtpPort:
+ *           type: string
+ *         smtpPassword:
+ *           type: string
+ *         userLimit:
+ *           type: integer
+ *         refferName:
+ *           type: string
+ *         status:
+ *           type: string
+ *           enum: [active, deactivated, waiting_activation]
+ *           required: true
+ *           example: "active"
+ *         stripeSubscriptionStatus:
+ *           type: string
+ *         stripeSubscriptionId:
+ *           type: integer
+ *         stripeCustomerId:
+ *           type: integer
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
+ *         user:
+ *           $ref: '#/components/schemas/User' 
+ *         customer:
+ *           $ref: '#/components/schemas/Customer' 
+ *         feed:
+ *           $ref: '#/components/schemas/Feed' 
+ *         persona:
+ *           $ref: '#/components/schemas/Persona' 
+ *         file:
+ *           $ref: '#/components/schemas/File'   
+ *       required:
+ *         - id
+ *         - name 
+ *         - status
+ *         - createdAt  
+ *         - updatedAt  
+ *       example:
+ *         id: 1
+ *         name: "XYZ Corporation"
+ *         status: "active"    
+ *         smtpHost: "smtp.xyz.com"
+ *         smtpPort: "587"
+ *         smtpPassword: "***********"
+ *         userLimit: 100
+ *         refferName: "Ref XYZ"
+ *         stripeSubscriptionStatus: "active"
+ *         stripeSubscriptionId: 12345
+ *         stripeCustomerId: 67890
+ *         createdAt: "2023-09-21T14:30:00.000-03:00"
+ *         updatedAt: "2023-09-21T15:45:00.000-03:00"
+ */
+
+
 
 export default class Company extends  compose(BaseModel, Filterable) {
 
