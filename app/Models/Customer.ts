@@ -52,8 +52,6 @@ import { CustomerFilter } from './Filters'
  *         - createdBy
  *         - accountManagerId
  *         - fillingPercentage
- *         - createdAt
- *         - updatedAt
  *       example:
  *         id: 1
  *         name: "ABC Corporation"
@@ -65,6 +63,110 @@ import { CustomerFilter } from './Filters'
  *         createdAt: "2023-09-21T14:30:00.000-03:00"
  *         updatedAt: "2023-09-21T15:45:00.000-03:00"
  */
+/**
+   @swagger
+   * paths:
+   *   /customers:
+   *     get:
+   *       tags:
+   *        - Customer
+   *       summary: Lista todos os customers
+   *       responses:
+   *         '200':
+   *           description: Lista de customers obtida com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 type: array
+   *                 items:
+   *                   $ref: '#/components/schemas/Customer'
+   *     post:
+   *       tags:
+   *        - Customer
+   *       summary: Cria um novo customer
+   *       requestBody:
+   *         required: true
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Customer'
+   *       responses:
+   *         '201':
+   *           description: Customer criado com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/Customer'
+   *   /customers/{id}:
+   *     get:
+   *       tags:
+   *        - Customer
+   *       summary: Obtém um customer por ID
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: integer
+   *             format: int64
+   *             minimum: 1
+   *       responses:
+   *         '200':
+   *           description: Customer obtido com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/Customer'
+   *     put:
+   *       tags:
+   *        - Customer
+   *       summary: Atualiza um customer por ID
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: integer
+   *             format: int64
+   *             minimum: 1
+   *       requestBody:
+   *         required: true
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 name:
+   *                   type: string
+   *                 logo:
+   *                   type: string
+   *                 status:
+   *                   type: string
+   *                 fillingPercentage:
+   *                   type: integer
+   *       responses:
+   *         '200':
+   *           description: Customer atualizado com sucesso
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/Customer'
+   *     delete:
+   *       tags:
+   *        - Customer
+   *       summary: Deleta um customer por ID
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: integer
+   *             format: int64
+   *             minimum: 1
+   *       responses:
+   *         '204':
+   *           description: Customer deletado com sucesso
+   */
 
 
 export default class Customer extends compose(BaseModel, Filterable) {

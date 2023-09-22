@@ -18,6 +18,18 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *         name:
  *           type: string
  *           required: true
+ *         adminName:
+ *           type: string
+ *           required: true
+ *         adminPassword:
+ *           type: string
+ *           required: true
+ *         adminPhone:
+ *           type: string
+ *           required: true
+ *         adminEmail:
+ *           type: string
+ *           required: true
  *         smtpHost:
  *           type: string
  *         smtpPort:
@@ -56,24 +68,125 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *       required:
  *         - id
  *         - name 
- *         - status
- *         - createdAt  
- *         - updatedAt  
+ *         - adminName
+ *         - adminEmail
+ *         - adminPassword
+ *         - adminPhone         
  *       example:
  *         id: 1
  *         name: "XYZ Corporation"
+ *         userLimit: 999
  *         status: "active"    
- *         smtpHost: "smtp.xyz.com"
- *         smtpPort: "587"
- *         smtpPassword: "***********"
- *         userLimit: 100
- *         refferName: "Ref XYZ"
- *         stripeSubscriptionStatus: "active"
- *         stripeSubscriptionId: 12345
- *         stripeCustomerId: 67890
  *         createdAt: "2023-09-21T14:30:00.000-03:00"
  *         updatedAt: "2023-09-21T15:45:00.000-03:00"
  */
+/**
+@swagger
+* paths:
+*   /companies:
+*     get:
+*       tags:
+*        - Company
+*       summary: Lista todas as companies
+*       responses:
+*         '200':
+*           description: Listagem de companies obtida com sucesso
+*           content:
+*             application/json:
+*               schema:
+*                 type: array
+*                 items:
+*                   $ref: '#/components/schemas/Company'
+*     post:
+*       tags:
+*        - Company
+*       summary: Cria uma nova company
+*       requestBody:
+*         required: true
+*         content:
+*           application/json:
+*             schema:
+*               $ref: '#/components/schemas/Company'
+*       responses:
+*         '201':
+*           description: Company criada com sucesso
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/Company'
+*   /companies/{id}:
+*     get:
+*       tags:
+*        - Company
+*       summary: Obtém uma company por ID
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       responses:
+*         '200':
+*           description: Company obtida com sucesso
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/Company'
+*     put:
+*       tags:
+*        - Company
+*       summary: Atualiza uma company por ID
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       requestBody:
+*         required: true
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 name:
+*                   type: string
+*                 smtpHost:
+*                   type: string
+*                 smtpPort:
+*                   type: string
+*                 smtpPassword:
+*                   type: string
+*                 status:
+*                   type: string
+*       responses:
+*         '200':
+*           description: Company atualizada com sucesso
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/Company'
+*     delete:
+*       tags:
+*        - Company
+*       summary: Deleta uma company por ID
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       responses:
+*         '204':
+*           description: Company deletado com sucesso
+*/
+
 
 
 

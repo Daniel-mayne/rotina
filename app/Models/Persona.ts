@@ -37,6 +37,12 @@ import { PersonaFilter } from './Filters'
   *         updatedAt:
   *           type: datetime
   *           format: datetime 
+  *         company:
+  *           $ref: '#/components/schemas/Company'
+  *         customer:
+  *           $ref: '#/components/schemas/Customer'
+  *         user:
+  *           $ref: '#/components/schemas/User'
   *       required:
   *          - id
   *          - name 

@@ -39,13 +39,26 @@ import { PostFilter } from './Filters'
  *         updatedAt:
  *           type: string
  *           format: datetime
+ *         feed:
+ *           $ref: '#/components/schemas/Feed'
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *         customer:
+ *           $ref: '#/components/schemas/Customer'
+ *         company:
+ *           $ref: '#/components/schemas/Company'
  *       required:
  *         - id
  *         - name
  *         - status
+ *         - postDate
+ *         - feedId
+ *         - createdBy
+ *         - companyId
  *       example:
  *         id: 1
- *         name: "Post 1"
+ *         name: "Postagem 1"
+ *         postDate: "2023-09-17T17:47:22.318-03:00"
  *         status: "waiting_approval"
  *         feedId: 123
  *         createdBy: 456
