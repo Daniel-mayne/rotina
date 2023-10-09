@@ -5,7 +5,7 @@ import { RecoveryPasswordValidator, ChangePasswordValidator } from 'App/Validato
 export default class UsersController {
   public async store({ request, auth, response }: HttpContextContract) {
     const { email, password } = request.all()
-    const token = await auth.attempt(email, password, { expiresIn: '30 days' })
+    const token = await auth.attempt(email, password, { expiresIn: '7 days' })
 
     await token.user.load(loader => loader.preload('company'))
     await token.user.load(loader => loader.preload('apiKeys'))
@@ -62,5 +62,6 @@ export default class UsersController {
 
   public async destroy({ auth }: HttpContextContract) {
     await auth.logout()
+    return true
   }
 }
