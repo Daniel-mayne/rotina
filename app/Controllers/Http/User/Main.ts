@@ -17,7 +17,7 @@ export default class UserController {
 
     return await User.filter(input)
       .where('companyId', auth.user!.companyId)
-      .orderBy(orderColumn, orderDirection)
+      .if(orderColumn && orderDirection, query => query.orderBy(orderColumn, orderDirection))
       .preload('company')
       .paginate(page, limit)
   }
