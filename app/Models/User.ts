@@ -340,7 +340,7 @@ export default class User extends compose(BaseModel, Filterable) {
   public feeds: HasMany<typeof Feed>
 
   @hasMany(() => File)
-  public Files: HasMany<typeof File>
+  public files: HasMany<typeof File>
 
   @hasMany(() => Post)
   public post: HasMany<typeof Post>
