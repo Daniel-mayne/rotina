@@ -17,10 +17,6 @@ export class StoreValidator {
     phone: schema.string({ trim: true }, [rules.mobile({ locale: ['pt-BR'] })]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
     theme: schema.enum.optional(['white', 'black'] as const),
-    workStart: schema.date.optional({ }),
-    workEnd: schema.date.optional({ }),
-    lunchStart: schema.date.optional({}),
-    lunchEnd: schema.date.optional({}),
     workLoad: schema.date.optional({})
   })
 
