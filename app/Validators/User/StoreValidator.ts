@@ -8,7 +8,7 @@ export class StoreValidator {
     name: schema.string({ trim: true }),
     password: schema.string({ trim: true }, [
       rules.confirmed('passwordConfirmation'),
-      rules.minLength(12),
+      rules.minLength(8),
     ]),
     email: schema.string({ trim: true }, [
       rules.email(),
@@ -17,11 +17,9 @@ export class StoreValidator {
     phone: schema.string({ trim: true }, [rules.mobile({ locale: ['pt-BR'] })]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
     theme: schema.enum.optional(['white', 'black'] as const),
-    workStart: schema.date.optional({ }),
-    workEnd: schema.date.optional({ }),
-    lunchStart: schema.date.optional({}),
-    lunchEnd: schema.date.optional({}),
-    workLoad: schema.date.optional({})
+    workLoad: schema.date.optional({
+      format: 'HH:mm:ss',
+    }),
   })
 
   public messages: CustomMessages = {
