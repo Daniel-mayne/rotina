@@ -270,6 +270,34 @@ export default class User extends compose(BaseModel, Filterable) {
   })
   public workLoad: DateTime
 
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
+  public workStart?: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
+  public workEnd?: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
+  public lunchStart?: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('HH:mm:ss')
+    }
+  })
+  public lunchEnd?: DateTime
+
   @column()
   public rememberMeToken?: string
 
@@ -297,6 +325,8 @@ export default class User extends compose(BaseModel, Filterable) {
   })
   public updatedAt: DateTime
 
+
+
   @hasMany(() => Apikey)
   public apiKeys: HasMany<typeof Apikey>
 
@@ -317,6 +347,8 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+
 
   @beforeSave()
   public static async hashPassword(user: User) {
