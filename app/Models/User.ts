@@ -279,9 +279,6 @@ export default class User extends compose(BaseModel, Filterable) {
   @hasMany(() => Apikey)
   public apiKeys: HasMany<typeof Apikey>
 
-  @hasMany(() => Customer)
-  public customers: HasMany<typeof Customer>
-
   @hasMany(() => Persona)
   public personas: HasMany<typeof Persona>
 
@@ -293,6 +290,12 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @hasMany(() => ApprovalItem)
   public approvalItem: HasMany<typeof ApprovalItem>
+
+  @hasMany(() => Customer, {
+    foreignKey: 'accountManagerId', 
+  })
+  public customers: HasMany<typeof Customer>
+
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
