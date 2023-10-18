@@ -44,14 +44,6 @@ import { UserFilter } from './Filters'
  *           type: string
  *         workLoad:
  *           type: datetime
- *         workStart:
- *           type: datetime
- *         workEnd:
- *           type: datetime
- *         lunchStart:
- *           type: datetime
- *         lunchEnd:
- *           type: datetime
  *         companyId:
  *           type: integer
  *         createdAt:
@@ -92,10 +84,6 @@ import { UserFilter } from './Filters'
  *         theme: "white"
  *         picture: "imagem string"
  *         workLoad: "08:00:00"
- *         workStart: "08:30:00"
- *         workEnd: "18:00:00"
- *         lunchStart: "12:00:00"
- *         lunchEnd: "13:30:00"
  *         companyId: 5
  *         createdAt: "2023-09-17T16:19:16.000-03:00"
  *         updatedAt: "2023-09-17T16:35:40.000-03:00"
@@ -192,18 +180,6 @@ import { UserFilter } from './Filters'
    *                   type: string
    *                 oldPassword:
    *                   type: string
-   *                 workStart:
-   *                   type: string
-   *                   format: date-time
-   *                 workEnd:
-   *                   type: string
-   *                   format: date-time
-   *                 lunchStart:
-   *                   type: string
-   *                   format: date-time
-   *                 lunchEnd:
-   *                   type: string
-   *                   format: date-time
    *       responses:
    *         '200':
    *           description: Usuário atualizado com sucesso
