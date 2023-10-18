@@ -9,15 +9,15 @@ export default class UserFilter extends BaseModelFilter {
   public static dropId: boolean = true
   public static camelCase: boolean = true
 
-  public search (word: string ): void {
+  public search(word: string): void {
     this.$query.andWhereRaw("(name LIKE ? OR email LIKE ? OR phone LIKE ?)", [`%${word}%`, `%${word}%`, `%${word}%`])
   }
 
-  public status (status: string ): void {
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
 
-  public name (name: string ): void {
+  public name(name: string): void {
     this.$query.whereLike('name', `%${name}%`)
   }
 
