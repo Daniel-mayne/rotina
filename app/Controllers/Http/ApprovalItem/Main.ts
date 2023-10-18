@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Post, Approval } from 'App/Models'
-import { StoreValidator, UpdateValidator } from 'App/Validators/Post'
+import { ApprovalItem, Approval } from 'App/Models'
+import { StoreValidator, UpdateValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 
-export default class PostsController {
+export default class ApprovalItemsController {
   public async index({ request, auth }: HttpContextContract) {
     const {
       limit = 10,
@@ -13,7 +13,7 @@ export default class PostsController {
       ...input
     } = request.qs()
 
-    return await  Post.filter(input)
+    return await  ApprovalItem.filter(input)
     .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
     .preload('approvals')
@@ -21,59 +21,59 @@ export default class PostsController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const postData = await request.validate(StoreValidator)
+    const approvalItemData = await request.validate(StoreValidator)
 
     const approvalIdExists = await Approval.query()
-      .where('id', postData.approvalId)
+      .where('id', approvalItemData.approvalId)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
     
-    const post = await new Post()
-      .merge({ ...postData, postDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: approvalIdExists.id, status: 'waiting_approval' })
+    const approvalItem = await new ApprovalItem()
+      .merge({ ...approvalItemData, approvalItemDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: approvalIdExists.id, status: 'waiting_approval' })
       .save()
     await auth.user?.load(loader => loader.preload('company'))
 
-    const preloads = [post.load(loader => loader.preload('approvals'))]
+    const preloads = [approvalItem.load(loader => loader.preload('approvals'))]
 
     await Promise.all(preloads)
 
-    return post
+    return approvalItem
   }
 
   public async show({ params, auth }: HttpContextContract) {
-    const post = await Post.query()
+    const approvalItem = await ApprovalItem.query()
     .where('id', params.id)
     .andWhere('companyId', auth.user!.companyId)
     .firstOrFail()
     const preloads = [
-      post.load(loader => loader.preload('approvals'))
+      approvalItem.load(loader => loader.preload('approvals'))
     ]
     await Promise.all(preloads)
-    return post
+    return approvalItem
 
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const postData = await request.validate(UpdateValidator)
-    const post = await Post.query()
+    const approvalItemData = await request.validate(UpdateValidator)
+    const approvalItem = await ApprovalItem.query()
     .where('id', params.id)
     .andWhere('companyId', auth.user!.companyId)
     .firstOrFail()
-    await post.merge(postData).save()
+    await approvalItem.merge(approvalItemData).save()
 
-    const preloads = [post.load(loader => loader.preload('approvals'))]
+    const preloads = [approvalItem.load(loader => loader.preload('approvals'))]
     await Promise.all(preloads)
 
-    return post
+    return approvalItem
 
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
-    const post = await Post.query()
+    const approvalItem = await ApprovalItem.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    return await post.delete()
+    return await approvalItem.delete()
   }
 }

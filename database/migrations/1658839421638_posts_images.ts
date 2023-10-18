@@ -7,11 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-        .integer('post_id')
+        .integer('approval_item_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('posts')
+        .inTable('approval_items')
         .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

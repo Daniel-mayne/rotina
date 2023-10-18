@@ -1,6 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('/posts', 'Post/Main')
+Route.resource('/approvalItems', 'ApprovalItem/Main')
     .apiOnly()
     .middleware({
         index: ['auth', 'acl:owner,administrator,user'],

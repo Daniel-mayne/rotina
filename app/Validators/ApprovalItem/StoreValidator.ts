@@ -7,7 +7,7 @@ export class StoreValidator {
   public schema = schema.create({
     name: schema.string({ trim: true }),
     approvalId: schema.number()
-    // postDate: schema.date()
+    // ApprovalItemDate: schema.date()
   })
 
   public messages: CustomMessages = {

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer, Post, User } from 'App/Models'
+import { Company, Customer, ApprovalItem, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalFilter } from './Filters'
@@ -42,8 +42,8 @@ import { ApprovalFilter } from './Filters'
  *           $ref: '#/components/schemas/Customer'
  *         user:
  *           $ref: '#/components/schemas/User'
- *         post:
- *           $ref: '#/components/schemas/Post'
+ *         approvalItem:
+ *           $ref: '#/components/schemas/ApprovalItem'
  *       required:
  *         - id
  *         - name
@@ -220,6 +220,6 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @hasMany(() => Post)
-  public post: HasMany<typeof Post>
+  @hasMany(() => ApprovalItem)
+  public approvalItem: HasMany<typeof ApprovalItem>
 }

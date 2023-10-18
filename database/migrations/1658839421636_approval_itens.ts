@@ -1,13 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'posts'
+  protected tableName = 'approval_items'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name', 255).notNullable()
-      table.timestamp('post_date', { useTz: true }).notNullable()
+      table.timestamp('approval_item_date', { useTz: true }).notNullable()
       table
         .enum('status', ['waiting_approval', 'approved', 'disapproved'])
         .notNullable()

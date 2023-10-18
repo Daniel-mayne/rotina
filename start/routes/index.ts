@@ -8,7 +8,7 @@ import './user'
 import './customer'
 import './persona'
 import './approval'
-import './post'
+import './approvalItem'
 
 Route.get('/', async () => {
   return { hello: 'world' }

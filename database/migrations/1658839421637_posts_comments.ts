@@ -8,11 +8,11 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('text', 255).notNullable()
       table
-        .integer('post_id')
+        .integer('approval_item_id')
         .unsigned()
         .nullable()
         .references('id')
-        .inTable('posts')
+        .inTable('approval_items')
         .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

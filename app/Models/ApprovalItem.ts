@@ -3,14 +3,14 @@ import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import { Company, Customer, Approval, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
-import { PostFilter } from './Filters'
+import { ApprovalItemFilter } from './Filters'
 
 {
   /**
  * @swagger
  * components:
  *   schemas:
- *     Post:
+ *     ApprovalItem:
  *       type: object
  *       properties:
  *         id:
@@ -19,7 +19,7 @@ import { PostFilter } from './Filters'
  *         name:
  *           type: string
  *           required: true
- *         postDate:
+ *         ApprovalItemDate:
  *           type: string
  *           format: datetime
  *         status:
@@ -51,14 +51,14 @@ import { PostFilter } from './Filters'
  *         - id
  *         - name
  *         - status
- *         - postDate
+ *         - approvalItemDate
  *         - approvalId
  *         - createdBy
  *         - companyId
  *       example:
  *         id: 1
- *         name: "Postagem 1"
- *         postDate: "2023-09-17T17:47:22.318-03:00"
+ *         name: "ApprovalItem 1"
+ *         ApprovalItemDate: "2023-09-17T17:47:22.318-03:00"
  *         status: "waiting_approval"
  *         approvalId: 123
  *         createdBy: 456
@@ -68,42 +68,42 @@ import { PostFilter } from './Filters'
   /**
    * @swagger
    * paths:
-   *   /posts:
+   *   /approvalItem:
    *     get:
    *       tags:
-   *        - Post
-   *       summary: Lista todas as postagens
+   *        - ApprovalItem
+   *       summary: Lista todas as approvalItem
    *       responses:
    *         '200':
-   *           description: Lista de postagens obtida com sucesso
+   *           description: Lista de approvalItem obtida com sucesso
    *           content:
    *             application/json:
    *               schema:
    *                 type: array
    *                 items:
-   *                   $ref: '#/components/schemas/Post'
+   *                   $ref: '#/components/schemas/ApprovalItem'
    *     post:
    *       tags:
-   *        - Post
-   *       summary: Cria uma nova postagem
+   *        - ApprovalItem
+   *       summary: Cria uma nova approvalItem
    *       requestBody:
    *         required: true
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Post'
+   *               $ref: '#/components/schemas/ApprovalItem'
    *       responses:
    *         '201':
-   *           description: Postagem criada com sucesso
+   *           description: ApprovalItem criada com sucesso
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/Post'
-   *   /posts/{id}:
+   *                 $ref: '#/components/schemas/ApprovalItem'
+   *   /ApprovalItems/{id}:
    *     get:
    *       tags:
-   *        - Post
-   *       summary: Obtém uma postagem por ID
+   *        - ApprovalItem
+   *       summary: Obtém uma approvalItem por ID
    *       parameters:
    *         - in: path
    *           name: id
@@ -114,15 +114,15 @@ import { PostFilter } from './Filters'
    *             minimum: 1
    *       responses:
    *         '200':
-   *           description: Postagem obtida com sucesso
+   *           description: ApprovalItem obtida com sucesso
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/Post'
+   *                 $ref: '#/components/schemas/ApprovalItem'
    *     put:
    *       tags:
-   *        - Post
-   *       summary: Atualiza uma postagem por ID
+   *        - ApprovalItem
+   *       summary: Atualiza uma approvalItem por ID
    *       parameters:
    *         - in: path
    *           name: id
@@ -144,15 +144,15 @@ import { PostFilter } from './Filters'
    *                   type: string
    *       responses:
    *         '200':
-   *           description: Postagem atualizada com sucesso
+   *           description: ApprovalItem atualizada com sucesso
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/Post'
+   *                 $ref: '#/components/schemas/ApprovalItem'
    *     delete:
    *       tags:
-   *        - Post
-   *       summary: Deleta uma postagem por ID
+   *        - ApprovalItem
+   *       summary: Deleta uma approvalItem por ID
    *       parameters:
    *         - in: path
    *           name: id
@@ -163,15 +163,15 @@ import { PostFilter } from './Filters'
    *             minimum: 1
    *       responses:
    *         '204':
-   *           description: Postagem deletada com sucesso
+   *           description: ApprovalItem deletada com sucesso
    */
 
 }
 
 
-export default class Post extends compose(BaseModel, Filterable) {
+export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
-  public static $filter = () => PostFilter
+  public static $filter = () => ApprovalItemFilter
 
   @column({ isPrimary: true })
   public id: number
@@ -184,7 +184,7 @@ export default class Post extends compose(BaseModel, Filterable) {
       return value
     }
   })
-  public postDate: DateTime
+  public approvalItemDate: DateTime
 
   @column()
   public status: 'waiting_approval' | 'approved' | 'disapproved'
