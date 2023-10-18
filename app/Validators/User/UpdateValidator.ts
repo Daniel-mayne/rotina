@@ -13,10 +13,10 @@ export class UpdateValidator {
     theme: schema.enum.optional(['white', 'black'] as const),
     password: schema.string.optional({ trim: true }, [
       rules.confirmed('passwordConfirmation'),
-      rules.minLength(12),
+      rules.minLength(8),
     ]),
     oldPassword: schema.string.optional({ trim: true }, [
-      rules.minLength(12)
+      rules.minLength(8)
     ]),
     sendNotificationWhatsapp: schema.boolean.optional(),
     workStart: schema.date.optional({}),

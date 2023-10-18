@@ -8,7 +8,7 @@ export class StoreValidator {
     name: schema.string({ trim: true }),
     password: schema.string({ trim: true }, [
       rules.confirmed('passwordConfirmation'),
-      rules.minLength(12),
+      rules.minLength(8),
     ]),
     email: schema.string({ trim: true }, [
       rules.email(),
