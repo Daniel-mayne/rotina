@@ -211,9 +211,19 @@ export default class Post extends compose(BaseModel, Filterable) {
   public company: BelongsTo<typeof Company>
 
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ 
+    autoCreate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    }, })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ 
+    autoCreate: true, 
+    autoUpdate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+   })
   public updatedAt: DateTime
 }

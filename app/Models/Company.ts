@@ -229,10 +229,21 @@ export default class Company extends  compose(BaseModel, Filterable) {
   @column()
   public stripeCustomerId?: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ 
+    autoCreate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+   })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ 
+    autoCreate: true, 
+    autoUpdate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+   })
   public updatedAt: DateTime
 
   @hasMany(() => User)

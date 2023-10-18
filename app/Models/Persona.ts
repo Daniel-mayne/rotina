@@ -219,10 +219,21 @@ export default class Persona extends compose(BaseModel, Filterable) {
   @column()
   public customerId: number
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ 
+    autoCreate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+   })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ 
+    autoCreate: true, 
+    autoUpdate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+   })
   public updatedAt: DateTime
 
   @belongsTo(() => Company)

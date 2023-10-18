@@ -197,11 +197,22 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @column()
   public fillingPercentage: number
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+    },
+  })
+  public updatedAt: DateTime;
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

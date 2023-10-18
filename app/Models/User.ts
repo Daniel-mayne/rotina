@@ -260,14 +260,17 @@ export default class User extends compose(BaseModel, Filterable) {
   public sendNotificationWhatsapp?: boolean
 
   @column.dateTime({
-    autoCreate: true, serialize: (value: DateTime) => {
+    autoCreate: true, 
+    serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     }
   })
   public createdAt: DateTime
 
   @column.dateTime({
-    autoCreate: true, autoUpdate: true, serialize: (value: DateTime) => {
+    autoCreate: true, 
+    autoUpdate: true, 
+    serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     }
   })
