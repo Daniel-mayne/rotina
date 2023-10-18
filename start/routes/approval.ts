@@ -1,6 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('/feeds', 'Feed/Main')
+Route.resource('/approvals', 'Approval/Main')
     .apiOnly()
     .middleware({
         index: ['auth', 'acl:owner,administrator,user'],

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, afterCreate, BaseModel, belongsTo, BelongsTo, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Apikey, Customer, Persona, Feed, Post, File } from 'App/Models'
+import { Company, Apikey, Customer, Persona, Approval, Post, File } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import { compose } from '@ioc:Adonis/Core/Helpers'
@@ -56,8 +56,8 @@ import { UserFilter } from './Filters'
  *           $ref: '#/components/schemas/Customer'
  *         persona:
  *           $ref: '#/components/schemas/Persona'
- *         feed:
- *           $ref: '#/components/schemas/Feed'
+ *         approval:
+ *           $ref: '#/components/schemas/Approval'
  *         file:
  *           $ref: '#/components/schemas/File'
  *         post:
@@ -285,8 +285,8 @@ export default class User extends compose(BaseModel, Filterable) {
   @hasMany(() => Persona)
   public personas: HasMany<typeof Persona>
 
-  @hasMany(() => Feed)
-  public feeds: HasMany<typeof Feed>
+  @hasMany(() => Approval)
+  public approvals: HasMany<typeof Approval>
 
   @hasMany(() => File)
   public files: HasMany<typeof File>

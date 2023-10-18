@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, User, Persona, Feed } from 'App/Models'
+import { Company, User, Persona, Approval } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CustomerFilter } from './Filters'
@@ -42,8 +42,8 @@ import { CustomerFilter } from './Filters'
  *           $ref: '#/components/schemas/User'
  *         persona:
  *           $ref: '#/components/schemas/Persona'
- *         feed:
- *           $ref: '#/components/schemas/Feed'
+ *         approval:
+ *           $ref: '#/components/schemas/Approval'
  *       required:
  *         - id
  *         - name
@@ -223,7 +223,7 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @hasMany(() => Persona)
   public personas: HasMany<typeof Persona>
 
-  @hasMany(() => Feed)
-  public feeds: HasMany<typeof Feed>
+  @hasMany(() => Approval)
+  public approvals: HasMany<typeof Approval>
 
 }

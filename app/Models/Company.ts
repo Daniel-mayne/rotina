@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Feed, File, Persona, User, Customer } from 'App/Models'
+import { Approval, File, Persona, User, Customer } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CompanyFilter } from './Filters'
@@ -59,8 +59,8 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *           $ref: '#/components/schemas/User' 
  *         customer:
  *           $ref: '#/components/schemas/Customer' 
- *         feed:
- *           $ref: '#/components/schemas/Feed' 
+ *         approval:
+ *           $ref: '#/components/schemas/Approval' 
  *         persona:
  *           $ref: '#/components/schemas/Persona' 
  *         file:
@@ -252,8 +252,8 @@ export default class Company extends  compose(BaseModel, Filterable) {
   @hasMany(()=> Customer)
   public customers: HasMany<typeof Customer>
 
-  @hasMany(()=> Feed)
-  public feeds: HasMany<typeof Feed>
+  @hasMany(()=> Approval)
+  public approvals: HasMany<typeof Approval>
 
   @hasMany(()=> Persona)
   public personas: HasMany<typeof Persona>

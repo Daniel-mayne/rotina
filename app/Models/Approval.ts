@@ -3,13 +3,13 @@ import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:
 import { Company, Customer, Post, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
-import { FeedFilter } from './Filters'
+import { ApprovalFilter } from './Filters'
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     Feed:
+ *     Approval:
  *       type: object
  *       properties:
  *         id:
@@ -56,8 +56,8 @@ import { FeedFilter } from './Filters'
  *         - updatedAt
  *       example:
  *         id: 123
- *         name: "Professional Feed"
- *         url: "https://professional-feed.com"
+ *         name: "Professional Approval"
+ *         url: "https://professional-approval.com"
  *         companyId: 456
  *         createdBy: 789
  *         customerId: 101
@@ -68,42 +68,42 @@ import { FeedFilter } from './Filters'
 /**
    * @swagger
    * paths:
-   *   /feeds:
+   *   /approvals:
    *     get:
    *       tags:
-   *        - Feed
-   *       summary: Lista todos as feeds
+   *        - Approval
+   *       summary: Lista todos as approvals
    *       responses:
    *         '200':
-   *           description: Lista de feeds obtida com sucesso
+   *           description: Lista de approvals obtida com sucesso
    *           content:
    *             application/json:
    *               schema:
    *                 type: array
    *                 items:
-   *                   $ref: '#/components/schemas/Feed'
+   *                   $ref: '#/components/schemas/Approval'
    *     post:
    *       tags:
-   *        - Feed
-   *       summary: Cria um novo feed
+   *        - Approval
+   *       summary: Cria um novo approval
    *       requestBody:
    *         required: true
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Feed'
+   *               $ref: '#/components/schemas/Approval'
    *       responses:
    *         '201':
-   *           description: Feed criada com sucesso
+   *           description: Approval criada com sucesso
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/Feed'
-   *   /feeds/{id}:
+   *                 $ref: '#/components/schemas/Approval'
+   *   /approvals/{id}:
    *     get:
    *       tags:
-   *        - Feed
-   *       summary: Obtém um feed por ID
+   *        - Approval
+   *       summary: Obtém um approval por ID
    *       parameters:
    *         - in: path
    *           name: id
@@ -114,15 +114,15 @@ import { FeedFilter } from './Filters'
    *             minimum: 1
    *       responses:
    *         '200':
-   *           description: Feed obtida com sucesso
+   *           description: Approval obtida com sucesso
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/Feed'
+   *                 $ref: '#/components/schemas/Approval'
    *     put:
    *       tags:
-   *        - Feed
-   *       summary: Atualiza um feed por ID
+   *        - Approval
+   *       summary: Atualiza um approval por ID
    *       parameters:
    *         - in: path
    *           name: id
@@ -146,15 +146,15 @@ import { FeedFilter } from './Filters'
    *                   type: string
    *       responses:
    *         '200':
-   *           description: Feed atualizado com sucesso
+   *           description: Approval atualizado com sucesso
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/Feed'
+   *                 $ref: '#/components/schemas/Approval'
    *     delete:
    *       tags:
-   *        - Feed
-   *       summary: Deleta uma feed por ID
+   *        - Approval
+   *       summary: Deleta uma approval por ID
    *       parameters:
    *         - in: path
    *           name: id
@@ -165,13 +165,13 @@ import { FeedFilter } from './Filters'
    *             minimum: 1
    *       responses:
    *         '204':
-   *           description: Feed deletado com sucesso
+   *           description: Approval deletado com sucesso
    */
 
 
-export default class Feed extends compose(BaseModel, Filterable)  {
+export default class Approval extends compose(BaseModel, Filterable)  {
 
-  public static $filter = () =>  FeedFilter
+  public static $filter = () =>  ApprovalFilter
 
   @column({ isPrimary: true })
   public id: number

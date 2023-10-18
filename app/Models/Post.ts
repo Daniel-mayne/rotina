@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer, Feed, User } from 'App/Models'
+import { Company, Customer, Approval, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { PostFilter } from './Filters'
@@ -27,7 +27,7 @@ import { PostFilter } from './Filters'
  *           enum: [waiting_approval, approved, disapproved]
  *           required: true
  *           example: waiting_approval
- *         feedId:
+ *         approvalId:
  *           type: integer
  *         createdBy:
  *           type: integer
@@ -39,8 +39,8 @@ import { PostFilter } from './Filters'
  *         updatedAt:
  *           type: string
  *           format: datetime
- *         feed:
- *           $ref: '#/components/schemas/Feed'
+ *         approval:
+ *           $ref: '#/components/schemas/Approval'
  *         user:
  *           $ref: '#/components/schemas/User'
  *         customer:
@@ -52,7 +52,7 @@ import { PostFilter } from './Filters'
  *         - name
  *         - status
  *         - postDate
- *         - feedId
+ *         - approvalId
  *         - createdBy
  *         - companyId
  *       example:
@@ -60,7 +60,7 @@ import { PostFilter } from './Filters'
  *         name: "Postagem 1"
  *         postDate: "2023-09-17T17:47:22.318-03:00"
  *         status: "waiting_approval"
- *         feedId: 123
+ *         approvalId: 123
  *         createdBy: 456
  *         companyId: 789
  */
@@ -190,7 +190,7 @@ export default class Post extends compose(BaseModel, Filterable) {
   public status: 'waiting_approval' | 'approved' | 'disapproved'
 
   @column()
-  public feedId: number
+  public approvalId: number
 
   @column()
   public createdBy: number
@@ -198,8 +198,8 @@ export default class Post extends compose(BaseModel, Filterable) {
   @column()
   public companyId: number
 
-  @belongsTo(() => Feed)
-  public feeds: BelongsTo<typeof Feed>
+  @belongsTo(() => Approval)
+  public approvals: BelongsTo<typeof Approval>
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

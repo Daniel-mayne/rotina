@@ -7,7 +7,7 @@ import './file'
 import './user'
 import './customer'
 import './persona'
-import './feed'
+import './approval'
 import './post'
 
 Route.get('/', async () => {

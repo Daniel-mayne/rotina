@@ -6,7 +6,7 @@ export class StoreValidator {
 
   public schema = schema.create({
     name: schema.string({ trim: true }),
-    feedId: schema.number()
+    approvalId: schema.number()
     // postDate: schema.date()
   })
 

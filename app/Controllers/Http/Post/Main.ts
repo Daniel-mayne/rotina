@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Post, Feed } from 'App/Models'
+import { Post, Approval } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Post'
 import { DateTime } from 'luxon'
 
@@ -16,25 +16,25 @@ export default class PostsController {
     return await  Post.filter(input)
     .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
-    .preload('feeds')
+    .preload('approvals')
     .paginate(page, limit)
   }
 
   public async store({ request, auth }: HttpContextContract) {
     const postData = await request.validate(StoreValidator)
 
-    const feedIdExists = await Feed.query()
-      .where('id', postData.feedId)
+    const approvalIdExists = await Approval.query()
+      .where('id', postData.approvalId)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
     
     const post = await new Post()
-      .merge({ ...postData, postDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, feedId: feedIdExists.id, status: 'waiting_approval' })
+      .merge({ ...postData, postDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: approvalIdExists.id, status: 'waiting_approval' })
       .save()
     await auth.user?.load(loader => loader.preload('company'))
 
-    const preloads = [post.load(loader => loader.preload('feeds'))]
+    const preloads = [post.load(loader => loader.preload('approvals'))]
 
     await Promise.all(preloads)
 
@@ -47,7 +47,7 @@ export default class PostsController {
     .andWhere('companyId', auth.user!.companyId)
     .firstOrFail()
     const preloads = [
-      post.load(loader => loader.preload('feeds'))
+      post.load(loader => loader.preload('approvals'))
     ]
     await Promise.all(preloads)
     return post
@@ -62,7 +62,7 @@ export default class PostsController {
     .firstOrFail()
     await post.merge(postData).save()
 
-    const preloads = [post.load(loader => loader.preload('feeds'))]
+    const preloads = [post.load(loader => loader.preload('approvals'))]
     await Promise.all(preloads)
 
     return post

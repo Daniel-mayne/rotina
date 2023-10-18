@@ -13,11 +13,11 @@ export default class extends BaseSchema {
         .notNullable()
         .defaultTo('waiting_approval')
       table
-        .integer('feed_id')
+        .integer('approval_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('feeds')
+        .inTable('approvals')
         .onDelete('CASCADE')
       table
         .integer('created_by')
