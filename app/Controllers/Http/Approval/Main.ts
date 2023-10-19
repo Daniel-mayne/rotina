@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Approval, Customer } from 'App/Models'
+import { Approval } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Approval'
 
 export default class ApprovalsController {
@@ -20,20 +20,17 @@ export default class ApprovalsController {
 }
 
   public async store({ request, auth }: HttpContextContract) {
-    const approvalData = await request.validate(StoreValidator)
-
-    const customerIdExists = await Customer.query()
-    .where('id', approvalData.customerId)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
-
+    const data = await request.validate(StoreValidator)
 
     const approval = await new Approval()
-      .merge({ ...approvalData, companyId: auth.user!.companyId, createdBy: auth.user!.id, customerId: customerIdExists.id, status: 'active' })
+      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
       .save()
-    await auth.user?.load(loader => loader.preload('company'))
-    const preloads = [approval.load(loader => loader.preload('company'))]
-    await Promise.all(preloads)
+
+    await approval.load(loader => {
+      loader.preload('company')
+      loader.preload('customer')
+      loader.preload('user')
+    })
 
     return approval
   }
