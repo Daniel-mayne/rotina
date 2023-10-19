@@ -4,7 +4,7 @@ import { Company, Customer, ApprovalItem, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalFilter } from './Filters'
-
+import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 /**
  * @swagger
  * components:
@@ -168,7 +168,6 @@ import { ApprovalFilter } from './Filters'
    *           description: Approval deletado com sucesso
    */
 
-
 export default class Approval extends compose(BaseModel, Filterable)  {
 
   public static $filter = () =>  ApprovalFilter
@@ -180,6 +179,11 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   public name: string
 
   @column()
+  @slugify({
+    strategy: 'shortId',
+    fields: ['name'],
+    allowUpdates: true,
+  })
   public url: string
 
   @column()
