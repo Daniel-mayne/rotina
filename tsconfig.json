@@ -42,7 +42,8 @@
       "@adonisjs/mail",
       "@adonisjs/view",
       "@mezielabs/adonis-stripe",
-      "adonis-lucid-filter"
+      "adonis-lucid-filter",
+      "@adonisjs/lucid-slugify"
     ]
   }
 }

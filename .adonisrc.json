@@ -38,7 +38,8 @@
     "./providers/PusherProvider",
     "@mezielabs/adonis-stripe",
     "@melchyore/adonis-cache",
-    "adonis-lucid-filter"
+    "adonis-lucid-filter",
+    "@adonisjs/lucid-slugify"
   ],
   "aceProviders": [
     "@adonisjs/repl"
