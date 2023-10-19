@@ -221,7 +221,7 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {foreignKey: 'createdBy' })
   public user: BelongsTo<typeof User>
 
   @hasMany(() => ApprovalItem)
