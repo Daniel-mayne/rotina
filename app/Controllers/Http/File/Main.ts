@@ -1,6 +1,12 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { File } from 'App/Models'
 import { StoreValidator } from 'App/Validators/File'
+import Drive from '@ioc:Adonis/Core/Drive'
+import { string } from '@ioc:Adonis/Core/Helpers'
+import Env from '@ioc:Adonis/Core/Env'
+
+
+
 
 export default class FilesController {
   public async index({ request, auth }: HttpContextContract) {
@@ -18,16 +24,35 @@ export default class FilesController {
     .preload('customer')
     .paginate(page, limit)
 }
-  public async store({ request, auth }: HttpContextContract) {
-    const fileData = await request.validate(StoreValidator)
-    const file = await new File()
-      .merge({ ...fileData, companyId: auth.user!.companyId })
-      .save()
-    await auth.user?.load(loader => loader.preload('company'))
-    const preloads = [file.load(loader => loader.preload('customer'))]
-    await Promise.all(preloads)
-    return file
+
+
+public async store({ request, auth }) {
+  const fileData = await request.validate(StoreValidator)
+  const fs = require('fs')
+
+  const fileName = fileData.file.clientName
+    .replace(`.${fileData.file.extname}`, '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+
+  const name = `${fileName.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file.extname}`
+  const contentType = fileData.file.headers['content-type']
+  const acl = 'public'
+
+
+  await Drive.put(`tmp/${name}`,  fs.createReadStream(fileData.file.tmpPath), {
+    contentType,
+    acl, 
+    'Content-Length': fileData.file.size,
+  })
+
+  const url = `${Env.get('S3_DOMAIN')}/tmp/rotina/uploads/${name}`
+
+  return {
+    url,
+    name
   }
+}
 
   public async show({}: HttpContextContract) {}
 
