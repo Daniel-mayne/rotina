@@ -5,9 +5,6 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import Env from '@ioc:Adonis/Core/Env'
 
-
-
-
 export default class FilesController {
   public async index({ request, auth }: HttpContextContract) {
     const {
@@ -19,44 +16,36 @@ export default class FilesController {
     } = request.qs()
 
     return await File.filter(input)
-    .where('companyId', auth.user!.companyId)
-    .orderBy(orderColumn, orderDirection)
-    .preload('customer')
-    .paginate(page, limit)
-}
-
-
-public async store({ request, auth }) {
-  const fileData = await request.validate(StoreValidator)
-  const fs = require('fs')
-
-  const fileName = fileData.file.clientName
-    .replace(`.${fileData.file.extname}`, '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-
-  const name = `${fileName.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file.extname}`
-  const contentType = fileData.file.headers['content-type']
-  const acl = 'public'
-
-
-  await Drive.put(`tmp/${name}`,  fs.createReadStream(fileData.file.tmpPath), {
-    contentType,
-    acl, 
-    'Content-Length': fileData.file.size,
-  })
-
-  const url = `${Env.get('S3_DOMAIN')}/tmp/rotina/uploads/${name}`
-
-  return {
-    url,
-    name
+      .where('companyId', auth.user!.companyId)
+      .orderBy(orderColumn, orderDirection)
+      .preload('customer')
+      .paginate(page, limit)
   }
-}
 
-  public async show({}: HttpContextContract) {}
+  public async store({ request, auth }) {
+    const fileData = await request.validate(StoreValidator)
+    const fs = require('fs')
 
-  public async update({}: HttpContextContract) {}
+    const fileName = fileData.file.clientName
+      .replace(`.${fileData.file.extname}`, '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
 
-  public async destroy({}: HttpContextContract) {}
+    const name = `${fileName.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file.extname}`
+    const contentType = fileData.file.headers['content-type']
+    const acl = 'public'
+
+    await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${name}`, fs.createReadStream(fileData.file.tmpPath), {
+      contentType,
+      acl,
+      'Content-Length': fileData.file.size,
+    })
+
+    const url = `${Env.get('S3_DOMAIN')}/companies/${auth.user!.id}/tmp/uploads/${name}`
+
+    return {
+      url,
+      name
+    }
+  }
 }
