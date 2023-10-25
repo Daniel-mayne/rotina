@@ -8,6 +8,7 @@ export class UpdateValidator {
         name: schema.string.optional({ trim: true }),
         description: schema.string.optional({ trim: true }),
         pains: schema.string.optional({ trim: true }),
+        status: schema.enum.optional(['active', 'deactivated'] as const),
         objections: schema.string.optional()
     })
 

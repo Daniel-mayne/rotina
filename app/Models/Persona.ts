@@ -219,6 +219,9 @@ export default class Persona extends compose(BaseModel, Filterable) {
   @column()
   public customerId: number
 
+  @column()
+  public status?: 'active' | 'deactivated'
+
   @column.dateTime({ 
     autoCreate: true,
     serialize: (value: DateTime) => {

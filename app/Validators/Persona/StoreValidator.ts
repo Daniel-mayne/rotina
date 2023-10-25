@@ -7,7 +7,7 @@ export class StoreValidator {
   public schema = schema.create({
     name: schema.string({ trim: true }),
     description: schema.string.optional({ trim: true }),
-    pains: schema.string({ trim: true }),
+    pains: schema.string.optional({ trim: true }),
     objections: schema.string.optional({ trim: true}),
     customerId: schema.number()
   })
