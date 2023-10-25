@@ -244,9 +244,6 @@ export default class Persona extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>
-
-  @hasMany(() => User)
-  public users: HasMany<typeof User>
 }
 
 

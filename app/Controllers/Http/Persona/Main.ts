@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Persona, Customer } from 'App/Models'
+import { Persona } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Persona'
 
 export default class PersonaController {
@@ -22,20 +22,16 @@ export default class PersonaController {
 
 
   public async store({ request, auth }: HttpContextContract) {
-    const personaData = await request.validate(StoreValidator)
-
-    const customerIdExists = await Customer.query()
-      .where('id', personaData.customerId)
-      .andWhere('companyId', auth.user!.companyId)
-      .firstOrFail()
-
+    const data = await request.validate(StoreValidator)
 
     const persona = await new Persona()
-      .merge({ ...personaData, companyId: auth.user!.companyId, customerId: customerIdExists.id  })
+      .merge({ ...data, companyId: auth.user!.companyId, customerId: data.customerId, status: 'active'  })
       .save()
-    await auth.user?.load(loader => loader.preload('company'))
-    const preloads = [persona.load(loader => loader.preload('customer'))]
-    await Promise.all(preloads)
+
+    await persona.load(loader => {
+      loader.preload('customer')
+    })
+
     return persona
   }
 
@@ -51,16 +47,18 @@ export default class PersonaController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
+    const data = await request.validate(UpdateValidator)
 
-    const personaData = await request.validate(UpdateValidator)
     const persona = await Persona.query()
     .where('id', params.id)
     .andWhere('companyId', auth.user!.companyId)
     .firstOrFail()
-    await persona.merge(personaData).save()
 
-    const preloads = [persona.load(loader => loader.preload('company'))]
-    await Promise.all(preloads)
+    await persona.merge(data).save()
+
+    await persona.load(loader => {
+      loader.preload('customer')
+    })
 
     return persona
 
