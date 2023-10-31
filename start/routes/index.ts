@@ -9,6 +9,7 @@ import './customer'
 import './persona'
 import './approval'
 import './approvalItem'
+import './customerInformation'
 
 Route.get('/', async () => {
   return { hello: 'world' }

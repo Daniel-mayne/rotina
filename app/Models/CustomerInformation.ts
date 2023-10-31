@@ -19,7 +19,7 @@ export default class CustomerInformation extends compose(BaseModel, Filterable){
   public text: string
 
   @column()
-  public type?: 'text' | 'code' | 'image'
+  public type: 'text' | 'code' | 'image'
 
   @column()
   public language: string
@@ -29,6 +29,10 @@ export default class CustomerInformation extends compose(BaseModel, Filterable){
 
   @column()
   public isValid: boolean
+
+  @column()
+  public companyId: number
+
 
   @column()
   public customerId: number

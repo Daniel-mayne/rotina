@@ -10,7 +10,9 @@ export class StoreValidator {
     type: schema.enum(['text', 'code', 'image'] as const),
     language: schema.string.optional({ trim: true }),
     status: schema.enum.optional(['active', 'deactivated'] as const),
-    isValid: schema.string.optional({ trim: true })
+    isValid: schema.boolean.optional(),
+    customerId: schema.number(),
+    updateId: schema.number.optional()
   })
 
   public messages: CustomMessages = {
