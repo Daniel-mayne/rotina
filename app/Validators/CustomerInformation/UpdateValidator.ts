@@ -14,6 +14,5 @@ export class UpdateValidator {
   })
 
   public messages: CustomMessages = {
-    'required': 'O campo {{ field }} é obrigatório.'
   }
 }
