@@ -21,19 +21,19 @@ export default class UserFilter extends BaseModelFilter {
     this.$query.whereLike('name', `%${name}%`)
   }
 
-  type(types: string) {
+  public type(types: string) {
     this.$query.whereIn('type', types.split(','))
   }
 
-  phone(phone: string) {
+  public phone(phone: string) {
     this.$query.whereLike('phone', `${phone}`)
   }
 
-  email(email: string) {
+  public email(email: string) {
     this.$query.whereLike('email', `${email}`)
   }
 
-  createdAt(value: string) {
+  public createdAt(value: string) {
     const dates: string[] = value.split(',')
     const firstDate = DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').startOf('day').toSQL()
     const seccondDate = dates[1]

@@ -5,7 +5,12 @@ import Persona from 'App/Models/Persona'
 export default class PersonaFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Persona, Persona>
 
-  public status (status: string ): void {
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
+
+  public customer(ids: string): void {
+    this.$query.whereIn('customer_id', ids.split(','))
+  }
+
 }

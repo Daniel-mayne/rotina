@@ -226,10 +226,10 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @hasMany(() => Approval)
   public approvals: HasMany<typeof Approval>
 
-  @hasOne(() => User, {
+  @belongsTo(() => User, {
     foreignKey: 'accountManagerId',
   })
-  public user: HasOne<typeof User>
+  public accountManager: BelongsTo<typeof User>
 
   @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
