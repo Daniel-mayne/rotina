@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.integer('company_id').unsigned().notNullable().references('id').inTable('companies').onDelete('CASCADE')
       table.integer('customer_id').unsigned().notNullable().references('id').inTable('customers').onDelete('CASCADE')
       table.integer('created_by').unsigned().notNullable().references('id').inTable('users').onDelete('CASCADE')
-      table.integer('update_by').unsigned().notNullable().references('id').inTable('users').onDelete('CASCADE')
+      table.integer('update_by').unsigned().nullable().references('id').inTable('users').onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

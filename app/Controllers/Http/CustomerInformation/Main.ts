@@ -7,27 +7,66 @@ export default class CustomerInformationController {
         const {
             limit = 10,
             page = 1,
-            orderColumn = 'name',
+            orderColumn = 'title',
             orderDirection = 'asc',
             ...input
         } = request.qs()
 
         return await CustomerInformation.filter(input)
-            .where('id', auth.user!.companyId)
+            .where('companyId', auth.user!.companyId)
             .orderBy(orderColumn, orderDirection)
             .preload('customer')
             .paginate(page, limit)
     }
 
-    public async store({request, auth}: HttpContextContract){
+    public async store({ request, auth }: HttpContextContract) {
         const informationData = await request.validate(StoreValidator)
         const information = await new CustomerInformation()
-        .merge({ ...informationData, companyId: auth.user!.companyId, createdBy: auth.user!.id, updateBy: auth.user!.id, status: 'active' })
-        .save()
+            .merge({
+                ...informationData,
+                companyId: auth.user!.companyId,
+                createdBy: auth.user!.id,
+                status: 'active'
+            })
+            .save()
 
         await information.load(loader => loader.preload('customer'))
         return information
     }
 
+    public async show({ params, auth }: HttpContextContract) {
+        const information = await CustomerInformation.query()
+            .where('id', params.id)
+            .andWhere('companyId', auth.user!.companyId)
+            .preload('customer')
+            .firstOrFail()
+
+        return information
+    }
+
+
+    public async update({ params, request, auth }: HttpContextContract) {
+        const informationData = await request.validate(UpdateValidator)
+        const information = await CustomerInformation.query()
+            .where('id', params.id)
+            .andWhere('companyId', auth.user!.companyId)
+            .firstOrFail()
+        await information.merge({
+            ...informationData, updateBy: auth.user!.id
+        }).save()
+        await information.load(loader => loader.preload('customer'))
+
+        return information
+    }
+
+
+    public async destroy({ params, auth }: HttpContextContract) {
+        const information = await CustomerInformation.query()
+            .where('id', params.id)
+            .andWhere('companyId', auth.user!.companyId)
+            .firstOrFail()
+
+        return await information.delete()
+    }
 
 }

@@ -1,4 +1,4 @@
-import { schema, CustomMessages} from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class StoreValidator {
@@ -11,8 +11,7 @@ export class StoreValidator {
     language: schema.string.optional({ trim: true }),
     status: schema.enum.optional(['active', 'deactivated'] as const),
     isValid: schema.boolean.optional(),
-    customerId: schema.number(),
-    updateId: schema.number.optional()
+    customerId: schema.number()
   })
 
   public messages: CustomMessages = {
