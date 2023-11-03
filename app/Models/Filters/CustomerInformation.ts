@@ -5,7 +5,11 @@ import CustomerInformation from 'App/Models/CustomerInformation'
 export default class CustomerInformationFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof CustomerInformation, CustomerInformation>
 
-  public status (status: string ): void {
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
+  }
+
+  public customer(ids: string): void {
+    this.$query.whereIn('customer_id', ids.split(','))
   }
 }
