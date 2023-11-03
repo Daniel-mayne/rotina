@@ -13,4 +13,12 @@ export default class PersonaFilter extends BaseModelFilter {
     this.$query.whereIn('customer_id', ids.split(','))
   }
 
+  public search(word: string): void {
+    this.$query.andWhereRaw("(name LIKE ?)", [`%${word}%`])
+  }
+
+  public name(name: string): void {
+    this.$query.whereLike('name', `%${name}%`)
+  }
+
 }
