@@ -70,8 +70,6 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 *         updatedAt: "2023-09-17T16:35:40.000-03:00" 
 */
 
-
-
 export default class File extends compose(BaseModel, Filterable) {
 
   public static $filter = () => FileFilter

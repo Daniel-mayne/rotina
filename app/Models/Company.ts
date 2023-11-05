@@ -186,14 +186,9 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 *         '204':
 *           description: Company deletado com sucesso
 */
-
-
-
-
 export default class Company extends  compose(BaseModel, Filterable) {
 
   public static $filter = () => CompanyFilter
-
   public static namingStrategy = new CamelCaseNamingStrategy()
 
   @column({ isPrimary: true })

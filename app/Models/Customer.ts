@@ -4,8 +4,6 @@ import { Company, User, Persona, Approval, CustomerInformation } from 'App/Model
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CustomerFilter } from './Filters'
-
-
 /**
  * @swagger
  * components:
@@ -167,8 +165,6 @@ import { CustomerFilter } from './Filters'
    *         '204':
    *           description: Customer deletado com sucesso
    */
-
-
 export default class Customer extends compose(BaseModel, Filterable) {
 
   public static $filter = () => CustomerFilter
@@ -220,16 +216,17 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @belongsTo(() => User)
   public users: BelongsTo<typeof User>
 
-  @hasMany(() => Persona)
-  public personas: HasMany<typeof Persona>
-
-  @hasMany(() => Approval)
-  public approvals: HasMany<typeof Approval>
 
   @belongsTo(() => User, {
     foreignKey: 'accountManagerId',
   })
   public accountManager: BelongsTo<typeof User>
+
+  @hasMany(() => Persona)
+  public personas: HasMany<typeof Persona>
+
+  @hasMany(() => Approval)
+  public approvals: HasMany<typeof Approval>
 
   @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>

@@ -7,7 +7,6 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { UserFilter } from './Filters'
-
 /**
  * @swagger
  * components:
@@ -88,7 +87,6 @@ import { UserFilter } from './Filters'
  *         createdAt: "2023-09-17T16:19:16.000-03:00"
  *         updatedAt: "2023-09-17T16:35:40.000-03:00"
  */
-
 /**
    @swagger
    * paths:
@@ -203,12 +201,8 @@ import { UserFilter } from './Filters'
    *         '204':
    *           description: Usuário deletado com sucesso
    */
-
-
 export default class User extends compose(BaseModel, Filterable) {
   public static namingStrategy = new CamelCaseNamingStrategy()
-
-
   public static $filter = () => UserFilter
 
   public serializeExtras = true

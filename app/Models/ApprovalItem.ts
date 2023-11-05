@@ -4,8 +4,6 @@ import { Company, Customer, Approval, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalItemFilter } from './Filters'
-
-{
   /**
  * @swagger
  * components:
@@ -165,10 +163,6 @@ import { ApprovalItemFilter } from './Filters'
    *         '204':
    *           description: ApprovalItem deletada com sucesso
    */
-
-}
-
-
 export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   public static $filter = () => ApprovalItemFilter
@@ -178,13 +172,6 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   @column()
   public name: string
-
-  @column.dateTime({
-    serialize: (value: DateTime) => {
-      return value
-    }
-  })
-  public approvalItemDate: DateTime
 
   @column()
   public status: 'waiting_approval' | 'approved' | 'disapproved'
@@ -198,18 +185,12 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   @column()
   public companyId: number
 
-  @belongsTo(() => Approval)
-  public approvals: BelongsTo<typeof Approval>
-
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
-
-  @belongsTo(() => Customer)
-  public customer: BelongsTo<typeof Customer>
-
-  @belongsTo(() => Company)
-  public company: BelongsTo<typeof Company>
-
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value
+    }
+  })
+  public approvalItemDate: DateTime
 
   @column.dateTime({ 
     autoCreate: true,
@@ -226,4 +207,16 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
     },
    })
   public updatedAt: DateTime
+
+  @belongsTo(() => Approval)
+  public approvals: BelongsTo<typeof Approval>
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Customer)
+  public customer: BelongsTo<typeof Customer>
+
+  @belongsTo(() => Company)
+  public company: BelongsTo<typeof Company>
 }

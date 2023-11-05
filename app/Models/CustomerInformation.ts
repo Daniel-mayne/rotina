@@ -4,7 +4,6 @@ import { Customer, User, Company } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CustomerFilter } from './Filters'
-
 /**
  * @swagger
  * components:
@@ -186,7 +185,6 @@ import { CustomerFilter } from './Filters'
    *         '204':
    *           description: Customer information deletado com sucesso
    */
-
 export default class CustomerInformation extends compose(BaseModel, Filterable) {
   public static $filter = () => CustomerFilter
 
