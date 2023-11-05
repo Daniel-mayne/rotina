@@ -225,5 +225,5 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   public user: BelongsTo<typeof User>
 
   @hasMany(() => ApprovalItem)
-  public approvalItem: HasMany<typeof ApprovalItem>
+  public approvalItems: HasMany<typeof ApprovalItem>
 }

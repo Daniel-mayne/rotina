@@ -16,7 +16,7 @@ export default class ApprovalItemsController {
     return await  ApprovalItem.filter(input)
     .where('companyId', auth.user!.companyId)
     .orderBy(orderColumn, orderDirection)
-    .preload('approvals')
+    .preload('approval')
     .paginate(page, limit)
   }
 
@@ -34,7 +34,7 @@ export default class ApprovalItemsController {
       .save()
     await auth.user?.load(loader => loader.preload('company'))
 
-    const preloads = [approvalItem.load(loader => loader.preload('approvals'))]
+    const preloads = [approvalItem.load(loader => loader.preload('approval'))]
 
     await Promise.all(preloads)
 
@@ -47,7 +47,7 @@ export default class ApprovalItemsController {
     .andWhere('companyId', auth.user!.companyId)
     .firstOrFail()
     const preloads = [
-      approvalItem.load(loader => loader.preload('approvals'))
+      approvalItem.load(loader => loader.preload('approval'))
     ]
     await Promise.all(preloads)
     return approvalItem
@@ -62,7 +62,7 @@ export default class ApprovalItemsController {
     .firstOrFail()
     await approvalItem.merge(approvalItemData).save()
 
-    const preloads = [approvalItem.load(loader => loader.preload('approvals'))]
+    const preloads = [approvalItem.load(loader => loader.preload('approval'))]
     await Promise.all(preloads)
 
     return approvalItem

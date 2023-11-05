@@ -209,7 +209,7 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   public updatedAt: DateTime
 
   @belongsTo(() => Approval)
-  public approvals: BelongsTo<typeof Approval>
+  public approval: BelongsTo<typeof Approval>
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

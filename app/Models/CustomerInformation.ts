@@ -246,5 +246,5 @@ export default class CustomerInformation extends compose(BaseModel, Filterable) 
   public company: BelongsTo<typeof Company>
 
   @belongsTo(() => User)
-  public users: BelongsTo<typeof User>
+  public user: BelongsTo<typeof User>
 }

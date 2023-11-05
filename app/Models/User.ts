@@ -283,7 +283,7 @@ export default class User extends compose(BaseModel, Filterable) {
   public files: HasMany<typeof File>
 
   @hasMany(() => ApprovalItem)
-  public approvalItem: HasMany<typeof ApprovalItem>
+  public approvalItems: HasMany<typeof ApprovalItem>
 
   @hasMany(() => Customer, {
     foreignKey: 'accountManagerId', 
