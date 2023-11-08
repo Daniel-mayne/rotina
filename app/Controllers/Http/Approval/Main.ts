@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Approval } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Approval'
+import { DateTime } from 'luxon'
+
 
 export default class ApprovalsController {
   public async index({ request, auth }: HttpContextContract) {
@@ -13,17 +15,17 @@ export default class ApprovalsController {
     } = request.qs()
 
     return await Approval.filter(input)
-    .where('companyId', auth.user!.companyId)
-    .orderBy(orderColumn, orderDirection)
-    .preload('customer')
-    .paginate(page, limit)
-}
+      .where('companyId', auth.user!.companyId)
+      .orderBy(orderColumn, orderDirection)
+      .preload('customer')
+      .paginate(page, limit)
+  }
 
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
     const approval = await new Approval()
-      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
+      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'Awaiting approval' })
       .save()
 
     await approval.load(loader => {
@@ -37,9 +39,9 @@ export default class ApprovalsController {
 
   public async show({ params, auth }: HttpContextContract) {
     const approval = await Approval.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
     const preloads = [
       approval.load(loader => loader.preload('customer')),
       approval.load(loader => loader.preload('company')),
@@ -52,10 +54,17 @@ export default class ApprovalsController {
 
     const approvalData = await request.validate(UpdateValidator)
     const approval = await Approval.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
-    await approval.merge(approvalData).save()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
+
+    if (approvalData.status == 'Approved') {
+      await approval.merge({ ...approvalData, approvalDate: DateTime.now().setZone() }).save()
+    }
+    if (approvalData.status == 'Denied') {
+      await approval.merge({ ...approvalData, reprovedDate: DateTime.now().setZone() }).save()
+    }
+
     const preloads = [approval.load(loader => loader.preload('customer'))]
     await Promise.all(preloads)
 
@@ -68,7 +77,7 @@ export default class ApprovalsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-      approval.merge({ status: 'deactivated'}).save()
-    return 
+    approval.merge({ status: 'Deleted' }).save()
+    return
   }
 }

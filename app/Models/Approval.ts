@@ -187,7 +187,7 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   public url: string
 
   @column()
-  public status: 'active' | 'deactivated'
+  public status: 'Awaiting approval' | 'Approved' | 'Denied' | 'Deleted'
 
   @column()
   public companyId: number
@@ -197,6 +197,20 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   
   @column()
   public createdBy: number
+
+  @column.dateTime({ 
+    serialize: (value: DateTime) => {
+      return value
+    },
+  })
+  public approvalDate: DateTime
+
+  @column.dateTime({ 
+    serialize: (value: DateTime) => {
+      return value
+    },
+  })
+  public reprovedDate: DateTime
 
   @column.dateTime({ 
     autoCreate: true,
