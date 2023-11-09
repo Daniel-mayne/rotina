@@ -21,9 +21,9 @@ export default class CustomersController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const customerData = await request.validate(StoreValidator)
+    const data = await request.validate(StoreValidator)
     const customer = await new Customer()
-      .merge({ ...customerData, companyId: auth.user!.companyId, createdBy: auth.user!.id, accountManagerId: auth.user!.id, fillingPercentage: 0.0, status: 'active' })
+      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, accountManagerId: auth.user!.id, fillingPercentage: 0.0, status: 'active' })
       .save()
 
     await customer.load(loader => {
@@ -44,12 +44,12 @@ export default class CustomersController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const customerData = await request.validate(UpdateValidator)
+    const data = await request.validate(UpdateValidator)
     const customer = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await customer.merge(customerData).save()
+    await customer.merge(data).save()
     await customer.load(loader => {
       loader.preload('company')
         .preload('accountManager')

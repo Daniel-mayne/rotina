@@ -50,16 +50,16 @@ export default class ApprovalsController {
 
   public async update({ params, request, auth }: HttpContextContract) {
 
-    const approvalData = await request.validate(UpdateValidator)
+    const data = await request.validate(UpdateValidator)
     const approval = await Approval.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
     await approval.merge({
-      ...approvalData,
-      approvalDate: approvalData.status === 'Approved' ? DateTime.now().setZone() : approval.approvalDate,
-      reprovedDate: approvalData.status === 'Denied' ? DateTime.now().setZone() : approval.reprovedDate,
+      ...data,
+      approvalDate: data.status === 'Approved' ? DateTime.now().setZone() : approval.approvalDate,
+      reprovedDate: data.status === 'Denied' ? DateTime.now().setZone() : approval.reprovedDate,
     }).save()
 
     await approval.load(loader => {
