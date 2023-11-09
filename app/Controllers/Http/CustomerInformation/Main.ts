@@ -20,17 +20,19 @@ export default class CustomerInformationController {
     }
 
     public async store({ request, auth }: HttpContextContract) {
-        const informationData = await request.validate(StoreValidator)
+        const data = await request.validate(StoreValidator)
         const information = await new CustomerInformation()
             .merge({
-                ...informationData,
+                ...data,
                 companyId: auth.user!.companyId,
                 createdBy: auth.user!.id,
                 status: 'active'
             })
             .save()
 
-        await information.load(loader => loader.preload('customer'))
+        await information.load(loader => {
+            loader.preload('customer')
+        })
         return information
     }
 
@@ -40,21 +42,22 @@ export default class CustomerInformationController {
             .andWhere('companyId', auth.user!.companyId)
             .preload('customer')
             .firstOrFail()
-
         return information
     }
 
 
     public async update({ params, request, auth }: HttpContextContract) {
-        const informationData = await request.validate(UpdateValidator)
+        const data = await request.validate(UpdateValidator)
         const information = await CustomerInformation.query()
             .where('id', params.id)
             .andWhere('companyId', auth.user!.companyId)
             .firstOrFail()
         await information.merge({
-            ...informationData, updateBy: auth.user!.id
+            ...data, updateBy: auth.user!.id
         }).save()
-        await information.load(loader => loader.preload('customer'))
+        await information.load(loader => {
+            loader.preload('customer')
+        })
 
         return information
     }

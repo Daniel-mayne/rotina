@@ -41,12 +41,10 @@ export default class ApprovalsController {
     const approval = await Approval.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
+      .preload('company')
+      .preload('customer')
       .firstOrFail()
-    const preloads = [
-      approval.load(loader => loader.preload('customer')),
-      approval.load(loader => loader.preload('company')),
-    ]
-    await Promise.all(preloads)
+
     return approval
   }
 
@@ -58,16 +56,15 @@ export default class ApprovalsController {
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
-    if (approvalData.status == 'Approved') {
-      await approval.merge({ ...approvalData, approvalDate: DateTime.now().setZone() }).save()
-    }
-    if (approvalData.status == 'Denied') {
-      await approval.merge({ ...approvalData, reprovedDate: DateTime.now().setZone() }).save()
-    }
+    await approval.merge({
+      ...approvalData,
+      approvalDate: approvalData.status === 'Approved' ? DateTime.now().setZone() : approval.approvalDate,
+      reprovedDate: approvalData.status === 'Denied' ? DateTime.now().setZone() : approval.reprovedDate,
+    }).save()
 
-    const preloads = [approval.load(loader => loader.preload('customer'))]
-    await Promise.all(preloads)
-
+    await approval.load(loader => {
+      loader.preload('customer')
+    })
     return approval
 
   }

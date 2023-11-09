@@ -15,8 +15,8 @@ export default class CompanyController {
     } = request.qs()
 
     return await Company.filter(input)
-    .where('id', auth.user!.companyId) 
-    .orderBy(orderColumn, orderDirection)
+      .where('id', auth.user!.companyId)
+      .orderBy(orderColumn, orderDirection)
       .preload('users')
       .paginate(page, limit)
   }
@@ -61,7 +61,9 @@ export default class CompanyController {
       companyId: company.id,
     })
 
-    await company.load(loader => loader.preload('users'))
+    await company.load(loader => {
+      loader.preload('users')
+    })
 
     const token = await auth.attempt(adminEmail, adminPassword, { expiresIn: '1 day' })
 
@@ -142,29 +144,32 @@ export default class CompanyController {
 
   public async show({ params, auth }: HttpContextContract) {
     const company = await Company.query()
-    .where('id', params.id)
-    .andWhere('id', auth.user!.companyId)
-    .preload('users').firstOrFail()
+      .where('id', params.id)
+      .andWhere('id', auth.user!.companyId)
+      .preload('users').firstOrFail()
+
     return company
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
     const company = await Company
-    .query()
-    .where('id', params.id)
-    .andWhere('id', auth.user!.companyId)
-    .firstOrFail()
+      .query()
+      .where('id', params.id)
+      .andWhere('id', auth.user!.companyId)
+      .firstOrFail()
     await company.merge(data).save()
-    await company.load(loader => loader.preload('users'))
+    await company.load(loader => {
+      loader.preload('users')
+    })
     return company
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
     const company = await Company.query()
-    .where('id', params.id)
-    .andWhere('id', auth.user!.companyId)
-    .firstOrFail()
+      .where('id', params.id)
+      .andWhere('id', auth.user!.companyId)
+      .firstOrFail()
     company.merge({ status: 'deactivated' }).save()
     return
   }

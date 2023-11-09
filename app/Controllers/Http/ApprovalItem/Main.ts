@@ -13,57 +13,54 @@ export default class ApprovalItemsController {
       ...input
     } = request.qs()
 
-    return await  ApprovalItem.filter(input)
-    .where('companyId', auth.user!.companyId)
-    .orderBy(orderColumn, orderDirection)
-    .preload('approval')
-    .paginate(page, limit)
+    return await ApprovalItem.filter(input)
+      .where('companyId', auth.user!.companyId)
+      .orderBy(orderColumn, orderDirection)
+      .preload('approval')
+      .paginate(page, limit)
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const approvalItemData = await request.validate(StoreValidator)
+    const data = await request.validate(StoreValidator)
 
     const approvalIdExists = await Approval.query()
-      .where('id', approvalItemData.approvalId)
+      .where('id', data.approvalId)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
-    
+
     const approvalItem = await new ApprovalItem()
-      .merge({ ...approvalItemData, approvalItemDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: approvalIdExists.id, status: 'waiting_approval' })
+      .merge({ ...data, approvalItemDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: approvalIdExists.id, status: 'waiting_approval' })
       .save()
-    await auth.user?.load(loader => loader.preload('company'))
-
-    const preloads = [approvalItem.load(loader => loader.preload('approval'))]
-
-    await Promise.all(preloads)
+    await approvalItem.load(loader => {
+      loader.preload('approval')
+    })
 
     return approvalItem
   }
 
   public async show({ params, auth }: HttpContextContract) {
     const approvalItem = await ApprovalItem.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
-    const preloads = [
-      approvalItem.load(loader => loader.preload('approval'))
-    ]
-    await Promise.all(preloads)
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .preload('approval')
+      .firstOrFail()
+   
     return approvalItem
 
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const approvalItemData = await request.validate(UpdateValidator)
+    const data = await request.validate(UpdateValidator)
     const approvalItem = await ApprovalItem.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
-    await approvalItem.merge(approvalItemData).save()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
+    await approvalItem.merge(data).save()
 
-    const preloads = [approvalItem.load(loader => loader.preload('approval'))]
-    await Promise.all(preloads)
+    await approvalItem.load(loader => {
+      loader.preload('approval')
+    })
 
     return approvalItem
 

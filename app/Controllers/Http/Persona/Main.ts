@@ -39,10 +39,9 @@ export default class PersonaController {
     const persona = await Persona.query()
     .where('id', params.id)
     .andWhere('companyId', auth.user!.companyId)
+    .preload('customer')
     .firstOrFail()
 
-    const preloads = [persona.load(loader => loader.preload('customer'))]
-    await Promise.all(preloads)
     return persona
   }
 

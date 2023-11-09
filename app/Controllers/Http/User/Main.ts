@@ -40,7 +40,9 @@ export default class UserController {
     //   await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
     // }
 
-    await user.load(loader => loader.preload('company'))
+    await user.load(loader => {
+      loader.preload('company')
+    })
     return user
   }
 
@@ -48,6 +50,7 @@ export default class UserController {
     const user = await User.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
+      .preload('company')
       .firstOrFail()
 
     const userTypeShow = auth.user?.type
@@ -79,7 +82,7 @@ export default class UserController {
     if (oldPassword) {
       if (!(await Hash.verify(user.password, oldPassword))) {
         response.unauthorized({
-          error: { message: "PassWord antigo Invalido" },
+          error: { message: "Password antigo invalido" },
         });
         return;
       }
@@ -104,7 +107,9 @@ export default class UserController {
       await auth.user?.load('company', (query) => query.preload('users'))
     }
 
-    await user.load(loader => loader.preload('company'))
+    await user.load(loader => {
+      loader.preload('company')
+    })
     return user
 
   }
@@ -115,25 +120,25 @@ export default class UserController {
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
-      if (user.id === auth.user!.id) {
-        return  response.unauthorized('Você não pode se excluir.')
-      }
-  
+    if (user.id === auth.user!.id) {
+      return response.unauthorized('Você não pode se excluir.')
+    }
+
     if (user.type === 'administrator') {
       const adminsCount = await User.query()
         .where('companyId', auth.user!.companyId)
         .andWhere('type', 'administrator')
         .count('* as total')
-  
+
       const adminCount = adminsCount[0].$extras.total
 
       if (adminCount <= 1) {
         return response.unauthorized('Não é possível excluir o último administrador da empresa.')
       }
     }
-  
-    
+
+
     return await user.delete()
   }
-  
+
 }

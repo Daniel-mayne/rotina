@@ -26,7 +26,10 @@ export default class CustomersController {
       .merge({ ...customerData, companyId: auth.user!.companyId, createdBy: auth.user!.id, accountManagerId: auth.user!.id, fillingPercentage: 0.0, status: 'active' })
       .save()
 
-    await customer.load(loader => loader.preload('company').preload('accountManager'))
+    await customer.load(loader => {
+      loader.preload('company')
+        .preload('accountManager')
+    })
     return customer
   }
 
@@ -47,7 +50,10 @@ export default class CustomersController {
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     await customer.merge(customerData).save()
-    await customer.load(loader => loader.preload('company').preload('accountManager'))
+    await customer.load(loader => {
+      loader.preload('company')
+        .preload('accountManager')
+    })
 
     return customer
 
