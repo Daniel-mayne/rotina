@@ -23,14 +23,8 @@ export default class ApprovalItemsController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
-    const approvalIdExists = await Approval.query()
-      .where('id', data.approvalId)
-      .andWhere('companyId', auth.user!.companyId)
-      .firstOrFail()
-
-
     const approvalItem = await new ApprovalItem()
-      .merge({ ...data, approvalItemDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: approvalIdExists.id, status: 'waiting_approval' })
+      .merge({ ...data, approvalItemDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: data.approvalId, status: 'waiting_approval' })
       .save()
     await approvalItem.load(loader => {
       loader.preload('approval')
