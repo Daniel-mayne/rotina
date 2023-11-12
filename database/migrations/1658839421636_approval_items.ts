@@ -6,7 +6,6 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('name', 255).notNullable()
       table.timestamp('approval_item_date', { useTz: true }).notNullable()
       table
         .enum('status', ['waiting_approval', 'approved', 'disapproved'])
