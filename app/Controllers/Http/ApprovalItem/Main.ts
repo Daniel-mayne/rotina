@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ApprovalItem, Approval } from 'App/Models'
+import { ApprovalItem } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 
