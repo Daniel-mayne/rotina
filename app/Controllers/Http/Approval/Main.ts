@@ -25,7 +25,7 @@ export default class ApprovalsController {
     const data = await request.validate(StoreValidator)
 
     const approval = await new Approval()
-      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'awaiting approval' })
+      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'waiting_approval' })
       .save()
 
     await approval.load(loader => {
@@ -59,7 +59,7 @@ export default class ApprovalsController {
     await approval.merge({
       ...data,
       approvalDate: data.status === 'approved' ? DateTime.now().setZone() : approval.approvalDate,
-      reprovedDate: data.status === 'denied' ? DateTime.now().setZone() : approval.reprovedDate,
+      reprovedDate: data.status === 'disapproved' ? DateTime.now().setZone() : approval.reprovedDate,
     }).save()
 
     await approval.load(loader => {

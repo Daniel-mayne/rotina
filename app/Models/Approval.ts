@@ -187,7 +187,7 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   public url: string
 
   @column()
-  public status: 'awaiting approval' | 'approved' | 'denied' | 'deleted'
+  public status: 'waiting_approval' | 'approved' | 'disapproved' | 'deleted'
 
   @column()
   public companyId: number

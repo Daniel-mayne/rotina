@@ -7,7 +7,7 @@ export class UpdateValidator {
 
     public schema = schema.create({
         name: schema.string.optional({ trim: true }),
-        status: schema.enum.optional(['awaiting approval', 'approved', 'denied', 'deleted'] as const)
+        status: schema.enum.optional(['waiting_approval', 'approved', 'disapproved', 'deleted'] as const)
     })
 
     public messages: CustomMessages = {
