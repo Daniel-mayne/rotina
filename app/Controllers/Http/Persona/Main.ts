@@ -36,13 +36,13 @@ export default class PersonaController {
   }
 
   public async show({ params, auth }: HttpContextContract) {
-    const persona = await Persona.query()
+    const data = await Persona.query()
     .where('id', params.id)
     .andWhere('companyId', auth.user!.companyId)
     .preload('customer')
     .firstOrFail()
 
-    return persona
+    return data
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
@@ -64,10 +64,10 @@ export default class PersonaController {
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
-    const persona = await Persona.query()
+    const data = await Persona.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    return await persona.delete()
+    return await data.delete()
   }
 }

@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { PostComment } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/PostComment'
-import { DateTime } from 'luxon'
 
 
 export default class PostCommentController {
@@ -24,14 +23,14 @@ export default class PostCommentController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
-    const postComment = await new PostComment()
+    const comment = await new PostComment()
       .merge({ ...data, approvalItemId: data.approvalItemId, companyId: auth.user!.companyId, })
       .save()
-    await postComment.load(loader => {
+    await comment.load(loader => {
       loader.preload('approvalItem')
     })
 
-    return postComment
+    return comment
   }
 
   public async show({ params, auth }: HttpContextContract) {

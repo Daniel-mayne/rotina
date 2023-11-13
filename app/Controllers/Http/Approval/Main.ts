@@ -38,14 +38,14 @@ export default class ApprovalsController {
   }
 
   public async show({ params, auth }: HttpContextContract) {
-    const approval = await Approval.query()
+    const data = await Approval.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('customer')
       .firstOrFail()
 
-    return approval
+    return data
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
@@ -70,11 +70,11 @@ export default class ApprovalsController {
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
-    const approval = await Approval.query()
+    const data = await Approval.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    approval.merge({ status: 'deleted' }).save()
+    data.merge({ status: 'deleted' }).save()
     return
   }
 }

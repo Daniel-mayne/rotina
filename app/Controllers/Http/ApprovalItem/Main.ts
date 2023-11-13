@@ -35,14 +35,14 @@ export default class ApprovalItemsController {
   }
 
   public async show({ params, auth }: HttpContextContract) {
-    const approvalItem = await ApprovalItem.query()
+    const data = await ApprovalItem.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('approval')
       .preload('postsComents')
       .firstOrFail()
    
-    return approvalItem
+    return data
 
   }
 
@@ -67,11 +67,11 @@ export default class ApprovalItemsController {
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
-    const approvalItem = await ApprovalItem.query()
+    const data = await ApprovalItem.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    return await approvalItem.delete()
+    return await data.delete()
   }
 }
 

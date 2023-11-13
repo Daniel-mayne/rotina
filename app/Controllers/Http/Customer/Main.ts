@@ -34,13 +34,13 @@ export default class CustomersController {
   }
 
   public async show({ params, auth }: HttpContextContract) {
-    const customer = await Customer.query()
+    const data = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('accountManager')
       .firstOrFail()
-    return customer
+    return data
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
@@ -60,11 +60,11 @@ export default class CustomersController {
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
-    const customer = await Customer.query()
+    const data = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await customer.merge({ status: 'deactivated' }).save()
+    await data.merge({ status: 'deactivated' }).save()
     return
   }
 }
