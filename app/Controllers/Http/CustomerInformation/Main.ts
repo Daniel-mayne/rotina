@@ -37,12 +37,12 @@ export default class CustomerInformationController {
     }
 
     public async show({ params, auth }: HttpContextContract) {
-        const information = await CustomerInformation.query()
+        const data = await CustomerInformation.query()
             .where('id', params.id)
             .andWhere('companyId', auth.user!.companyId)
             .preload('customer')
             .firstOrFail()
-        return information
+        return data
     }
 
 
@@ -64,12 +64,12 @@ export default class CustomerInformationController {
 
 
     public async destroy({ params, auth }: HttpContextContract) {
-        const information = await CustomerInformation.query()
+        const data = await CustomerInformation.query()
             .where('id', params.id)
             .andWhere('companyId', auth.user!.companyId)
             .firstOrFail()
 
-        return await information.delete()
+        return await data.delete()
     }
 
 }

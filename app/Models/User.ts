@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, afterCreate, BaseModel, belongsTo, BelongsTo, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Apikey, Customer, Persona, Approval, ApprovalItem, File, CustomerInformation, PostComent } from 'App/Models'
+import { Company, Apikey, Customer, Persona, Approval, ApprovalItem, File, CustomerInformation, PostComment } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import { compose } from '@ioc:Adonis/Core/Helpers'
@@ -285,8 +285,8 @@ export default class User extends compose(BaseModel, Filterable) {
   @hasMany(() => ApprovalItem)
   public approvalItems: HasMany<typeof ApprovalItem>
 
-  @hasMany(() => PostComent)
-  public postsComents: HasMany<typeof PostComent>
+  @hasMany(() => PostComment)
+  public postsComents: HasMany<typeof PostComment>
 
   @hasMany(() => Customer, {
     foreignKey: 'accountManagerId', 

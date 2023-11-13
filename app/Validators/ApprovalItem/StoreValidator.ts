@@ -13,7 +13,6 @@ export class StoreValidator {
     title: schema.string({ trim: true }),
     text: schema.string({ trim: true }),
     approvalId: schema.number([rules.exists({ table: 'approvals', column: 'id', where: { company_id: this.refs.companyId } })]),
-    guestApprovalId: schema.number([rules.exists({ table: 'users', column: 'id', where: { company_id: this.refs.companyId, type: 'administrator'  } })])
   })
 
   public messages: CustomMessages = {

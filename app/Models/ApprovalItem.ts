@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer, Approval, User, ApprovalItemFile, PostComent } from 'App/Models'
+import { Company, Customer, Approval, User, ApprovalItemFile, PostComment } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalItemFilter } from './Filters'
@@ -189,19 +189,26 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   public companyId: number
 
   @column()
-  public guestApprovalId: number
+  public approvalBy: number
 
-  @column.dateTime({
+  @column.dateTime({ 
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value
     },
   })
-  public approvalItemDate: DateTime
+  public approvalDate: DateTime
+
+  @column.dateTime({ 
+    serialize: (value: DateTime) => {
+      return value
+    },
+  })
+  public reprovedDate: DateTime
 
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public createdAt: DateTime
@@ -210,13 +217,13 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
     autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public updatedAt: DateTime
 
-  @hasMany(() => PostComent)
-  public postsComents: HasMany<typeof PostComent>
+  @hasMany(() => PostComment)
+  public postsComents: HasMany<typeof PostComment>
 
   @belongsTo(() => Approval)
   public approval: BelongsTo<typeof Approval>

@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'posts_comments'
+  protected tableName = 'post_comments'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
@@ -13,6 +13,13 @@ export default class extends BaseSchema {
         .nullable()
         .references('id')
         .inTable('approval_items')
+        .onDelete('CASCADE')
+        table
+        .integer('company_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('companies')
         .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

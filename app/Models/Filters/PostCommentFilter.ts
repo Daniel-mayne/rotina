@@ -1,10 +1,10 @@
 import { BaseModelFilter } from '@ioc:Adonis/Addons/LucidFilter'
 import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import  PostComent  from 'App/Models/PostComent'
+import  PostComment  from 'App/Models/PostComment'
 
-export default class PostComentFilter extends BaseModelFilter {
-    public $query: ModelQueryBuilderContract<typeof PostComent, PostComent>
+export default class PostCommentFilter extends BaseModelFilter {
+    public $query: ModelQueryBuilderContract<typeof PostComment, PostComment>
   
     public status (status: string ): void {
       this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))

@@ -17,6 +17,7 @@ export default class ApprovalItemsController {
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
+      .preload('postsComents')
       .paginate(page, limit)
   }
 
@@ -24,7 +25,7 @@ export default class ApprovalItemsController {
     const data = await request.validate(StoreValidator)
 
     const approvalItem = await new ApprovalItem()
-      .merge({ ...data, approvalItemDate: DateTime.now().setZone(), createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: data.approvalId, status: 'waiting_approval' })
+      .merge({ ...data, createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: data.approvalId, status: 'waiting_approval' })
       .save()
     await approvalItem.load(loader => {
       loader.preload('approval')
@@ -38,6 +39,7 @@ export default class ApprovalItemsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('approval')
+      .preload('postsComents')
       .firstOrFail()
    
     return approvalItem
@@ -50,7 +52,11 @@ export default class ApprovalItemsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await approvalItem.merge(data).save()
+    await approvalItem.merge({ ...data,  
+      approvalBy: data.status === 'approved' || data.status === 'disapproved' ? auth.user!.id : undefined,
+      approvalDate: data.status === 'approved' ? DateTime.now().setZone() : approvalItem.approvalDate,
+      reprovedDate: data.status === 'disapproved' ? DateTime.now().setZone() : approvalItem.reprovedDate,
+    }).save()
 
     await approvalItem.load(loader => {
       loader.preload('approval')
@@ -68,3 +74,5 @@ export default class ApprovalItemsController {
     return await approvalItem.delete()
   }
 }
+
+

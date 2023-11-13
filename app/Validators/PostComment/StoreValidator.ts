@@ -10,7 +10,7 @@ export class StoreValidator {
 
   public schema = schema.create({
     text: schema.string({ trim: true }),
-    approvalItemId: schema.number([rules.exists({ table: 'approvalItems', column: 'id', where: { company_id: this.refs.companyId } })])
+    approvalItemId: schema.number([rules.exists({ table: 'approval_items', column: 'id', where: { company_id: this.refs.companyId } })])
   })
 
   public messages: CustomMessages = {

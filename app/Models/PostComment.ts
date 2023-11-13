@@ -3,11 +3,11 @@ import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import { ApprovalItem, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
-import { PostComentFilter } from './Filters'
+import { PostCommentFilter } from './Filters'
 
-export default class PostComent extends compose(BaseModel, Filterable)  {
+export default class PostComment extends compose(BaseModel, Filterable)  {
 
-  public static $filter = () =>   PostComentFilter
+  public static $filter = () =>   PostCommentFilter
   
   @column({ isPrimary: true })
   public id: number
@@ -17,6 +17,9 @@ export default class PostComent extends compose(BaseModel, Filterable)  {
 
   @column()
   public approvalItemId: number
+
+  @column()
+  public companyId: number
 
   @column.dateTime({
     autoCreate: true,

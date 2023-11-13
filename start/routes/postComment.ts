@@ -1,6 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('/postComents', 'PostComent/Main')
+Route.resource('/postComments', 'PostComment/Main')
     .apiOnly()
     .middleware({
         index: ['auth', 'acl:owner,administrator,user'],

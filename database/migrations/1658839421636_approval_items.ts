@@ -6,7 +6,10 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.timestamp('approval_item_date', { useTz: true }).notNullable()
+      table.string('title', 255).notNullable()
+      table.text('text', 'longtext').notNullable()
+      table.timestamp('approval_date', { useTz: true })
+      table.timestamp('reproved_date', { useTz: true })
       table
         .enum('status', ['waiting_approval', 'approved', 'disapproved'])
         .notNullable()
@@ -31,6 +34,13 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('companies')
+        .onDelete('CASCADE')
+        table
+        .integer('approval_by')
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('users')
         .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
