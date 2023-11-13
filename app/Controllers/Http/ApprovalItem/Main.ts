@@ -8,7 +8,7 @@ export default class ApprovalItemsController {
     const {
       limit = 10,
       page = 1,
-      orderColumn = 'name',
+      orderColumn = 'title',
       orderDirection = 'asc',
       ...input
     } = request.qs()

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer, Approval, User, ApprovalItemFile } from 'App/Models'
+import { Company, Customer, Approval, User, ApprovalItemFile, PostComent } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalItemFilter } from './Filters'
@@ -171,6 +171,9 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   public id: number
 
   @column()
+  public title: string
+
+  @column()
   public text: string
 
   @column()
@@ -184,6 +187,9 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   @column()
   public companyId: number
+
+  @column()
+  public guestApprovalId: number
 
   @column.dateTime({
     serialize: (value: DateTime) => {
@@ -208,6 +214,9 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
     },
   })
   public updatedAt: DateTime
+
+  @hasMany(() => PostComent)
+  public postsComents: HasMany<typeof PostComent>
 
   @belongsTo(() => Approval)
   public approval: BelongsTo<typeof Approval>
