@@ -227,6 +227,9 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   
   @hasMany(()=> Notification)
   public notifications: HasMany<typeof Notification>
+  
+  @hasMany(() => ApprovalItemFile)
+  public files: HasMany<typeof ApprovalItemFile>
 
   @belongsTo(() => Approval)
   public approval: BelongsTo<typeof Approval>
@@ -239,8 +242,5 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
-
-  @hasMany(() => ApprovalItemFile)
-  public files: HasMany<typeof ApprovalItemFile>
 
 }

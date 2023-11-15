@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import { User, ApprovalItem,  PostComment} from 'App/Models'
+import { User, ApprovalItem, PostComment} from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { NotificationFilter } from './Filters'
@@ -19,7 +19,10 @@ export default class Notification extends compose(BaseModel, Filterable) {
   public approvalItemId: number
 
   @column()
-  public commentId: number
+  public postCommentId: number
+
+  @column()
+  public status: 'sent' | 'received' | 'seen' | 'not_seen'
 
   @column.dateTime({
     autoCreate: true,
@@ -45,5 +48,5 @@ export default class Notification extends compose(BaseModel, Filterable) {
   public approvalItem: BelongsTo<typeof ApprovalItem>
 
   @belongsTo(() => PostComment)
-  public comment: BelongsTo<typeof PostComment>
+  public postComment: BelongsTo<typeof PostComment>
 }

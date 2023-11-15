@@ -1,14 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany, afterCreate } from '@ioc:Adonis/Lucid/Orm'
 import { ApprovalItem, User, Notification } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { PostCommentFilter } from './Filters'
 
-export default class PostComment extends compose(BaseModel, Filterable)  {
+export default class PostComment extends compose(BaseModel, Filterable) {
 
-  public static $filter = () =>   PostCommentFilter
-  
+  public static $filter = () => PostCommentFilter
+
   @column({ isPrimary: true })
   public id: number
 
@@ -20,6 +20,9 @@ export default class PostComment extends compose(BaseModel, Filterable)  {
 
   @column()
   public companyId: number
+
+  @column()
+  public userId: number
 
   @column.dateTime({
     autoCreate: true,
@@ -38,8 +41,8 @@ export default class PostComment extends compose(BaseModel, Filterable)  {
   })
   public updatedAt: DateTime
 
-  
-  @hasMany(()=> Notification)
+
+  @hasMany(() => Notification)
   public notifications: HasMany<typeof Notification>
 
   @belongsTo(() => User)
@@ -47,4 +50,16 @@ export default class PostComment extends compose(BaseModel, Filterable)  {
 
   @belongsTo(() => ApprovalItem)
   public approvalItem: BelongsTo<typeof ApprovalItem>
+
+  @afterCreate()
+  public static async createNotification(postComment: PostComment) {
+    await postComment.related('notifications').create({
+      userId: postComment.userId,
+      approvalItemId: postComment.approvalItemId,
+      postCommentId: postComment.id,
+      status: 'sent'
+    })
+  }
+
+
 }
