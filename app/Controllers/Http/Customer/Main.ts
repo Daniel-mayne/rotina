@@ -1,6 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Customer } from 'App/Models'
-import { StoreValidator, UpdateValidator } from 'App/Validators/Customer'
+import { StoreValidator, UpdateValidator, StoreTemporaryValidator } from 'App/Validators/Customer'
+import Drive from '@ioc:Adonis/Core/Drive'
+import Env from '@ioc:Adonis/Core/Env'
+import { string } from '@ioc:Adonis/Core/Helpers'
+
+
 
 export default class CustomersController {
   public async index({ request, auth }: HttpContextContract) {
@@ -32,6 +37,46 @@ export default class CustomersController {
     })
     return customer
   }
+
+
+  public async uploadLogo({ request, auth }: HttpContextContract) {
+    const fileData = await request.validate(StoreTemporaryValidator);
+    const data = await request.validate(UpdateValidator)
+
+    const fs = require('fs');
+
+    const originalFileName = fileData.file.clientName
+      .replace(`.${fileData.file.extname}`, '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const newName = `${originalFileName.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file.extname}`;
+    const contentType = fileData.file.headers['content-type'];
+    const acl = 'public';
+
+    await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file.tmpPath), {
+      contentType,
+      acl,
+      'Content-Length': fileData.file.size,
+    });
+
+    const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`;
+    const destinationPath = `companies/${auth.user!.companyId}/user/${auth.user!.id}/${newName}`;
+
+    await Drive.move(sourcePath, destinationPath);
+    const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`;
+
+    const customer = await Customer.query()
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
+    await customer.merge({logo: updatedUrl}).save()
+
+    return {
+      updatedUrl,
+      newName,
+    };
+  }
+
 
   public async show({ params, auth }: HttpContextContract) {
     const data = await Customer.query()
