@@ -75,6 +75,7 @@ export default class ApprovalItemsController {
 
     await approvalItem.load(loader => {
       loader.preload('approval')
+      loader.preload('persona')
     })
 
     return { approvalItem, approvalItemFile }
