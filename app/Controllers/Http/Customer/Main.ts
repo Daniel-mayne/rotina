@@ -40,17 +40,16 @@ export default class CustomersController {
 
 
   public async uploadLogo({ request, auth }: HttpContextContract) {
-    const fileData = await request.validate(StoreTemporaryValidator);
-    const data = await request.validate(UpdateValidator)
+    const fileData = await request.validate(StoreTemporaryValidator)
 
     const fs = require('fs');
 
     const originalFileName = fileData.file.clientName
       .replace(`.${fileData.file.extname}`, '')
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
+      .replace(/[\u0300-\u036f]/g, '')
 
-    const newName = `${originalFileName.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file.extname}`;
+    const newName = `${originalFileName.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file.extname}`
     const contentType = fileData.file.headers['content-type'];
     const acl = 'public';
 
@@ -60,11 +59,11 @@ export default class CustomersController {
       'Content-Length': fileData.file.size,
     });
 
-    const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`;
-    const destinationPath = `companies/${auth.user!.companyId}/user/${auth.user!.id}/${newName}`;
+    const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`
+    const destinationPath = `companies/${auth.user!.companyId}/user/${auth.user!.id}/${newName}`
 
-    await Drive.move(sourcePath, destinationPath);
-    const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`;
+    await Drive.move(sourcePath, destinationPath)
+    const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
 
     const customer = await Customer.query()
       .andWhere('companyId', auth.user!.companyId)

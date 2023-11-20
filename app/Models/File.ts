@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer, User } from 'App/Models'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { ApprovalItemFile, Company, Customer, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { FileFilter } from './Filters'
@@ -121,4 +121,7 @@ export default class File extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>
+
+  @hasMany(() => ApprovalItemFile)
+  public approvalItemFiles: HasMany<typeof ApprovalItemFile>
 }

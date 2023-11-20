@@ -12,6 +12,7 @@ import './approvalItem'
 import './customerInformation'
 import './postComment'
 import './uploadLogoCustomer'
+import './approvalItemFile'
 
 Route.get('/', async () => {
   return { hello: 'world' }
