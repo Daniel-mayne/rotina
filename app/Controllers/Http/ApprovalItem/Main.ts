@@ -52,7 +52,7 @@ export default class ApprovalItemsController {
     await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file?.tmpPath), {
       contentType,
       acl,
-      'Content-Length': fileData.file.size,
+      'Content-Length': fileData.file?.size,
     });
 
     const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`
@@ -65,17 +65,17 @@ export default class ApprovalItemsController {
 
 
     const file = await new File()
-      .merge({  companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileData.file?.extname, name:newName  })
+      .merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileData.file?.extname, name: newName })
       .save()
 
     const approvalItemFile = await new ApprovalItemFile()
-      .merge({ approvalItemId: approvalItem.id, fileId: file.id  })
+      .merge({ approvalItemId: approvalItem.id, fileId: file.id })
       .save()
 
     await approvalItem.load(loader => {
       loader.preload('approval')
     })
-   
+
 
     return { approvalItem, approvalItemFile }
   }
@@ -92,7 +92,7 @@ export default class ApprovalItemsController {
 
   }
 
- 
+
 
 
   public async update({ params, request, auth }: HttpContextContract) {
