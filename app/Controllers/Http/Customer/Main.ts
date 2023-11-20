@@ -70,6 +70,8 @@ export default class CustomersController {
       .firstOrFail()
     await customer.merge({logo: updatedUrl}).save()
 
+    await Drive.delete(sourcePath)
+
     return {
       updatedUrl,
       newName,

@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ApprovalItem, ApprovalItemFile, File } from 'App/Models'
+import { ApprovalItem, ApprovalItemFile, File, Approval } from 'App/Models'
 import { StoreValidator, UpdateValidator, StoreTemporaryValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 import Drive from '@ioc:Adonis/Core/Drive'
@@ -20,9 +20,9 @@ export default class ApprovalItemsController {
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
-      .preload('postsComents')
-      .preload('user')
-      .preload('persona')
+      // .preload('postsComents')
+      // .preload('user')
+      // .preload('persona')
       .paginate(page, limit)
   }
 
@@ -39,47 +39,49 @@ export default class ApprovalItemsController {
     const fileData = await request.validate(StoreTemporaryValidator)
     if (fileData.file) {
 
-    const fs = require('fs')
+      const fs = require('fs')
 
-    const originalFileName = fileData.file?.clientName
-      .replace(`.${fileData.file.extname}`, '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      const originalFileName = fileData.file?.clientName
+        .replace(`.${fileData.file.extname}`, '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
 
-    const newName = `${originalFileName?.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file?.extname}`
-    const contentType = fileData.file?.headers['content-type']
-    const acl = 'public'
+      const newName = `${originalFileName?.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file?.extname}`
+      const contentType = fileData.file?.headers['content-type']
+      const acl = 'public'
 
-    await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file?.tmpPath ?? ''), {
-      contentType,
-      acl,
-      'Content-Length': fileData.file?.size,
-    });
+      await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file?.tmpPath ?? ''), {
+        contentType,
+        acl,
+        'Content-Length': fileData.file?.size,
+      });
 
-    const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`
-
-
-    const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${approvalItem.id}/${newName}`
-
-    await Drive.move(sourcePath, destinationPath)
-    const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
+      const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`
 
 
-    const file = await new File()
-      .merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileData.file?.extname, name: newName })
-      .save()
+      const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${approvalItem.id}/${newName}`
 
-    const approvalItemFile = await new ApprovalItemFile()
-      .merge({ approvalItemId: approvalItem.id, fileId: file.id })
-      .save()
+      await Drive.move(sourcePath, destinationPath)
+      const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
 
-    await approvalItem.load(loader => {
-      loader.preload('approval')
-      loader.preload('persona')
-    })
 
-    return { approvalItem, approvalItemFile }
-  }
+      const file = await new File()
+        .merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileData.file?.extname, name: newName })
+        .save()
+
+      const approvalItemFile = await new ApprovalItemFile()
+        .merge({ approvalItemId: approvalItem.id, fileId: file.id })
+        .save()
+
+      await Drive.delete(sourcePath)
+
+      await approvalItem.load(loader => {
+        loader.preload('approval')
+        loader.preload('persona')
+      })
+
+      return { approvalItem, approvalItemFile }
+    }
 
     return { approvalItem }
   }
@@ -98,6 +100,16 @@ export default class ApprovalItemsController {
 
 
 
+  public async approveAll({ params, request, auth }: HttpContextContract) {
+
+    const approvalItems = await ApprovalItem.query()
+      .where('approvalId', params.id) 
+      .andWhere('companyId', auth.user!.companyId)
+      .andWhere('status', 'waiting_approval')
+      .update({ status: 'approved'})
+    return approvalItems
+
+  }
 
   public async update({ params, request, auth }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
