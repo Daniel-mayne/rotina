@@ -184,7 +184,7 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   @column()
   public createdBy: number
-
+  
   @column()
   public companyId: number
 
@@ -234,7 +234,10 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   @belongsTo(() => Approval)
   public approval: BelongsTo<typeof Approval>
 
-  @belongsTo(() => User)
+
+  @belongsTo(() => User, {
+    foreignKey: 'createdBy',
+  })
   public user: BelongsTo<typeof User>
 
   @belongsTo(() => Customer)
