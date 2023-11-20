@@ -100,7 +100,7 @@ export default class ApprovalItemsController {
 
 
 
-  public async approveAll({ params, request, auth }: HttpContextContract) {
+  public async approveAll({ params, auth }: HttpContextContract) {
 
     const approvalItems = await ApprovalItem.query()
       .where('approvalId', params.id) 
