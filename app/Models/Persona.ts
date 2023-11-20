@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, BelongsTo, belongsTo} from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer } from 'App/Models'
+import { BaseModel, column, BelongsTo, belongsTo, hasMany, HasMany} from '@ioc:Adonis/Lucid/Orm'
+import { Company, Customer, ApprovalItem } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { PersonaFilter } from './Filters'
@@ -214,6 +214,9 @@ export default class Persona extends compose(BaseModel, Filterable) {
   public customerId: number
 
   @column()
+  public approvalItemId: number
+
+  @column()
   public status?: 'active' | 'deactivated'
 
   @column.dateTime({
@@ -232,6 +235,10 @@ export default class Persona extends compose(BaseModel, Filterable) {
     },
   })
   public updatedAt: DateTime
+
+
+  @hasMany(() => ApprovalItem)
+  public approvalItems: HasMany<typeof ApprovalItem>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

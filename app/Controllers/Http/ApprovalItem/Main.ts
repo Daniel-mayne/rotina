@@ -22,9 +22,9 @@ export default class ApprovalItemsController {
       .preload('approval')
       .preload('postsComents')
       .preload('user')
+      .preload('persona')
       .paginate(page, limit)
   }
-
 
 
 
@@ -37,6 +37,7 @@ export default class ApprovalItemsController {
 
 
     const fileData = await request.validate(StoreTemporaryValidator)
+    if (fileData.file) {
 
     const fs = require('fs')
 
@@ -49,7 +50,7 @@ export default class ApprovalItemsController {
     const contentType = fileData.file?.headers['content-type']
     const acl = 'public'
 
-    await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file?.tmpPath), {
+    await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file?.tmpPath ?? ''), {
       contentType,
       acl,
       'Content-Length': fileData.file?.size,
@@ -76,8 +77,10 @@ export default class ApprovalItemsController {
       loader.preload('approval')
     })
 
-
     return { approvalItem, approvalItemFile }
+  }
+
+    return { approvalItem }
   }
 
   public async show({ params, auth }: HttpContextContract) {

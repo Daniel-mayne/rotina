@@ -42,6 +42,13 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
+        table
+        .integer('persona_id')
+        .nullable()
+        .unsigned()
+        .references('id')
+        .inTable('personas')
+        .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
