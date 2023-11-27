@@ -9,3 +9,5 @@ Route.resource('/customers', 'Customer/Main')
         update: ['auth', 'acl:owner,administrator,user'],
         destroy: ['auth', 'acl:owner,administrator,user'],
     })
+
+    Route.put('/customers/:id/restore', 'Customer/Main.restore').middleware(['auth', 'acl:owner,administrator,user'])

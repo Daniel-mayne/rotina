@@ -179,7 +179,7 @@ export default class Customer extends compose(BaseModel, Filterable) {
   public logo?: string
 
   @column()
-  public status?: 'active' | 'deactivated'
+  public status?: 'active' | 'deactivated'  | 'delected'
 
   @column()
   public companyId: number

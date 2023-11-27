@@ -137,8 +137,8 @@ export default class UserController {
       }
     }
 
-
-    return await user.delete()
+    await user.merge({ status: 'deleted' }).save()
+    return
   }
 
 }

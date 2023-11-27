@@ -217,7 +217,7 @@ export default class Persona extends compose(BaseModel, Filterable) {
   public approvalItemId: number
 
   @column()
-  public status?: 'active' | 'deactivated'
+  public status?: 'active' | 'deactivated' | 'deleted'
 
   @column.dateTime({
     autoCreate: true,

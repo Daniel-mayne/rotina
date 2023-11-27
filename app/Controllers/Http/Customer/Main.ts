@@ -105,12 +105,24 @@ export default class CustomersController {
 
   }
 
+  public async restore({ params, auth }: HttpContextContract) {
+
+    const data = await Customer.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .andWhere('status', 'deleted')
+      .firstOrFail()
+      await data.merge({ status: 'active' }).save()
+
+      return data
+  }
+
   public async destroy({ params, auth }: HttpContextContract) {
     const data = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await data.merge({ status: 'deactivated' }).save()
+    await data.merge({ status: 'delected' }).save()
     return
   }
 }

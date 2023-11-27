@@ -225,7 +225,7 @@ export default class User extends compose(BaseModel, Filterable) {
   public theme: 'white' | 'black'
 
   @column()
-  public status: 'active' | 'deactivated'
+  public status: 'active' | 'deactivated' | 'deleted'
 
   @column()
   public type: 'user' | 'guest' | 'administrator' | 'owner'

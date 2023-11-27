@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ApprovalItem, ApprovalItemFile, File, Approval } from 'App/Models'
+import { ApprovalItem, ApprovalItemFile, File } from 'App/Models'
 import { StoreValidator, UpdateValidator, StoreTemporaryValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 import Drive from '@ioc:Adonis/Core/Drive'
@@ -20,13 +20,11 @@ export default class ApprovalItemsController {
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
-      // .preload('postsComents')
-      // .preload('user')
-      // .preload('persona')
+      .preload('postsComents')
+      .preload('user')
+      .preload('persona')
       .paginate(page, limit)
   }
-
-
 
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
@@ -98,15 +96,13 @@ export default class ApprovalItemsController {
 
   }
 
-
-
   public async approveAll({ params, auth }: HttpContextContract) {
 
     const approvalItems = await ApprovalItem.query()
-      .where('approvalId', params.id) 
+      .where('approvalId', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .andWhere('status', 'waiting_approval')
-      .update({ status: 'approved'})
+      .update({ status: 'approved' })
     return approvalItems
 
   }

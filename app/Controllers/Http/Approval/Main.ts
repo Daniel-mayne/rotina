@@ -69,12 +69,28 @@ export default class ApprovalsController {
 
   }
 
+  public async restore({ params, auth }: HttpContextContract) {
+
+    const data = await Approval.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .andWhere('status', 'deleted')
+      .firstOrFail()
+      await data.merge({ status: 'waiting_approval' }).save()
+
+      return data
+
+  }
+
+
+
   public async destroy({ params, auth }: HttpContextContract) {
     const data = await Approval.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     data.merge({ status: 'deleted' }).save()
+
     return
   }
 }
