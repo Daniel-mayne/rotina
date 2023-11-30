@@ -1,10 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ApprovalItem, ApprovalItemFile, File } from 'App/Models'
-import { StoreValidator, UpdateValidator, StoreTemporaryValidator } from 'App/Validators/ApprovalItem'
+import { StoreValidator, UpdateValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Env from '@ioc:Adonis/Core/Env'
-import { string } from '@ioc:Adonis/Core/Helpers'
 
 export default class ApprovalItemsController {
   public async index({ request, auth }: HttpContextContract) {
@@ -27,61 +26,49 @@ export default class ApprovalItemsController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const data = await request.validate(StoreValidator)
-
+    const { links, ...data } = await request.validate(StoreValidator)
+    const linksArray = links.split(',')
     const approvalItem = await new ApprovalItem()
       .merge({ ...data, createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: data.approvalId, status: 'waiting_approval' })
       .save()
 
+    const uploadedFiles: { name: string, url: string }[] = []
 
-    const fileData = await request.validate(StoreTemporaryValidator)
-    if (fileData.file) {
+    for (const link of linksArray) {
+      const fileUrlParts = link.split('.com/')
+      const extractedPath = fileUrlParts.length > 1 ? fileUrlParts[1] : fileUrlParts[0]
+      const url = link.split('/')
+      const nameExtension = url[url.length - 1]
+      const Extension = nameExtension.split('.')
+      const fileExtension = Extension.pop()
+      const fileName = Extension.join('.')
 
-      const fs = require('fs')
+      const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${approvalItem.id}/${nameExtension}`
+      console.log('destinationPath:', destinationPath)
 
-      const originalFileName = fileData.file?.clientName
-        .replace(`.${fileData.file.extname}`, '')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-
-      const newName = `${originalFileName?.replace(/\s/g, '-')}-${string.generateRandom(5)}.${fileData.file?.extname}`
-      const contentType = fileData.file?.headers['content-type']
-      const acl = 'public'
-
-      await Drive.put(`companies/${auth.user!.id}/tmp/uploads/${newName}`, fs.createReadStream(fileData.file?.tmpPath ?? ''), {
-        contentType,
-        acl,
-        'Content-Length': fileData.file?.size,
-      });
-
-      const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`
-
-
-      const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${approvalItem.id}/${newName}`
-
-      await Drive.move(sourcePath, destinationPath)
+      await Drive.move(extractedPath, destinationPath)
       const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
 
-
       const file = await new File()
-        .merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileData.file?.extname, name: newName })
+        .merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileExtension, name: fileName })
         .save()
 
-      const approvalItemFile = await new ApprovalItemFile()
+      await new ApprovalItemFile()
         .merge({ approvalItemId: approvalItem.id, fileId: file.id })
         .save()
 
-      await Drive.delete(sourcePath)
-
-      await approvalItem.load(loader => {
-        loader.preload('approval')
-        loader.preload('persona')
+      uploadedFiles.push({
+        name: fileName,
+        url: updatedUrl
       })
-
-      return { approvalItem, approvalItemFile }
     }
-
-    return { approvalItem }
+    await approvalItem.load(loader => {
+      loader.preload('approval')
+      loader.preload('persona')
+      loader.preload('files')
+      loader.preload('user')
+    })
+    return { approvalItem, uploadedFiles }
   }
 
   public async show({ params, auth }: HttpContextContract) {
