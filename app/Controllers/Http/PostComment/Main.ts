@@ -16,6 +16,7 @@ export default class PostCommentController {
       .where('companyId', auth.user!.companyId)
       .if(orderColumn && orderDirection, query => query.orderBy(orderColumn, orderDirection))
       .preload('approvalItem')
+      .preload('user')
       .paginate(page, limit)
 
   }
@@ -28,6 +29,7 @@ export default class PostCommentController {
       .save()
     await comment.load(loader => {
       loader.preload('approvalItem')
+      loader.preload('user')
     })
 
 
@@ -40,6 +42,7 @@ export default class PostCommentController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('approvalItem')
+      .preload('user')
       .firstOrFail()
     return data
   }

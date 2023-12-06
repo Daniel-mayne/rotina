@@ -24,7 +24,7 @@ export default class ApprovalItemsController {
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
-      .preload('postsComents')
+      .preload('postsComents', query => query.preload('user'))
       .preload('user')
       .preload('persona')
       .paginate(page, limit)
@@ -69,8 +69,8 @@ export default class ApprovalItemsController {
     await approvalItem.load(loader => {
       loader.preload('approval')
       loader.preload('persona')
-      loader.preload('files')
       loader.preload('user')
+      loader.preload('postsComents', query => query.preload('user'))
     })
     return { approvalItem, fileUploads }
   }
@@ -81,7 +81,9 @@ export default class ApprovalItemsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('approval')
-      .preload('postsComents')
+      .preload('postsComents', query => query.preload('user'))
+      .preload('user')
+      .preload('persona')
       .firstOrFail()
 
     return data
@@ -114,6 +116,9 @@ export default class ApprovalItemsController {
 
     await approvalItem.load(loader => {
       loader.preload('approval')
+      loader.preload('persona')
+      loader.preload('user')
+      loader.preload('postsComents', query => query.preload('user'))
     })
 
     return approvalItem
@@ -132,8 +137,6 @@ export default class ApprovalItemsController {
     return data
 
   }
-
-
 
   public async destroy({ params, auth }: HttpContextContract) {
     const data = await ApprovalItem.query()
