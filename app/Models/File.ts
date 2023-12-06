@@ -94,6 +94,9 @@ export default class File extends compose(BaseModel, Filterable) {
   public companyId: number
 
   @column()
+  public customerId: number
+
+  @column()
   public createdBy: number
 
   @column.dateTime({ 

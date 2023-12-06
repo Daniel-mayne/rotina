@@ -43,9 +43,18 @@ export default class FilesController {
 
     const url = `${Env.get('S3_DOMAIN')}/companies/${auth.user!.id}/tmp/uploads/${name}`
 
-    return {
-      url,
-      name
-    }
+    const data = await new File()
+      .merge({
+        name: name,
+        extension: fileData.file.extname,
+        size: fileData.file.size,
+        link: url,
+        companyId: auth.user!.companyId,
+        createdBy: auth.user!.id,
+      })
+      .save()
+
+    return data
+
   }
 }

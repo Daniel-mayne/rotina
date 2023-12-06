@@ -4,6 +4,11 @@ import { StoreValidator, UpdateValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Env from '@ioc:Adonis/Core/Env'
+import * as path from 'path'
+
+interface FileUpload {
+  link: string;
+}
 
 export default class ApprovalItemsController {
   public async index({ request, auth }: HttpContextContract) {
@@ -27,49 +32,50 @@ export default class ApprovalItemsController {
 
   public async store({ request, auth }: HttpContextContract) {
     const { links, ...data } = await request.validate(StoreValidator)
-    const linksArray = links.split(',')
     const approvalItem = await new ApprovalItem()
       .merge({ ...data, createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: data.approvalId, status: 'waiting_approval' })
       .save()
+    const fileUploads: FileUpload[] = []
 
-    const uploadedFiles: { name: string, url: string }[] = []
+    for (const link of links) {
+      const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');
 
-    for (const link of linksArray) {
-      const fileUrlParts = link.split('.com/')
-      const extractedPath = fileUrlParts.length > 1 ? fileUrlParts[1] : fileUrlParts[0]
-      const url = link.split('/')
-      const nameExtension = url[url.length - 1]
-      const Extension = nameExtension.split('.')
-      const fileExtension = Extension.pop()
-      const fileName = Extension.join('.')
+      if (await Drive.exists(filePath)) {
+        console.log('entrei:')
+        const fileStas = await Drive.getStats(filePath)
+        const extension = path.extname(filePath)
+        const nameFile = path.basename(filePath)
 
-      const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${approvalItem.id}/${nameExtension}`
-      console.log('destinationPath:', destinationPath)
+        const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${approvalItem.id}/${nameFile}`
+        console.log('destinationPath:', destinationPath)
 
-      await Drive.move(extractedPath, destinationPath)
-      const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
+        await Drive.move(filePath, destinationPath)
+        const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
 
-      const file = await new File()
-        .merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: fileExtension, name: fileName })
-        .save()
+        const file = await File.query()
+          .where('link', link)
+          .firstOrFail()
 
-      await new ApprovalItemFile()
-        .merge({ approvalItemId: approvalItem.id, fileId: file.id })
-        .save()
+        await file.merge({ companyId: auth.user!.companyId,  createdBy: auth.user!.id, link: updatedUrl, extension: extension, name: nameFile })
+          .save()
 
-      uploadedFiles.push({
-        name: fileName,
-        url: updatedUrl
-      })
+        await  approvalItem.related('files').create({ fileId: file.id})
+
+        fileUploads.push({
+          link: updatedUrl
+        })
+      }
     }
+
     await approvalItem.load(loader => {
       loader.preload('approval')
       loader.preload('persona')
       loader.preload('files')
       loader.preload('user')
     })
-    return { approvalItem, uploadedFiles }
+    return { approvalItem, fileUploads }
   }
+
 
   public async show({ params, auth }: HttpContextContract) {
     const data = await ApprovalItem.query()
