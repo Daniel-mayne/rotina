@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ApprovalItem, ApprovalItemFile, File } from 'App/Models'
+import { ApprovalItem, File } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/ApprovalItem'
 import { DateTime } from 'luxon'
 import Drive from '@ioc:Adonis/Core/Drive'
@@ -42,7 +42,6 @@ export default class ApprovalItemsController {
 
       if (await Drive.exists(filePath)) {
         console.log('entrei:')
-        const fileStas = await Drive.getStats(filePath)
         const extension = path.extname(filePath)
         const nameFile = path.basename(filePath)
 
