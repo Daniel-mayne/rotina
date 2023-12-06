@@ -82,8 +82,6 @@ export default class ApprovalsController {
 
   }
 
-
-
   public async destroy({ params, auth }: HttpContextContract) {
     const data = await Approval.query()
       .where('id', params.id)

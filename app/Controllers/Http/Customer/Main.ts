@@ -122,7 +122,7 @@ export default class CustomersController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await data.merge({ status: 'delected' }).save()
+    await data.merge({ status: 'deleted' }).save()
     return
   }
 }

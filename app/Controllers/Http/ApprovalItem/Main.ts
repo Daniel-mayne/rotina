@@ -120,12 +120,28 @@ export default class ApprovalItemsController {
 
   }
 
-  public async destroy({ params, auth }: HttpContextContract) {
+  public async restore({ params, auth }: HttpContextContract) {
+
     const data = await ApprovalItem.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
+      .andWhere('status', 'deleted')
       .firstOrFail()
-    return await data.delete()
+    await data.merge({ status: 'waiting_approval' }).save()
+
+    return data
+
+  }
+
+
+
+  public async destroy({ params, auth }: HttpContextContract) {
+    const data = await ApprovalItem.query()
+    .where('id', params.id)
+    .andWhere('companyId', auth.user!.companyId)
+    .firstOrFail()
+    await data.merge({ status: 'deleted' }).save()
+    return
   }
 }
 

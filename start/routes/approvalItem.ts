@@ -9,3 +9,5 @@ Route.resource('/approvalItems', 'ApprovalItem/Main')
         update: ['auth', 'acl:owner,administrator,user'],
         destroy: ['auth', 'acl:owner,administrator,user'],
     })
+
+    Route.put('/approvalItems/:id/restore', 'ApprovalItem/Main.restore').middleware(['auth', 'acl:owner,administrator,user'])

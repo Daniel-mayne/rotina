@@ -177,7 +177,7 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   public text: string
 
   @column()
-  public status: 'waiting_approval' | 'approved' | 'disapproved'
+  public status: 'waiting_approval' | 'approved' | 'disapproved' | 'deleted'
 
   @column()
   public personaId: number

@@ -114,6 +114,18 @@ export default class UserController {
 
   }
 
+
+  public async restore({ params, auth }: HttpContextContract){
+    const data = await User.query()
+    .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .andWhere('status', 'deleted')
+      .firstOrFail()
+      await data.merge({ status: 'active' }).save()
+
+      return data
+  }
+
   public async destroy({ params, auth, response }: HttpContextContract) {
     const user = await User.query()
       .where('id', params.id)
