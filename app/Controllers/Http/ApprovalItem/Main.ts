@@ -26,7 +26,7 @@ export default class ApprovalItemsController {
       .preload('approval')
       .preload('postsComents', query => query.preload('user'))
       .preload('user')
-      .preload('persona')
+      .preload('persona', query => query.preload('customer'))
       .paginate(page, limit)
   }
 
