@@ -12,20 +12,21 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *     get:
  *       tags:
  *        - Approval
- *       summary: Lista todos as approvals
+ *       summary: Liste todos os Approvals.
  *       responses:
  *         '200':
- *           description: Lista de approvals obtida com sucesso
+ *           description: Lista de Approvals obtida com sucesso.
  *           content:
  *             application/json:
  *               schema:
  *                 type: array
  *                 items:
  *                   $ref: '#/components/schemas/Approval'
+ * 
  *     post:
  *       tags:
  *        - Approval
- *       summary: Cria um novo approval
+ *       summary: Crie um novo Approval.
  *       requestBody:
  *         required: true
  *         content:
@@ -34,16 +35,17 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *               $ref: '#/components/schemas/Approval'
  *       responses:
  *         '201':
- *           description: Approval criada com sucesso
+ *           description: Approval criado com sucesso.
  *           content:
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
+ * 
  *   /approvals/{id}:
  *     get:
  *       tags:
  *        - Approval
- *       summary: Obtém um approval por ID
+ *       summary: Obtenha um Approval por ID.
  *       parameters:
  *         - in: path
  *           name: id
@@ -54,15 +56,16 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             minimum: 1
  *       responses:
  *         '200':
- *           description: Approval obtida com sucesso
+ *           description: Approval obtido com sucesso.
  *           content:
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
+ * 
  *     put:
  *       tags:
  *        - Approval
- *       summary: Atualiza um approval por ID
+ *       summary: Atualize um Approval pelo ID.
  *       parameters:
  *         - in: path
  *           name: id
@@ -84,17 +87,22 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *                   type: string
  *                 status:
  *                   type: string
+ *                 approvalDate:
+ *                   type: string
+ *                 reprovedDate:
+ *                   type: string
  *       responses:
  *         '200':
- *           description: Approval atualizado com sucesso
+ *           description: Approval atualizado com sucesso.
  *           content:
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
+ * 
  *     delete:
  *       tags:
  *        - Approval
- *       summary: Deleta uma approval por ID
+ *       summary: Delete um Approval pelo ID.
  *       parameters:
  *         - in: path
  *           name: id
@@ -105,7 +113,29 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             minimum: 1
  *       responses:
  *         '204':
- *           description: Approval deletado com sucesso
+ *           description: Approval deletado com sucesso.
+ * 
+ *   /approvals/{id}/restore:
+ *     put:
+ *       tags:
+ *        - Approval
+ *       summary: Restaure um Approval pelo ID dentro de 7 dias após a exclusão.
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: integer
+ *             format: int64
+ *             minimum: 1
+ *       responses:
+ *         '204':
+ *           description: Approval restaurado com sucesso.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Approval'
+ *     
  * components:
  *   schemas:
  *     Approval:
@@ -122,15 +152,19 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *           required: true
  *         status:
  *           type: string
- *           enum: [active, deactivated]
+ *           enum: [waiting_approval, approved, disapproved, deleted]
  *           required: true
- *           example: "active"
+ *           example: "waiting_approval"
  *         companyId:
  *           type: integer
  *         customerId:
  *           type: integer
  *         createdBy:
  *           type: integer
+ *         approvalDate:
+ *           type: string
+ *         reprovedDate:
+ *           type: string
  *         createdAt:
  *           type: string
  *         updatedAt:
@@ -151,6 +185,8 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *         - createdBy
  *         - customerId
  *         - status
+ *         - approvalDate
+ *         - reprovedDate
  *         - createdAt
  *         - updatedAt
  *       example:
@@ -161,8 +197,10 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *         createdBy: 789
  *         customerId: 101
  *         status: "active"
- *         createdAt: "2023-09-21T14:30:00.000-03:00"
- *         updatedAt: "2023-09-21T15:45:00.000-03:00"
+ *         approvalDate: "2023-10-21T11:30:00.000-03:00"
+ *         reprovedDate: "2023-08-21T14:30:00.000-03:00"
+ *         createdAt: "2023-06-21T13:30:00.000-03:00"
+ *         updatedAt: "2023-12-21T15:45:00.000-03:00"
  */
 
 export default class Approval extends compose(BaseModel, Filterable) {
