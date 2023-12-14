@@ -7,6 +7,105 @@ import { ApprovalFilter } from './Filters'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 /**
  * @swagger
+ * paths:
+ *   /approvals:
+ *     get:
+ *       tags:
+ *        - Approval
+ *       summary: Lista todos as approvals
+ *       responses:
+ *         '200':
+ *           description: Lista de approvals obtida com sucesso
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Approval'
+ *     post:
+ *       tags:
+ *        - Approval
+ *       summary: Cria um novo approval
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Approval'
+ *       responses:
+ *         '201':
+ *           description: Approval criada com sucesso
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Approval'
+ *   /approvals/{id}:
+ *     get:
+ *       tags:
+ *        - Approval
+ *       summary: Obtém um approval por ID
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: integer
+ *             format: int64
+ *             minimum: 1
+ *       responses:
+ *         '200':
+ *           description: Approval obtida com sucesso
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Approval'
+ *     put:
+ *       tags:
+ *        - Approval
+ *       summary: Atualiza um approval por ID
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: integer
+ *             format: int64
+ *             minimum: 1
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 url:
+ *                   type: string
+ *                 status:
+ *                   type: string
+ *       responses:
+ *         '200':
+ *           description: Approval atualizado com sucesso
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Approval'
+ *     delete:
+ *       tags:
+ *        - Approval
+ *       summary: Deleta uma approval por ID
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: integer
+ *             format: int64
+ *             minimum: 1
+ *       responses:
+ *         '204':
+ *           description: Approval deletado com sucesso
  * components:
  *   schemas:
  *     Approval:
@@ -65,112 +164,10 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *         createdAt: "2023-09-21T14:30:00.000-03:00"
  *         updatedAt: "2023-09-21T15:45:00.000-03:00"
  */
-/**
-   * @swagger
-   * paths:
-   *   /approvals:
-   *     get:
-   *       tags:
-   *        - Approval
-   *       summary: Lista todos as approvals
-   *       responses:
-   *         '200':
-   *           description: Lista de approvals obtida com sucesso
-   *           content:
-   *             application/json:
-   *               schema:
-   *                 type: array
-   *                 items:
-   *                   $ref: '#/components/schemas/Approval'
-   *     post:
-   *       tags:
-   *        - Approval
-   *       summary: Cria um novo approval
-   *       requestBody:
-   *         required: true
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Approval'
-   *       responses:
-   *         '201':
-   *           description: Approval criada com sucesso
-   *           content:
-   *             application/json:
-   *               schema:
-   *                 $ref: '#/components/schemas/Approval'
-   *   /approvals/{id}:
-   *     get:
-   *       tags:
-   *        - Approval
-   *       summary: Obtém um approval por ID
-   *       parameters:
-   *         - in: path
-   *           name: id
-   *           required: true
-   *           schema:
-   *             type: integer
-   *             format: int64
-   *             minimum: 1
-   *       responses:
-   *         '200':
-   *           description: Approval obtida com sucesso
-   *           content:
-   *             application/json:
-   *               schema:
-   *                 $ref: '#/components/schemas/Approval'
-   *     put:
-   *       tags:
-   *        - Approval
-   *       summary: Atualiza um approval por ID
-   *       parameters:
-   *         - in: path
-   *           name: id
-   *           required: true
-   *           schema:
-   *             type: integer
-   *             format: int64
-   *             minimum: 1
-   *       requestBody:
-   *         required: true
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 name:
-   *                   type: string
-   *                 url:
-   *                   type: string
-   *                 status:
-   *                   type: string
-   *       responses:
-   *         '200':
-   *           description: Approval atualizado com sucesso
-   *           content:
-   *             application/json:
-   *               schema:
-   *                 $ref: '#/components/schemas/Approval'
-   *     delete:
-   *       tags:
-   *        - Approval
-   *       summary: Deleta uma approval por ID
-   *       parameters:
-   *         - in: path
-   *           name: id
-   *           required: true
-   *           schema:
-   *             type: integer
-   *             format: int64
-   *             minimum: 1
-   *       responses:
-   *         '204':
-   *           description: Approval deletado com sucesso
-   */
 
-export default class Approval extends compose(BaseModel, Filterable)  {
+export default class Approval extends compose(BaseModel, Filterable) {
 
-  public static $filter = () =>  ApprovalFilter
+  public static $filter = () => ApprovalFilter
 
   @column({ isPrimary: true })
   public id: number
@@ -194,25 +191,25 @@ export default class Approval extends compose(BaseModel, Filterable)  {
 
   @column()
   public customerId: number
-  
+
   @column()
   public createdBy: number
 
-  @column.dateTime({ 
+  @column.dateTime({
     serialize: (value: DateTime) => {
       return value
     },
   })
   public approvalDate: DateTime
 
-  @column.dateTime({ 
+  @column.dateTime({
     serialize: (value: DateTime) => {
       return value
     },
   })
   public reprovedDate: DateTime
 
-  @column.dateTime({ 
+  @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
@@ -220,13 +217,13 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   })
   public createdAt: DateTime
 
-  @column.dateTime({ 
-    autoCreate: true, 
+  @column.dateTime({
+    autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
-   })
+  })
   public updatedAt: DateTime
 
   @belongsTo(() => Company)
@@ -235,7 +232,7 @@ export default class Approval extends compose(BaseModel, Filterable)  {
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>
 
-  @belongsTo(() => User, {foreignKey: 'createdBy' })
+  @belongsTo(() => User, { foreignKey: 'createdBy' })
   public user: BelongsTo<typeof User>
 
   @hasMany(() => ApprovalItem)
