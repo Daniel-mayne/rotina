@@ -1,11 +1,134 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Customer, Approval, User, ApprovalItemFile, PostComment , Notification, Persona } from 'App/Models'
+import { Company, Customer, Approval, User, ApprovalItemFile, PostComment, Notification, Persona } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalItemFilter } from './Filters'
 /**
 * @swagger
+* paths:
+*   /approvalItem:
+*     get:
+*       tags:
+*        - ApprovalItem
+*       summary: Liste todos os ApprovalItems
+*       responses:
+*         '200':
+*           description: Lista de ApprovalItems obtida com sucesso.
+*           content:
+*             application/json:
+*               schema:
+*                 type: array
+*                 items:
+*                   $ref: '#/components/schemas/ApprovalItem'
+*
+*     post:
+*       tags:
+*        - ApprovalItem
+*       summary: Crie um novo ApprovalItem.
+*       requestBody:
+*         required: true
+*         content:
+*           application/json:
+*             schema:
+*               $ref: '#/components/schemas/ApprovalItem'
+*       responses:
+*         '201':
+*           description: ApprovalItem criado com sucesso.
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/ApprovalItem'
+*
+*   /ApprovalItems/{id}:
+*     get:
+*       tags:
+*        - ApprovalItem
+*       summary: Obtenha um ApprovalItem por ID.
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       responses:
+*         '200':
+*           description: ApprovalItem obtido com sucesso.
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/ApprovalItem'
+*
+*     put:
+*       tags:
+*        - ApprovalItem
+*       summary: Atualize um ApprovalItem por ID.
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       requestBody:
+*         required: true
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 name:
+*                   type: string
+*                 status:
+*                   type: string
+*       responses:
+*         '200':
+*           description: ApprovalItem atualizado com sucesso.
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/ApprovalItem'
+*
+*     delete:
+*       tags:
+*        - ApprovalItem
+*       summary: Exclua um ApprovalItem por ID.
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       responses:
+*         '204':
+*           description: ApprovalItem excluído com sucesso.
+*
+*   /ApprovalItems/{id}/restore:
+*     put:
+*       tags:
+*        - ApprovalItem
+*       summary: Restaure um ApprovalItem pelo ID dentro de 7 dias após a exclusão.
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           schema:
+*             type: integer
+*             format: int64
+*             minimum: 1
+*       responses:
+*         '200':
+*           description: ApprovalItem atualizada com sucesso
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/ApprovalItem'
+*
 * components:
 *   schemas:
 *     ApprovalItem:
@@ -61,108 +184,8 @@ import { ApprovalItemFilter } from './Filters'
 *         approvalId: 123
 *         createdBy: 456
 *         companyId: 789
+*
 */
-
-/**
- * @swagger
- * paths:
- *   /approvalItem:
- *     get:
- *       tags:
- *        - ApprovalItem
- *       summary: Lista todas as approvalItem
- *       responses:
- *         '200':
- *           description: Lista de approvalItem obtida com sucesso
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   $ref: '#/components/schemas/ApprovalItem'
- *     post:
- *       tags:
- *        - ApprovalItem
- *       summary: Cria uma nova approvalItem
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApprovalItem'
- *       responses:
- *         '201':
- *           description: ApprovalItem criada com sucesso
- *           content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/ApprovalItem'
- *   /ApprovalItems/{id}:
- *     get:
- *       tags:
- *        - ApprovalItem
- *       summary: Obtém uma approvalItem por ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           schema:
- *             type: integer
- *             format: int64
- *             minimum: 1
- *       responses:
- *         '200':
- *           description: ApprovalItem obtida com sucesso
- *           content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/ApprovalItem'
- *     put:
- *       tags:
- *        - ApprovalItem
- *       summary: Atualiza uma approvalItem por ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           schema:
- *             type: integer
- *             format: int64
- *             minimum: 1
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 name:
- *                   type: string
- *                 status:
- *                   type: string
- *       responses:
- *         '200':
- *           description: ApprovalItem atualizada com sucesso
- *           content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/ApprovalItem'
- *     delete:
- *       tags:
- *        - ApprovalItem
- *       summary: Deleta uma approvalItem por ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           schema:
- *             type: integer
- *             format: int64
- *             minimum: 1
- *       responses:
- *         '204':
- *           description: ApprovalItem deletada com sucesso
- */
 export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   public static $filter = () => ApprovalItemFilter
@@ -187,21 +210,21 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
 
   @column()
   public createdBy: number
-  
+
   @column()
   public companyId: number
 
   @column()
   public approvalBy: number
 
-  @column.dateTime({ 
+  @column.dateTime({
     serialize: (value: DateTime) => {
       return value
     },
   })
   public approvalDate: DateTime
 
-  @column.dateTime({ 
+  @column.dateTime({
     serialize: (value: DateTime) => {
       return value
     },
@@ -226,11 +249,11 @@ export default class ApprovalItem extends compose(BaseModel, Filterable) {
   public updatedAt: DateTime
 
   @hasMany(() => PostComment)
-  public postsComents: HasMany<typeof PostComment> 
-  
-  @hasMany(()=> Notification)
+  public postsComents: HasMany<typeof PostComment>
+
+  @hasMany(() => Notification)
   public notifications: HasMany<typeof Notification>
-  
+
   @hasMany(() => ApprovalItemFile)
   public files: HasMany<typeof ApprovalItemFile>
 

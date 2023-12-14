@@ -129,7 +129,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             format: int64
  *             minimum: 1
  *       responses:
- *         '204':
+ *         '200':
  *           description: Approval restaurado com sucesso.
  *           content:
  *             application/json:
