@@ -11,7 +11,7 @@ export default class PostCommentController {
       orderDirection = 'asc',
       ...input
     } = request.qs()
-
+    console.log(input)
     return await PostComment.filter(input)
       .where('companyId', auth.user!.companyId)
       .if(orderColumn && orderDirection, query => query.orderBy(orderColumn, orderDirection))
@@ -60,6 +60,8 @@ export default class PostCommentController {
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
+    console.log('id', params.id)
+    console.log('user', auth.user!)
     const data = await PostComment.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
