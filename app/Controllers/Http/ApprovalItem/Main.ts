@@ -24,7 +24,6 @@ export default class ApprovalItemsController {
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
-      .preload('postsComents', query => query.preload('user'))
       .preload('user')
       .preload('persona', query => query.preload('customer'))
       .paginate(page, limit)
