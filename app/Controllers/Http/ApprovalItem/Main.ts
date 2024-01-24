@@ -41,7 +41,6 @@ export default class ApprovalItemsController {
       const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');
 
       if (await Drive.exists(filePath)) {
-        console.log('entrei:')
         const extension = path.extname(filePath)
         const nameFile = path.basename(filePath)
 
