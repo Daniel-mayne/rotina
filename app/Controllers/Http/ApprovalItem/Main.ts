@@ -53,10 +53,10 @@ export default class ApprovalItemsController {
           .where('link', link)
           .firstOrFail()
 
-        await file.merge({ companyId: auth.user!.companyId,  createdBy: auth.user!.id, link: updatedUrl, extension: extension, name: nameFile })
+        await file.merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: extension, name: nameFile })
           .save()
 
-        await  approvalItem.related('files').create({ fileId: file.id})
+        await approvalItem.related('files').create({ fileId: file.id })
 
         fileUploads.push({
           link: updatedUrl
@@ -79,6 +79,7 @@ export default class ApprovalItemsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('approval')
+      .preload('files')
       .preload('postsComents', query => query.preload('user'))
       .preload('user')
       .preload('persona')
@@ -100,11 +101,53 @@ export default class ApprovalItemsController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
+    const { links, ...data } = await request.validate(UpdateValidator)
     const approvalItem = await ApprovalItem.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
+
+    const fileUploadsUpdate: FileUpload[] = []
+
+
+    if (links) {
+      for (const link of links) {
+        // const file = await File.query()
+        //   .where('link', link)
+        //   .first()
+        //   console.log(link)
+        if (link.includes('/tmp/')) {
+          console.log('entrei')
+          const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');
+          if (await Drive.exists(filePath)) {
+            console.log(filePath)
+            const extension = path.extname(filePath)
+            const nameFile = path.basename(filePath)
+
+            const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${params.id}/${nameFile}`
+            console.log('destinationPath:', destinationPath)
+
+            await Drive.move(filePath, destinationPath)
+            const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
+
+            console.log(updatedUrl)
+
+            const file = await File.query()
+              .where('link', link)
+              .firstOrFail()
+
+            await file.merge({ companyId: auth.user!.companyId, createdBy: auth.user!.id, link: updatedUrl, extension: extension, name: nameFile })
+              .save()
+
+            await approvalItem.related('files').create({ fileId: file.id })
+
+            fileUploadsUpdate.push({
+              link: updatedUrl
+            })
+          }
+        }
+      }
+    }
     await approvalItem.merge({
       ...data,
       approvalBy: data.status === 'approved' || data.status === 'disapproved' ? auth.user!.id : undefined,
@@ -114,6 +157,7 @@ export default class ApprovalItemsController {
 
     await approvalItem.load(loader => {
       loader.preload('approval')
+      loader.preload('files')
       loader.preload('persona')
       loader.preload('user')
       loader.preload('postsComents', query => query.preload('user'))
@@ -138,9 +182,9 @@ export default class ApprovalItemsController {
 
   public async destroy({ params, auth }: HttpContextContract) {
     const data = await ApprovalItem.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
     await data.merge({ status: 'deleted' }).save()
     return
   }

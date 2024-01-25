@@ -43,6 +43,7 @@ export default class ApprovalsController {
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('customer')
+      .preload('approvalItems')
       .firstOrFail()
 
     return data
