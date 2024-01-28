@@ -26,6 +26,7 @@ export default class ApprovalItemsController {
       .preload('approval')
       .preload('user')
       .preload('persona', query => query.preload('customer'))
+      .if(auth.user!.type === 'guest', query => query.whereHas('approval', query => query.where('customer_id', auth.user!.customerId)))
       .paginate(page, limit)
   }
 
