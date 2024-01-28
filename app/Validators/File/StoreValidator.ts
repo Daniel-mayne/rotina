@@ -9,9 +9,7 @@ export class StoreValidator {
       size: '500mb',
       extnames: [
         'jpg',
-        'png',
         'jpeg',
-        'png',
         'gif',
         'pdf',
         'mp4',

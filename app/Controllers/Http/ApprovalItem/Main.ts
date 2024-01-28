@@ -31,13 +31,13 @@ export default class ApprovalItemsController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const { links, ...data } = await request.validate(StoreValidator)
+    const { files, ...data } = await request.validate(StoreValidator)
     const approvalItem = await new ApprovalItem()
       .merge({ ...data, createdBy: auth.user!.id, companyId: auth.user!.companyId, approvalId: data.approvalId, status: 'waiting_approval' })
       .save()
     const fileUploads: FileUpload[] = []
 
-    for (const link of links) {
+    for (const link of files) {
       const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');
 
       if (await Drive.exists(filePath)) {

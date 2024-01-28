@@ -22,7 +22,7 @@ export default class FilesController {
       .paginate(page, limit)
   }
 
-  public async store({ request, auth }) {
+  public async temporaryStore({ request, auth }) {
     const fileData = await request.validate(StoreValidator)
     const fs = require('fs')
 
