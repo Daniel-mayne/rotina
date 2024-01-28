@@ -113,25 +113,18 @@ export default class ApprovalItemsController {
 
     if (links) {
       for (const link of links) {
-        // const file = await File.query()
-        //   .where('link', link)
-        //   .first()
-        //   console.log(link)
+   
         if (link.includes('/tmp/')) {
-          console.log('entrei')
           const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');
           if (await Drive.exists(filePath)) {
-            console.log(filePath)
             const extension = path.extname(filePath)
             const nameFile = path.basename(filePath)
 
             const destinationPath = `companies/${auth.user!.companyId}/approvals/${data.approvalId}/items/${params.id}/${nameFile}`
-            console.log('destinationPath:', destinationPath)
 
             await Drive.move(filePath, destinationPath)
             const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
 
-            console.log(updatedUrl)
 
             const file = await File.query()
               .where('link', link)
