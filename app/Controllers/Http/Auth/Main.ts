@@ -9,6 +9,7 @@ export default class UsersController {
 
     await token.user.load(loader => loader.preload('company'))
     await token.user.load(loader => loader.preload('apiKeys'))
+    await token.user.load(loader => loader.preload('customer'))
 
     if (token.user.company.status === 'waiting_activation') {
       return response.badRequest({

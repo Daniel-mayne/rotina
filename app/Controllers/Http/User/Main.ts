@@ -18,6 +18,7 @@ export default class UserController {
       .where('companyId', auth.user!.companyId)
       .if(orderColumn && orderDirection, query => query.orderBy(orderColumn, orderDirection))
       .preload('company')
+      .preload('customer')
       .paginate(page, limit)
   }
 

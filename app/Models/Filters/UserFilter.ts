@@ -32,6 +32,10 @@ export default class UserFilter extends BaseModelFilter {
     this.$query.whereLike('email', `${email}`)
   }
 
+  public customerId(ids: string): void {
+    this.$query.whereIn('customer_id', ids.split(','))
+  }
+
   public createdAt(value: string) {
     const dates: string[] = value.split(',')
     const firstDate = DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').startOf('day').toSQL()

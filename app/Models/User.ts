@@ -246,6 +246,9 @@ export default class User extends compose(BaseModel, Filterable) {
   @column()
   public companyId: number
 
+  @column()
+  public customerId: number
+
   @column({
     serialize: (value?: Number) => {
       return Boolean(value)
@@ -303,6 +306,9 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+  @belongsTo(() => Customer)
+  public customer: BelongsTo<typeof Customer>
 
   @beforeSave()
   public static async hashPassword(user: User) {

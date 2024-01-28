@@ -22,7 +22,6 @@ export default class ApprovalItemFilter extends BaseModelFilter {
     this.$query.whereIn('created_by', createdBys.split(','))
   }
 
-
   public createdAt(value: string) {
     const dates: string[] = value.split(',')
     const firstDate = DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').startOf('day').toSQL()

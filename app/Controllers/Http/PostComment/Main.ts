@@ -11,7 +11,7 @@ export default class PostCommentController {
       orderDirection = 'asc',
       ...input
     } = request.qs()
-    console.log(input)
+
     return await PostComment.filter(input)
       .where('companyId', auth.user!.companyId)
       .if(orderColumn && orderDirection, query => query.orderBy(orderColumn, orderDirection))
