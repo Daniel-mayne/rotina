@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { File } from 'App/Models'
-import { StoreValidator } from 'App/Validators/File'
+import { StoreValidator, DeleteValidator } from 'App/Validators/File'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import Env from '@ioc:Adonis/Core/Env'
@@ -57,4 +57,25 @@ export default class FilesController {
     return data
 
   }
+
+
+  public async destroy({ request, auth }: HttpContextContract) {
+    const data = await request.validate(DeleteValidator)
+    const file = await File.query()
+      .where('link', data.file)
+      .andWhere('company_id', auth.user!.companyId)
+      .if(auth.user!.type !== "administrator", query => query.where('created_by', auth.user!.id))
+      .firstOrFail()
+
+      const fileReplace = data.file.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '')
+
+    if (await Drive.exists(fileReplace)) {
+      await Drive.delete(fileReplace)
+      return await file.delete()
+    }
+
+
+
+  }
+
 }

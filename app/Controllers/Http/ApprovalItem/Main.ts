@@ -70,8 +70,9 @@ export default class ApprovalItemsController {
       loader.preload('persona')
       loader.preload('user')
       loader.preload('postsComents', query => query.preload('user'))
+      loader.preload('files')
     })
-    return { approvalItem, fileUploads }
+    return { approvalItem }
   }
 
 
@@ -102,7 +103,7 @@ export default class ApprovalItemsController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const { links, ...data } = await request.validate(UpdateValidator)
+    const { files, ...data } = await request.validate(UpdateValidator)
     const approvalItem = await ApprovalItem.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
@@ -111,8 +112,8 @@ export default class ApprovalItemsController {
     const fileUploadsUpdate: FileUpload[] = []
 
 
-    if (links) {
-      for (const link of links) {
+    if (files) {
+      for (const link of files) {
    
         if (link.includes('/tmp/')) {
           const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');

@@ -60,8 +60,6 @@ export default class PostCommentController {
   }
 
   public async destroy({ params, auth }: HttpContextContract) {
-    console.log('id', params.id)
-    console.log('user', auth.user!)
     const data = await PostComment.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
