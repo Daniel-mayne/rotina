@@ -14,6 +14,8 @@ import './postComment'
 import './uploadLogoCustomer'
 import './approvalItemFile'
 import './approveAllItemsApproval'
+import './taskTemplate'
+import './projectTemplate'
 
 Route.get('/', async () => {
   return { hello: 'world' }
