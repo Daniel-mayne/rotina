@@ -1,22 +1,26 @@
 import { BaseModelFilter } from '@ioc:Adonis/Addons/LucidFilter'
 import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import ProjectTemplate from 'App/Models/ProjectTemplate'
+import TaskTemplate from 'App/Models/TaskTemplate'
 
 
-export default class ProjectTemplateFilter extends BaseModelFilter {
-    public $query: ModelQueryBuilderContract<typeof ProjectTemplate, ProjectTemplate>
+export default class TaskTemplateFilter extends BaseModelFilter {
+    public $query: ModelQueryBuilderContract<typeof TaskTemplate, TaskTemplate>
 
     public search(word: string): void {
-      this.$query.andWhereRaw("(title LIKE ? OR text LIKE)", [`%${word}%`, `%${word}%`])
+      this.$query.andWhereRaw("(title LIKE ? OR task_title LIKE ? OR task_description LIKE)", [`%${word}%`, `%${word}%`, `%${word}%`])
     }
   
     public title(title: string): void {
       this.$query.whereLike('title', `%${title}%`)
     }
 
-    public projectDescription(projectDescription: string): void {
-      this.$query.whereLike('project_description', `%${projectDescription}%`)
+    public task_title(task_title: string): void {
+      this.$query.whereLike('task_title', `%${task_title}%`)
+    }
+
+    public task_description(task_description: string): void {
+      this.$query.whereLike('task_description', `%${task_description}%`)
     }
   
     public createdAt(value: string) {

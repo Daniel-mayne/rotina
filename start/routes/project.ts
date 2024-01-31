@@ -10,3 +10,5 @@ Route.resource('/projects', 'Project/Main')
         destroy: ['auth', 'acl:owner,administrator,user'],
     })
 
+
+    

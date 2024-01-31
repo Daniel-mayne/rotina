@@ -2,39 +2,45 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
-import { ProjectFilter } from './Filters'
+import { TaskTemplateFilter } from './Filters'
 
-export default class Project extends compose (BaseModel, Filterable) {
-
-  public static $filter = () => ProjectFilter
+export default class TaskTemplate extends compose (BaseModel, Filterable) {
+  public static $filter = () => TaskTemplateFilter
 
   @column({ isPrimary: true })
   public id: number
 
   @column()
   public title: string
-  
-  @column()
-  public projectDescription: string
-
-  @column()
-  public companyId: number
-
-  @column()
-  public customerId: number
 
   @column()
   public createdBy: number
 
   @column()
-  public projectTemplateId: number
+  public companyId: number
 
   @column()
-  public estimatedDelivery: Date
+  public taskTitle: string
 
-  @column()
-  public status: 'active' | 'deactivated' 
   
+
+  @column.dateTime({
+    serialize: (value?: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+    }
+  })
+  public deadlineDate: DateTime
+
+  @column.dateTime({
+    serialize: (value?: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+    }
+  })
+  public estimatedTaskTime: DateTime
+
+  @column()
+  public taskDescription: string
+
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
