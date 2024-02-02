@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { TaskTemplateFilter } from './Filters'
+import { Company, User } from 'App/Models'
+
 
 export default class TaskTemplate extends compose (BaseModel, Filterable) {
   public static $filter = () => TaskTemplateFilter
@@ -19,10 +21,8 @@ export default class TaskTemplate extends compose (BaseModel, Filterable) {
   @column()
   public companyId: number
 
-  @column()
+  @column() 
   public taskTitle: string
-
-  
 
   @column.dateTime({
     serialize: (value?: DateTime) => {
@@ -57,4 +57,10 @@ export default class TaskTemplate extends compose (BaseModel, Filterable) {
     },
   })
   public updatedAt: DateTime
+
+
+  @belongsTo(() => User, {
+    foreignKey: 'createdBy',
+  })
+  public user: BelongsTo<typeof User>
 }

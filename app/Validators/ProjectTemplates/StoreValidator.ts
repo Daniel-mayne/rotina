@@ -1,11 +1,19 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class StoreValidator {
   constructor(protected ctx: HttpContextContract) { }
 
+  public refs = schema.refs({
+    companyId: this.ctx.auth.user!.companyId,
+  })
+
+
   public schema = schema.create({
-    
+    title: schema.string({ trim: true }),
+    projectTitle: schema.string({ trim: true }),
+    projectDescription: schema.string({ trim: true }),
+  
   })
 
   public messages: CustomMessages = {

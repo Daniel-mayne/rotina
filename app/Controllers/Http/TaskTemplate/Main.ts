@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class TaskController {
+export default class TaskTemplateController {
   public async index({}: HttpContextContract) {}
 
   public async store({}: HttpContextContract) {}

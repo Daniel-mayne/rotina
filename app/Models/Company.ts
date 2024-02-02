@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Approval, File, Persona, User, Customer, CustomerInformation } from 'App/Models'
+import { Approval, File, Persona, User, Customer, CustomerInformation, ProjectTemplate } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CompanyFilter } from './Filters'
@@ -258,5 +258,8 @@ export default class Company extends  compose(BaseModel, Filterable) {
 
   @hasMany(()=> CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
+
+  @hasMany(() => ProjectTemplate)
+  public projectTemplates: HasMany<typeof ProjectTemplate>
 
 }

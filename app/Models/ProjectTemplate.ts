@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectTemplateFilter } from './Filters'
+import { Company, User } from 'App/Models'
+
 
 
 export default class ProjectTemplate extends compose (BaseModel, Filterable) {
@@ -16,17 +18,18 @@ export default class ProjectTemplate extends compose (BaseModel, Filterable) {
   @column()
   public title: string
 
-  @column()
-  public createdBy: number
-
-  @column()
-  public companyId: number
-
+  
   @column()
   public projectTitle: string
   
   @column()
   public projectDescription: string
+
+  @column()
+  public createdBy: number
+
+  @column()
+  public companyId: number
 
 
   @column.dateTime({
@@ -45,4 +48,15 @@ export default class ProjectTemplate extends compose (BaseModel, Filterable) {
     },
   })
   public updatedAt: DateTime
+
+  @belongsTo(() => User, {
+    foreignKey: 'createdBy',
+  })
+  public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Company)
+  public company: BelongsTo<typeof Company>
+
+  
+
 }

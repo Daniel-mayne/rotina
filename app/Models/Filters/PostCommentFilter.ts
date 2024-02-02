@@ -11,7 +11,6 @@ export default class PostCommentFilter extends BaseModelFilter {
   }
 
   public approvalItem(ids: string): void {
-    console.log('inside approvalitemid filter ')
     this.$query.whereIn('approval_item_id', ids.split(','))
   }
 
