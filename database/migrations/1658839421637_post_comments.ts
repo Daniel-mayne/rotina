@@ -14,14 +14,14 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('approval_items')
         .onDelete('CASCADE')
-        table
+      table
         .integer('company_id')
         .unsigned()
         .notNullable()
         .references('id')
         .inTable('companies')
         .onDelete('CASCADE')
-        table
+      table
         .integer('user_id')
         .unsigned()
         .notNullable()

@@ -4,7 +4,7 @@ import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectFilter } from './Filters'
 
-export default class Project extends compose (BaseModel, Filterable) {
+export default class Project extends compose(BaseModel, Filterable) {
 
   public static $filter = () => ProjectFilter
 
@@ -13,7 +13,7 @@ export default class Project extends compose (BaseModel, Filterable) {
 
   @column()
   public title: string
-  
+
   @column()
   public projectDescription: string
 
@@ -33,8 +33,8 @@ export default class Project extends compose (BaseModel, Filterable) {
   public estimatedDelivery: Date
 
   @column()
-  public status: 'active' | 'deactivated' 
-  
+  public status: 'active' | 'deactivated'
+
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {

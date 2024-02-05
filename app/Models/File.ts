@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Approval, ApprovalItemFile, Company, Customer, User } from 'App/Models'
+import { ApprovalItemFile, Company, Customer, User } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { FileFilter } from './Filters'
@@ -100,21 +100,21 @@ export default class File extends compose(BaseModel, Filterable) {
   @column()
   public createdBy: number
 
-  @column.dateTime({ 
+  @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss');
     },
-   })
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ 
-    autoCreate: true, 
+  @column.dateTime({
+    autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss');
     },
-   })
+  })
   public updatedAt: DateTime
 
   @belongsTo(() => Company)

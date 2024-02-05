@@ -77,9 +77,9 @@ export default class ApprovalsController {
       .andWhere('companyId', auth.user!.companyId)
       .andWhere('status', 'deleted')
       .firstOrFail()
-      await data.merge({ status: 'waiting_approval' }).save()
+    await data.merge({ status: 'waiting_approval' }).save()
 
-      return data
+    return data
 
   }
 

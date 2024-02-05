@@ -14,7 +14,7 @@ export default class CustomerFilter extends BaseModelFilter {
   public name(name: string): void {
     this.$query.whereLike('name', `%${name}%`)
   }
-  
+
   public type(types: string) {
     this.$query.whereIn('type', types.split(','))
   }

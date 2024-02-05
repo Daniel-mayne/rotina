@@ -6,7 +6,7 @@ import { TaskProjectTemplateFilter } from './Filters'
 import { TaskTemplate, ProjectTemplate } from 'App/Models'
 
 
-export default class TaskProjectTemplate extends compose(BaseModel, Filterable){
+export default class TaskProjectTemplate extends compose(BaseModel, Filterable) {
 
   public static $filter = () => TaskProjectTemplateFilter
 
@@ -14,10 +14,10 @@ export default class TaskProjectTemplate extends compose(BaseModel, Filterable){
   public id: number
 
   @column()
-  public projectId: number
+  public taskTemplateId: number
 
   @column()
-  public taskId: number
+  public projectTemplateId: number
 
   @column.dateTime({
     serialize: (value?: DateTime) => {
@@ -26,27 +26,26 @@ export default class TaskProjectTemplate extends compose(BaseModel, Filterable){
   })
   public deadlineStart: DateTime
 
-  @column.dateTime({ 
+  @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss');
     },
-   })
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ 
-    autoCreate: true, 
+  @column.dateTime({
+    autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss');
     },
-   })
+  })
   public updatedAt: DateTime
 
-
-  @belongsTo(()=> TaskTemplate)
+  @belongsTo(() => TaskTemplate)
   public taskTemplate: BelongsTo<typeof TaskTemplate>
 
-  @belongsTo(()=> ProjectTemplate)
+  @belongsTo(() => ProjectTemplate)
   public projectTemplate: BelongsTo<typeof ProjectTemplate>
 }

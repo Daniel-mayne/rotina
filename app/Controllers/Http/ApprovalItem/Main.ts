@@ -114,7 +114,7 @@ export default class ApprovalItemsController {
 
     if (files) {
       for (const link of files) {
-   
+
         if (link.includes('/tmp/')) {
           const filePath = link.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '');
           if (await Drive.exists(filePath)) {

@@ -10,4 +10,4 @@ Route.resource('/customers', 'Customer/Main')
         destroy: ['auth', 'acl:owner,administrator,user'],
     })
 
-    Route.put('/customers/:id/restore', 'Customer/Main.restore').middleware(['auth', 'acl:owner,administrator,user'])
+Route.put('/customers/:id/restore', 'Customer/Main.restore').middleware(['auth', 'acl:owner,administrator,user'])

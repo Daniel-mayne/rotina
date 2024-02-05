@@ -12,7 +12,7 @@ export class StoreValidator {
     name: schema.string({ trim: true }),
     description: schema.string.optional({ trim: true }),
     pains: schema.string.optional({ trim: true }),
-    objections: schema.string.optional({ trim: true}),
+    objections: schema.string.optional({ trim: true }),
     customerId: schema.number([rules.exists({ table: 'customers', column: 'id', where: { company_id: this.refs.companyId } })])
   })
 
@@ -21,5 +21,4 @@ export class StoreValidator {
   }
 }
 
-     
-      
+

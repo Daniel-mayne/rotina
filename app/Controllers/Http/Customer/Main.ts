@@ -68,7 +68,7 @@ export default class CustomersController {
     const customer = await Customer.query()
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await customer.merge({logo: updatedUrl}).save()
+    await customer.merge({ logo: updatedUrl }).save()
 
     await Drive.delete(sourcePath)
 
@@ -112,9 +112,9 @@ export default class CustomersController {
       .andWhere('companyId', auth.user!.companyId)
       .andWhere('status', 'deleted')
       .firstOrFail()
-      await data.merge({ status: 'active' }).save()
+    await data.merge({ status: 'active' }).save()
 
-      return data
+    return data
   }
 
   public async destroy({ params, auth }: HttpContextContract) {

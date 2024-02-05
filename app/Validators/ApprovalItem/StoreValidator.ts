@@ -5,9 +5,9 @@ export class StoreValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   public refs = schema.refs({
-    companyId : this.ctx.auth.user!.companyId,
+    companyId: this.ctx.auth.user!.companyId,
   })
-  
+
 
   public schema = schema.create({
     title: schema.string({ trim: true }),

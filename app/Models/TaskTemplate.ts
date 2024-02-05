@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { TaskTemplateFilter } from './Filters'
-import { Company, User } from 'App/Models'
+import { User, TaskProjectTemplate } from 'App/Models'
 
 
-export default class TaskTemplate extends compose (BaseModel, Filterable) {
+export default class TaskTemplate extends compose(BaseModel, Filterable) {
   public static $filter = () => TaskTemplateFilter
 
   @column({ isPrimary: true })
@@ -21,7 +21,7 @@ export default class TaskTemplate extends compose (BaseModel, Filterable) {
   @column()
   public companyId: number
 
-  @column() 
+  @column()
   public taskTitle: string
 
   @column.dateTime({
@@ -63,4 +63,7 @@ export default class TaskTemplate extends compose (BaseModel, Filterable) {
     foreignKey: 'createdBy',
   })
   public user: BelongsTo<typeof User>
+
+  @hasMany(() => TaskProjectTemplate)
+  public taskProjectTemplates: HasMany<typeof TaskProjectTemplate>
 }

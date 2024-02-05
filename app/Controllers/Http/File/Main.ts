@@ -67,7 +67,7 @@ export default class FilesController {
       .if(auth.user!.type !== "administrator", query => query.where('created_by', auth.user!.id))
       .firstOrFail()
 
-      const fileReplace = data.file.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '')
+    const fileReplace = data.file.replace(Env.get('S3_DOMAIN'), '').replace(/^\//, '')
 
     if (await Drive.exists(fileReplace)) {
       await Drive.delete(fileReplace)

@@ -5,11 +5,11 @@ export class UpdateValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    
+
   })
 
   public messages: CustomMessages = {
     'required': 'O campo {{ field }} é obrigatório.',
-    
+
   }
 }

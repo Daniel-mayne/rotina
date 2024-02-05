@@ -25,7 +25,7 @@ export default class PostCommentController {
     const data = await request.validate(StoreValidator)
 
     const comment = await new PostComment()
-      .merge({ ...data, approvalItemId: data.approvalItemId, companyId: auth.user!.companyId, userId: auth.user!.id,})
+      .merge({ ...data, approvalItemId: data.approvalItemId, companyId: auth.user!.companyId, userId: auth.user!.id, })
       .save()
     await comment.load(loader => {
       loader.preload('approvalItem')

@@ -186,7 +186,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 *         '204':
 *           description: Company deletado com sucesso
 */
-export default class Company extends  compose(BaseModel, Filterable) {
+export default class Company extends compose(BaseModel, Filterable) {
 
   public static $filter = () => CompanyFilter
   public static namingStrategy = new CamelCaseNamingStrategy()
@@ -224,39 +224,39 @@ export default class Company extends  compose(BaseModel, Filterable) {
   @column()
   public stripeCustomerId?: string
 
-  @column.dateTime({ 
+  @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss');
     },
-   })
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ 
-    autoCreate: true, 
+  @column.dateTime({
+    autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss');
     },
-   })
+  })
   public updatedAt: DateTime
 
   @hasMany(() => User)
   public users: HasMany<typeof User>
 
-  @hasMany(()=> Customer)
+  @hasMany(() => Customer)
   public customers: HasMany<typeof Customer>
 
-  @hasMany(()=> Approval)
+  @hasMany(() => Approval)
   public approvals: HasMany<typeof Approval>
 
-  @hasMany(()=> Persona)
+  @hasMany(() => Persona)
   public personas: HasMany<typeof Persona>
 
-  @hasMany(()=> File)
+  @hasMany(() => File)
   public files: HasMany<typeof File>
 
-  @hasMany(()=> CustomerInformation)
+  @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
 
   @hasMany(() => ProjectTemplate)

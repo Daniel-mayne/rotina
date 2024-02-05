@@ -10,4 +10,4 @@ Route.resource('/approvals', 'Approval/Main')
         destroy: ['auth', 'acl:owner,administrator,user'],
     })
 
-    Route.put('/approvals/:id/restore', 'Approval/Main.restore').middleware(['auth', 'acl:owner,administrator,user'])
+Route.put('/approvals/:id/restore', 'Approval/Main.restore').middleware(['auth', 'acl:owner,administrator,user'])

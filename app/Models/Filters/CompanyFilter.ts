@@ -5,11 +5,11 @@ import Company from 'App/Models/Company'
 
 export default class CompanyFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Company, Company>
-  
-  public status (status: string ): void {
+
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
-  
+
   public name(name: string): void {
     this.$query.whereLike('name', `%${name}%`)
   }

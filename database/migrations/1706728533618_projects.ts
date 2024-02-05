@@ -3,11 +3,11 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class extends BaseSchema {
   protected tableName = 'projects'
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('title', 255).notNullable()    
-      table.text('project_description', 'longtext').notNullable()    
+      table.string('title', 255).notNullable()
+      table.text('project_description', 'longtext').notNullable()
       table.integer('company_id').unsigned().notNullable().references('id').inTable('companies').onDelete('CASCADE')
       table.integer('customer_id').unsigned().notNullable().references('id').inTable('customers').onDelete('CASCADE')
       table.integer('created_by').unsigned().notNullable().references('id').inTable('users').onDelete('CASCADE')
@@ -19,7 +19,7 @@ export default class extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
 }

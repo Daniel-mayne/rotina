@@ -28,21 +28,21 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
-        table
+      table
         .integer('company_id')
         .unsigned()
         .notNullable()
         .references('id')
         .inTable('companies')
         .onDelete('CASCADE')
-        table
+      table
         .integer('approval_by')
         .unsigned()
         .nullable()
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
-        table
+      table
         .integer('persona_id')
         .nullable()
         .unsigned()

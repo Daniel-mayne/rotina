@@ -1,12 +1,12 @@
 import { BaseModelFilter } from '@ioc:Adonis/Addons/LucidFilter'
 import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import Approval from 'App/Models/Approval' 
+import Approval from 'App/Models/Approval'
 
 export default class ApprovalFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Approval, Approval>
 
-  public status (status: string ): void {
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
 

@@ -6,11 +6,11 @@ import ApprovalItemFile from 'App/Models/ApprovalItemFile'
 export default class ApprovalItemFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof ApprovalItemFile, ApprovalItemFile>
 
-  public status (status: string ): void {
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
-  
-  
+
+
 
   public approvalItemId(approvalItemIds: string) {
     this.$query.whereIn('approval_item_id', approvalItemIds.split(','))

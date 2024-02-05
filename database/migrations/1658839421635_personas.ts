@@ -24,7 +24,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('customers')
         .onDelete('CASCADE')
-        
+
 
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

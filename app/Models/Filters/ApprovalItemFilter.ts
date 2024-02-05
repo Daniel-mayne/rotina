@@ -6,10 +6,10 @@ import ApprovalItem from 'App/Models/ApprovalItem'
 export default class ApprovalItemFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof ApprovalItem, ApprovalItem>
 
-  public status (status: string ): void {
+  public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
-  
+
   public name(name: string): void {
     this.$query.whereLike('name', `%${name}%`)
   }

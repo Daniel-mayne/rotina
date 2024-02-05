@@ -11,4 +11,3 @@ Route.resource('/projects', 'Project/Main')
     })
 
 
-    

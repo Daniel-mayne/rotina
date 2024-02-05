@@ -13,11 +13,11 @@ export default class PersonaController {
     } = request.qs()
 
     return await Persona.filter(input)
-    .where('companyId', auth.user!.companyId)
-    .orderBy(orderColumn, orderDirection)
-    .preload('company')
-    .preload('customer')
-    .paginate(page, limit)
+      .where('companyId', auth.user!.companyId)
+      .orderBy(orderColumn, orderDirection)
+      .preload('company')
+      .preload('customer')
+      .paginate(page, limit)
   }
 
 
@@ -25,7 +25,7 @@ export default class PersonaController {
     const data = await request.validate(StoreValidator)
 
     const persona = await new Persona()
-      .merge({ ...data, companyId: auth.user!.companyId, customerId: data.customerId, status: 'active'  })
+      .merge({ ...data, companyId: auth.user!.companyId, customerId: data.customerId, status: 'active' })
       .save()
 
     await persona.load(loader => {
@@ -37,10 +37,10 @@ export default class PersonaController {
 
   public async show({ params, auth }: HttpContextContract) {
     const data = await Persona.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .preload('customer')
-    .firstOrFail()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .preload('customer')
+      .firstOrFail()
 
     return data
   }
@@ -49,9 +49,9 @@ export default class PersonaController {
     const data = await request.validate(UpdateValidator)
 
     const persona = await Persona.query()
-    .where('id', params.id)
-    .andWhere('companyId', auth.user!.companyId)
-    .firstOrFail()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
 
     await persona.merge(data).save()
 
@@ -81,7 +81,7 @@ export default class PersonaController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-      await data.merge({ status: 'deleted' }).save()
-      return
+    await data.merge({ status: 'deleted' }).save()
+    return
   }
 }

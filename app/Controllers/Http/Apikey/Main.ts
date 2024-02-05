@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Apikey } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Apikey'
-import  Encryption  from '@ioc:Adonis/Core/Encryption'
+import Encryption from '@ioc:Adonis/Core/Encryption'
 
 export default class AnnotationController {
-  public async index({}: HttpContextContract) {}
+  public async index({ }: HttpContextContract) { }
 
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
@@ -15,7 +15,7 @@ export default class AnnotationController {
     return apikey
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ }: HttpContextContract) { }
 
   public async update({ params, auth, request }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)

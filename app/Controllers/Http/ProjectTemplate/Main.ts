@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ProjectTemplate } from 'App/Models'
-import { StoreValidator } from 'App/Validators/ProjectTemplates'
+import { StoreValidator, UpdateValidator } from 'App/Validators/ProjectTemplates'
 
 export default class ProjectTemplateController {
   public async index({ request, auth }: HttpContextContract) {
@@ -15,6 +15,9 @@ export default class ProjectTemplateController {
     return await ProjectTemplate.filter(input)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
+      .preload('company')
+      .preload('user')
+      .preload('taskProjectTemplates')
       .paginate(page, limit)
   }
 
@@ -24,17 +27,47 @@ export default class ProjectTemplateController {
       .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id })
       .save()
 
-      await projectTemplate.load(loader => {
-        loader.preload('company')
+    await projectTemplate.load(loader => {
+      loader.preload('company')
         .preload('user')
-      })
+    })
 
-      return projectTemplate
-   }
+    return projectTemplate
+  }
 
-  public async show({ }: HttpContextContract) { }
+  public async show({ params, auth }: HttpContextContract) {
+    const data = await ProjectTemplate.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .preload('company')
+      .preload('user')
+      .firstOrFail()
+    return data
+  }
 
-  public async update({ }: HttpContextContract) { }
+  public async update({ params, request, auth }: HttpContextContract) {
+    const data = await request.validate(UpdateValidator)
+    const projectTemplate = await ProjectTemplate.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
 
-  public async destroy({ }: HttpContextContract) { }
+    await projectTemplate.merge(data)
+      .save()
+
+    await projectTemplate.load(loader => {
+      loader.preload('company')
+        .preload('user')
+    })
+    return projectTemplate
+  }
+
+  public async destroy({ params, auth }: HttpContextContract) {
+    const data = await ProjectTemplate.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
+    await data.delete()
+    return
+  }
 }

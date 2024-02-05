@@ -257,7 +257,7 @@ export default class User extends compose(BaseModel, Filterable) {
   public sendNotificationWhatsapp?: boolean
 
   @column.dateTime({
-    autoCreate: true, 
+    autoCreate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     }
@@ -265,8 +265,8 @@ export default class User extends compose(BaseModel, Filterable) {
   public createdAt: DateTime
 
   @column.dateTime({
-    autoCreate: true, 
-    autoUpdate: true, 
+    autoCreate: true,
+    autoUpdate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     }
@@ -286,7 +286,7 @@ export default class User extends compose(BaseModel, Filterable) {
   public files: HasMany<typeof File>
 
   @hasMany(() => ApprovalItem, {
-    foreignKey: 'createdBy', 
+    foreignKey: 'createdBy',
   })
   public approvalItems: HasMany<typeof ApprovalItem>
 
@@ -294,17 +294,17 @@ export default class User extends compose(BaseModel, Filterable) {
   public postsComents: HasMany<typeof PostComment>
 
   @hasMany(() => Customer, {
-    foreignKey: 'accountManagerId', 
+    foreignKey: 'accountManagerId',
   })
   public customers: HasMany<typeof Customer>
 
-  @hasMany(()=> CustomerInformation)
+  @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
-  
-  @hasMany(()=> Notification)
+
+  @hasMany(() => Notification)
   public notifications: HasMany<typeof Notification>
 
-  @hasMany(()=> ProjectTemplate)
+  @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
 
   @belongsTo(() => Company)

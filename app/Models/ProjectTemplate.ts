@@ -1,14 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectTemplateFilter } from './Filters'
-import { Company, User } from 'App/Models'
+import { Company, TaskProjectTemplate, User } from 'App/Models'
 
 
 
-export default class ProjectTemplate extends compose (BaseModel, Filterable) {
-
+export default class ProjectTemplate extends compose(BaseModel, Filterable) {
 
   public static $filter = () => ProjectTemplateFilter
 
@@ -18,10 +17,9 @@ export default class ProjectTemplate extends compose (BaseModel, Filterable) {
   @column()
   public title: string
 
-  
   @column()
   public projectTitle: string
-  
+
   @column()
   public projectDescription: string
 
@@ -57,6 +55,7 @@ export default class ProjectTemplate extends compose (BaseModel, Filterable) {
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  
+  @hasMany(() => TaskProjectTemplate)
+  public taskProjectTemplates: HasMany<typeof TaskProjectTemplate>
 
 }
