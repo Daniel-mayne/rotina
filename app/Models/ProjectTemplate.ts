@@ -3,7 +3,7 @@ import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectTemplateFilter } from './Filters'
-import { Company, TaskProjectTemplate, User } from 'App/Models'
+import { Company, Project, TaskProjectTemplate, User } from 'App/Models'
 
 
 
@@ -54,6 +54,9 @@ export default class ProjectTemplate extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+  @hasMany(()=> Project)
+  public  projects: HasMany<typeof Project>
 
   @hasMany(() => TaskProjectTemplate)
   public taskProjectTemplates: HasMany<typeof TaskProjectTemplate>

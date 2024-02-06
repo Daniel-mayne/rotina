@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectFilter } from './Filters'
+import ProjectTemplate from './ProjectTemplate'
 
 export default class Project extends compose(BaseModel, Filterable) {
 
@@ -51,4 +52,7 @@ export default class Project extends compose(BaseModel, Filterable) {
     },
   })
   public updatedAt: DateTime
+
+  @belongsTo(()=> ProjectTemplate)
+  public projectTemplate: BelongsTo<typeof ProjectTemplate>
 }
