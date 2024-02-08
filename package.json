@@ -9,6 +9,7 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
+  "packageManager": "pnpm@8.0.0",
   "eslintConfig": {
     "extends": [
       "plugin:adonis/typescriptApp",
@@ -27,7 +28,7 @@
     "build"
   ],
   "engines": {
-    "node": "18.8"
+    "node": "18.x"
   },
   "prettier": {
     "trailingComma": "es5",
