@@ -28,7 +28,7 @@
     "build"
   ],
   "engines": {
-    "node": "18.8"
+    "node": "18.x"
   },
   "prettier": {
     "trailingComma": "es5",

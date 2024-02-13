@@ -31,7 +31,7 @@ export default class Project extends compose(BaseModel, Filterable) {
   public projectTemplateId: number
 
   @column()
-  public estimatedDelivery: Date
+  public estimatedDelivery: DateTime
 
   @column()
   public status: 'active' | 'deactivated'
