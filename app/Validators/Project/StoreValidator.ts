@@ -6,11 +6,12 @@ export class StoreValidator {
 
   public refs = schema.refs({
     companyId: this.ctx.auth.user!.companyId,
+    customerId: this.ctx.auth.user!.customerId,
   })
 
 
   public schema = schema.create({
-    title: schema.string({ trim: true }, [rules.unique({ table: 'project_templates', column: 'title', where: { company_id: this.refs.companyId } })]),
+    title: schema.string({ trim: true }, [rules.unique({ table: 'projects', column: 'title', where: { customer_id: this.refs.customerId } })]),
     projectDescription: schema.string({ trim: true }),
     projectTemplateId: schema.number(),
     customerId: schema.number(),
