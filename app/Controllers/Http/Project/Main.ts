@@ -20,9 +20,9 @@ export default class ProjectController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const data = await request.validate(StoreValidator)
+    const  data = await request.validate(StoreValidator)
     const project = await new Project()
-      .merge({ ...data, companyId: auth.user!.companyId, status: 'active' })
+      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
       .save()
 
       await project.load(loader => {

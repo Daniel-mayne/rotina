@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasMany, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectFilter } from './Filters'
@@ -31,10 +31,14 @@ export default class Project extends compose(BaseModel, Filterable) {
   public projectTemplateId: number
 
   @column()
-  public estimatedDelivery: DateTime
-
-  @column()
   public status: 'active' | 'deactivated'
+
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy')
+    },
+  })
+  public estimatedDelivery: DateTime
 
   @column.dateTime({
     autoCreate: true,

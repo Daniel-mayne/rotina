@@ -6,7 +6,7 @@ export class StoreValidator {
 
   public refs = schema.refs({
     companyId: this.ctx.auth.user!.companyId,
-    customerId: this.ctx.auth.user!.customerId,
+    customerId: this.ctx.request.input('customerId'),
   })
 
 
@@ -15,8 +15,7 @@ export class StoreValidator {
     projectDescription: schema.string({ trim: true }),
     projectTemplateId: schema.number(),
     customerId: schema.number(),
-    estimatedDelivery: schema.date(),
-
+    estimatedDelivery: schema.date({ format: 'dd/MM/yyyy' })
   })
 
   public messages: CustomMessages = {
