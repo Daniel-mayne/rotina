@@ -2,7 +2,7 @@ import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class StoreValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     name: schema.string({ trim: true }),
@@ -18,7 +18,7 @@ export class StoreValidator {
     type: schema.enum(['user', 'guest', 'administrator'] as const),
     theme: schema.enum.optional(['white', 'black'] as const),
     customerId: schema.number.optional([rules.exists({ table: 'customer', column: 'id' })]),
-    workLoad: schema.date.optional({})
+    workLoad: schema.date.optional({}),
   })
 
   public messages: CustomMessages = {

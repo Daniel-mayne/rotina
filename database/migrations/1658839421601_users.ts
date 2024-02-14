@@ -12,7 +12,10 @@ export default class UsersSchema extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('picture', 255).nullable()
       table.enum('status', ['active', 'deactivated']).notNullable().defaultTo('active')
-      table.enum('type', ['user', 'guest', 'administrator', 'owner']).notNullable().defaultTo('user')
+      table
+        .enum('type', ['user', 'guest', 'administrator', 'owner'])
+        .notNullable()
+        .defaultTo('user')
       table.enum('theme', ['white', 'black']).notNullable().defaultTo('white')
       table.time('work_load').notNullable().defaultTo('08:00:00')
       table.time('work_start').notNullable().defaultTo('08:30:00')

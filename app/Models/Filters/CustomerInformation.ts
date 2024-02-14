@@ -15,12 +15,11 @@ export default class CustomerInformationFilter extends BaseModelFilter {
   }
 
   public search(word: string): void {
-    this.$query.andWhereRaw("(title LIKE ? OR text LIKE)", [`%${word}%`, `%${word}%`])
+    this.$query.andWhereRaw('(title LIKE ? OR text LIKE)', [`%${word}%`, `%${word}%`])
   }
 
   public title(title: string): void {
     this.$query.whereLike('title', `%${title}%`)
-
   }
 
   public text(text: string): void {
@@ -30,8 +29,6 @@ export default class CustomerInformationFilter extends BaseModelFilter {
   public type(types: string) {
     this.$query.whereIn('type', types.split(','))
   }
-
-
 
   public createdAt(value: string) {
     const dates: string[] = value.split(',')

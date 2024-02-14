@@ -27,9 +27,8 @@ export default class ProjectTemplateController {
       .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id })
       .save()
 
-    await projectTemplate.load(loader => {
-      loader.preload('company')
-        .preload('user')
+    await projectTemplate.load((loader) => {
+      loader.preload('company').preload('user')
     })
 
     return projectTemplate
@@ -52,12 +51,10 @@ export default class ProjectTemplateController {
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
 
-    await projectTemplate.merge(data)
-      .save()
+    await projectTemplate.merge(data).save()
 
-    await projectTemplate.load(loader => {
-      loader.preload('company')
-        .preload('user')
+    await projectTemplate.load((loader) => {
+      loader.preload('company').preload('user')
     })
     return projectTemplate
   }

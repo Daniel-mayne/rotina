@@ -6,7 +6,6 @@ import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { NotificationFilter } from './Filters'
 
 export default class Notification extends compose(BaseModel, Filterable) {
-
   public static $filter = () => NotificationFilter
 
   @column({ isPrimary: true })

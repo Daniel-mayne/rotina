@@ -16,7 +16,7 @@ export default class UserController {
 
     return await User.filter(input)
       .where('companyId', auth.user!.companyId)
-      .if(orderColumn && orderDirection, query => query.orderBy(orderColumn, orderDirection))
+      .if(orderColumn && orderDirection, (query) => query.orderBy(orderColumn, orderDirection))
       .preload('company')
       .preload('customer')
       .paginate(page, limit)
@@ -41,7 +41,7 @@ export default class UserController {
     //   await Stripe.subscriptionItems.update(sub.items.data[0].id, { quantity: userQuantity })
     // }
 
-    await user.load(loader => {
+    await user.load((loader) => {
       loader.preload('company')
     })
     return user
@@ -64,7 +64,6 @@ export default class UserController {
     return user
   }
 
-
   public async update({ params, auth, request, response }: HttpContextContract) {
     const { oldPassword: oldPassword, ...data } = await request.validate(UpdateValidator)
 
@@ -83,9 +82,9 @@ export default class UserController {
     if (oldPassword) {
       if (!(await Hash.verify(user.password, oldPassword))) {
         response.unauthorized({
-          error: { message: "Password antigo invalido" },
-        });
-        return;
+          error: { message: 'Password antigo invalido' },
+        })
+        return
       }
     }
 
@@ -108,13 +107,11 @@ export default class UserController {
       await auth.user?.load('company', (query) => query.preload('users'))
     }
 
-    await user.load(loader => {
+    await user.load((loader) => {
       loader.preload('company')
     })
     return user
-
   }
-
 
   public async restore({ params, auth }: HttpContextContract) {
     const data = await User.query()
@@ -153,5 +150,4 @@ export default class UserController {
     await user.merge({ status: 'deleted' }).save()
     return
   }
-
 }

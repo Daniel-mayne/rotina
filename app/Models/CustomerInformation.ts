@@ -212,7 +212,6 @@ export default class CustomerInformation extends compose(BaseModel, Filterable) 
   @column()
   public companyId: number
 
-
   @column()
   public customerId: number
 
@@ -225,7 +224,7 @@ export default class CustomerInformation extends compose(BaseModel, Filterable) 
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public createdAt: DateTime
@@ -234,10 +233,10 @@ export default class CustomerInformation extends compose(BaseModel, Filterable) 
     autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
-  public updatedAt: DateTime;
+  public updatedAt: DateTime
 
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>

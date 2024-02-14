@@ -74,7 +74,6 @@ export default class AuthMiddleware {
     next: () => Promise<void>,
     customGuards: (keyof GuardsList)[]
   ) {
-
     /**
      * Uses the user defined guards or the default guard mentioned in
      * the config file
@@ -83,6 +82,5 @@ export default class AuthMiddleware {
     await this.authenticate(auth, guards)
 
     await next()
-
   }
 }

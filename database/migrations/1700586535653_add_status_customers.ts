@@ -5,7 +5,11 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.enum('status', ['active', 'deactivated', 'deleted']).notNullable().defaultTo('active').alter()
+      table
+        .enum('status', ['active', 'deactivated', 'deleted'])
+        .notNullable()
+        .defaultTo('active')
+        .alter()
     })
   }
 

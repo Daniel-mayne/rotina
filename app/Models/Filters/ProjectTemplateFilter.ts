@@ -3,12 +3,14 @@ import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import ProjectTemplate from 'App/Models/ProjectTemplate'
 
-
 export default class ProjectTemplateFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof ProjectTemplate, ProjectTemplate>
 
   public search(word: string): void {
-    this.$query.andWhereRaw("(title LIKE ? OR project_description LIKE)", [`%${word}%`, `%${word}%`])
+    this.$query.andWhereRaw('(title LIKE ? OR project_description LIKE)', [
+      `%${word}%`,
+      `%${word}%`,
+    ])
   }
 
   public title(title: string): void {

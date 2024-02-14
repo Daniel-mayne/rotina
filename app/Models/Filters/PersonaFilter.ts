@@ -3,7 +3,6 @@ import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Persona from 'App/Models/Persona'
 
-
 export default class PersonaFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Persona, Persona>
 
@@ -16,7 +15,10 @@ export default class PersonaFilter extends BaseModelFilter {
   }
 
   public search(word: string): void {
-    this.$query.andWhereRaw("(name LIKE ? OR description LIKE ? OR pains LIKE ? OR objections LIKE ?)", [`%${word}%`, `%${word}%`, `%${word}%`, `%${word}%`])
+    this.$query.andWhereRaw(
+      '(name LIKE ? OR description LIKE ? OR pains LIKE ? OR objections LIKE ?)',
+      [`%${word}%`, `%${word}%`, `%${word}%`, `%${word}%`]
+    )
   }
 
   public name(name: string): void {
@@ -43,5 +45,4 @@ export default class PersonaFilter extends BaseModelFilter {
       : DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').endOf('day').toSQL()
     this.$query.whereBetween('created_at', [firstDate!, seccondDate!])
   }
-
 }

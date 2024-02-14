@@ -22,10 +22,15 @@ export default class ProjectController {
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
     const project = await new Project()
-      .merge({ ...data, companyId: auth.user!.companyId, createdBy: auth.user!.id, status: 'active' })
+      .merge({
+        ...data,
+        companyId: auth.user!.companyId,
+        createdBy: auth.user!.id,
+        status: 'active',
+      })
       .save()
 
-    await project.load(loader => {
+    await project.load((loader) => {
       loader.preload('projectTemplate')
     })
     return project
@@ -48,11 +53,10 @@ export default class ProjectController {
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     await project.merge(data).save()
-    await project.load(loader => {
+    await project.load((loader) => {
       loader.preload('projectTemplate')
     })
     return project
-
   }
 
   public async destroy({ params, auth }: HttpContextContract) {

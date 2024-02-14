@@ -6,7 +6,6 @@ import Customer from 'App/Models/Customer'
 export default class CustomerFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Customer, Customer>
 
-
   public status(status: string): void {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
@@ -26,7 +25,6 @@ export default class CustomerFilter extends BaseModelFilter {
   public createdBy(createdBys: string): void {
     this.$query.whereIn('created_by', createdBys.split(','))
   }
-
 
   public createdAt(value: string) {
     const dates: string[] = value.split(',')

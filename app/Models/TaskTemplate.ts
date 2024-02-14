@@ -5,7 +5,6 @@ import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { TaskTemplateFilter } from './Filters'
 import { User, TaskProjectTemplate } from 'App/Models'
 
-
 export default class TaskTemplate extends compose(BaseModel, Filterable) {
   public static $filter = () => TaskTemplateFilter
 
@@ -27,14 +26,14 @@ export default class TaskTemplate extends compose(BaseModel, Filterable) {
   @column.dateTime({
     serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    }
+    },
   })
   public deadlineDate: DateTime
 
   @column.dateTime({
     serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    }
+    },
   })
   public estimatedTaskTime: DateTime
 
@@ -57,7 +56,6 @@ export default class TaskTemplate extends compose(BaseModel, Filterable) {
     },
   })
   public updatedAt: DateTime
-
 
   @belongsTo(() => User, {
     foreignKey: 'createdBy',

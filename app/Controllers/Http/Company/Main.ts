@@ -25,7 +25,7 @@ export default class CompanyController {
     const { adminEmail, adminName, adminPassword, adminPhone, ...companyData } =
       await request.validate(StoreValidator)
 
-    // const custommerStripe = await Stripe.customers.create({  
+    // const custommerStripe = await Stripe.customers.create({
     //   email: adminEmail,
     //   name: companyData.name,
     //   phone: adminPhone ? adminPhone : undefined,
@@ -61,7 +61,7 @@ export default class CompanyController {
       companyId: company.id,
     })
 
-    await company.load(loader => {
+    await company.load((loader) => {
       loader.preload('users')
     })
 
@@ -146,20 +146,20 @@ export default class CompanyController {
     const company = await Company.query()
       .where('id', params.id)
       .andWhere('id', auth.user!.companyId)
-      .preload('users').firstOrFail()
+      .preload('users')
+      .firstOrFail()
 
     return company
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
     const data = await request.validate(UpdateValidator)
-    const company = await Company
-      .query()
+    const company = await Company.query()
       .where('id', params.id)
       .andWhere('id', auth.user!.companyId)
       .firstOrFail()
     await company.merge(data).save()
-    await company.load(loader => {
+    await company.load((loader) => {
       loader.preload('users')
     })
     return company

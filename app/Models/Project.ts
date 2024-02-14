@@ -6,7 +6,6 @@ import { ProjectFilter } from './Filters'
 import ProjectTemplate from './ProjectTemplate'
 
 export default class Project extends compose(BaseModel, Filterable) {
-
   public static $filter = () => ProjectFilter
 
   @column({ isPrimary: true })
@@ -57,6 +56,6 @@ export default class Project extends compose(BaseModel, Filterable) {
   })
   public updatedAt: DateTime
 
-  @belongsTo(()=> ProjectTemplate)
+  @belongsTo(() => ProjectTemplate)
   public projectTemplate: BelongsTo<typeof ProjectTemplate>
 }

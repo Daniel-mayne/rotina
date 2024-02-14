@@ -2,7 +2,7 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class StoreTemporaryValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     file: schema.file({
@@ -21,7 +21,7 @@ export class StoreTemporaryValidator {
         'docx',
         'xlsx',
         'csv',
-        'zip'
+        'zip',
       ],
     }),
   })

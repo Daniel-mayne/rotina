@@ -10,16 +10,12 @@ export default class ApprovalItemFilter extends BaseModelFilter {
     this.$query.if(status !== 'all', (query) => query.whereIn('status', status.split(',')))
   }
 
-
-
   public approvalItemId(approvalItemIds: string) {
     this.$query.whereIn('approval_item_id', approvalItemIds.split(','))
   }
   public fileId(fileIds: string) {
     this.$query.whereIn('file_id', fileIds.split(','))
   }
-
-
 
   public createdAt(value: string) {
     const dates: string[] = value.split(',')
