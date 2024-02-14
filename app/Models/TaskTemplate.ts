@@ -15,34 +15,34 @@ export default class TaskTemplate extends compose(BaseModel, Filterable) {
   public title: string
 
   @column()
+  public taskTitle: string
+
+  @column()
+  public taskDescription: string
+
+  @column()
   public createdBy: number
 
   @column()
   public companyId: number
 
-  @column()
-  public taskTitle: string
-
   @column.dateTime({
     serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+      return value.toFormat('dd/MM/yyyy')
     },
   })
   public deadlineDate: DateTime
 
   @column.dateTime({
     serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+      return value.toFormat('dd/MM/yyyy')
     },
   })
   public estimatedTaskTime: DateTime
 
-  @column()
-  public taskDescription: string
-
   @column.dateTime({
     autoCreate: true,
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
@@ -51,7 +51,7 @@ export default class TaskTemplate extends compose(BaseModel, Filterable) {
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })

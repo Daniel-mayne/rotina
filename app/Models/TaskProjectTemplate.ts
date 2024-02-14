@@ -26,7 +26,7 @@ export default class TaskProjectTemplate extends compose(BaseModel, Filterable) 
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
@@ -35,7 +35,7 @@ export default class TaskProjectTemplate extends compose(BaseModel, Filterable) 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
