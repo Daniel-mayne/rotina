@@ -27,6 +27,14 @@ export default class ProjectTemplateFilter extends BaseModelFilter {
       this.$query.whereIn('customer_id', ids.split(','))
     }
 
+    public estimatedDelivery(value: string) {
+      const dates: string[] = value.split(',')
+      const firstDate = DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').startOf('day').toSQL()
+      const seccondDate = dates[1]
+        ? DateTime.fromFormat(dates[1], 'dd/MM/yyyy').endOf('day').toSQL()
+        : DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').endOf('day').toSQL()
+      this.$query.whereBetween('estimated_delivery', [firstDate!, seccondDate!])
+    }
 
   public createdAt(value: string) {
     const dates: string[] = value.split(',')
