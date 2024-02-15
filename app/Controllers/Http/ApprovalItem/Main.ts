@@ -25,6 +25,7 @@ export default class ApprovalItemsController {
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
       .preload('user')
+      .preload('files', query => query.preload('file'))
       .preload('persona', (query) => query.preload('customer'))
       .if(auth.user!.type === 'guest', (query) =>
         query.whereHas('approval', (query) => query.where('customer_id', auth.user!.customerId))
@@ -84,7 +85,7 @@ export default class ApprovalItemsController {
       loader.preload('persona')
       loader.preload('user')
       loader.preload('postsComents', (query) => query.preload('user'))
-      loader.preload('files')
+      loader.preload('files', query => query.preload('file'))
     })
     return { approvalItem }
   }
@@ -94,7 +95,7 @@ export default class ApprovalItemsController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('approval')
-      .preload('files')
+      .preload('files', query => query.preload('file'))
       .preload('postsComents', (query) => query.preload('user'))
       .preload('user')
       .preload('persona')
@@ -171,7 +172,7 @@ export default class ApprovalItemsController {
 
     await approvalItem.load((loader) => {
       loader.preload('approval')
-      loader.preload('files')
+      loader.preload('files', query => query.preload('file'))
       loader.preload('persona')
       loader.preload('user')
       loader.preload('postsComents', (query) => query.preload('user'))
