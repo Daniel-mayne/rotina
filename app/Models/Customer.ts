@@ -166,7 +166,6 @@ import { CustomerFilter } from './Filters'
    *           description: Customer deletado com sucesso
    */
 export default class Customer extends compose(BaseModel, Filterable) {
-
   public static $filter = () => CustomerFilter
 
   @column({ isPrimary: true })
@@ -196,7 +195,7 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public createdAt: DateTime
@@ -205,10 +204,10 @@ export default class Customer extends compose(BaseModel, Filterable) {
     autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
-  public updatedAt: DateTime;
+  public updatedAt: DateTime
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
@@ -229,5 +228,4 @@ export default class Customer extends compose(BaseModel, Filterable) {
 
   @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
-
 }

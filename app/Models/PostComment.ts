@@ -1,12 +1,19 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany, afterCreate } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  column,
+  belongsTo,
+  BelongsTo,
+  hasMany,
+  HasMany,
+  afterCreate,
+} from '@ioc:Adonis/Lucid/Orm'
 import { ApprovalItem, User, Notification } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { PostCommentFilter } from './Filters'
 
 export default class PostComment extends compose(BaseModel, Filterable) {
-
   public static $filter = () => PostCommentFilter
 
   @column({ isPrimary: true })
@@ -41,7 +48,6 @@ export default class PostComment extends compose(BaseModel, Filterable) {
   })
   public updatedAt: DateTime
 
-
   @hasMany(() => Notification)
   public notifications: HasMany<typeof Notification>
 
@@ -57,9 +63,7 @@ export default class PostComment extends compose(BaseModel, Filterable) {
       userId: postComment.userId,
       approvalItemId: postComment.approvalItemId,
       postCommentId: postComment.id,
-      status: 'sent'
+      status: 'sent',
     })
   }
-
-
 }

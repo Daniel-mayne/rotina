@@ -16,6 +16,7 @@ import './approvalItemFile'
 import './approveAllItemsApproval'
 import './taskTemplate'
 import './projectTemplate'
+import './project'
 
 Route.get('/', async () => {
   return { hello: 'world' }

@@ -1,6 +1,14 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Approval, File, Persona, User, Customer, CustomerInformation, ProjectTemplate } from 'App/Models'
+import {
+  Approval,
+  File,
+  Persona,
+  User,
+  Customer,
+  CustomerInformation,
+  ProjectTemplate,
+} from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CompanyFilter } from './Filters'
@@ -56,27 +64,27 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *         updatedAt:
  *           type: string
  *         user:
- *           $ref: '#/components/schemas/User' 
+ *           $ref: '#/components/schemas/User'
  *         customer:
- *           $ref: '#/components/schemas/Customer' 
+ *           $ref: '#/components/schemas/Customer'
  *         approval:
- *           $ref: '#/components/schemas/Approval' 
+ *           $ref: '#/components/schemas/Approval'
  *         persona:
- *           $ref: '#/components/schemas/Persona' 
+ *           $ref: '#/components/schemas/Persona'
  *         file:
- *           $ref: '#/components/schemas/File'   
+ *           $ref: '#/components/schemas/File'
  *       required:
  *         - id
- *         - name 
+ *         - name
  *         - adminName
  *         - adminEmail
  *         - adminPassword
- *         - adminPhone         
+ *         - adminPhone
  *       example:
  *         id: 1
  *         name: "XYZ Corporation"
  *         userLimit: 999
- *         status: "active"    
+ *         status: "active"
  *         createdAt: "2023-09-21T14:30:00.000-03:00"
  *         updatedAt: "2023-09-21T15:45:00.000-03:00"
  */
@@ -187,7 +195,6 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 *           description: Company deletado com sucesso
 */
 export default class Company extends compose(BaseModel, Filterable) {
-
   public static $filter = () => CompanyFilter
   public static namingStrategy = new CamelCaseNamingStrategy()
 
@@ -216,7 +223,14 @@ export default class Company extends compose(BaseModel, Filterable) {
   public status?: 'active' | 'deactivated' | 'waiting_activation'
 
   @column()
-  public stripeSubscriptionStatus?: 'active' | 'past_due' | 'unpaid' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'trialing'
+  public stripeSubscriptionStatus?:
+    | 'active'
+    | 'past_due'
+    | 'unpaid'
+    | 'canceled'
+    | 'incomplete'
+    | 'incomplete_expired'
+    | 'trialing'
 
   @column()
   public stripeSubscriptionId?: string
@@ -227,7 +241,7 @@ export default class Company extends compose(BaseModel, Filterable) {
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public createdAt: DateTime
@@ -236,7 +250,7 @@ export default class Company extends compose(BaseModel, Filterable) {
     autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public updatedAt: DateTime
@@ -261,5 +275,4 @@ export default class Company extends compose(BaseModel, Filterable) {
 
   @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
-
 }

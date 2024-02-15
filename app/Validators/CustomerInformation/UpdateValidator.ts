@@ -2,7 +2,7 @@ import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class UpdateValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     title: schema.string.optional({ trim: true }),
@@ -10,9 +10,8 @@ export class UpdateValidator {
     type: schema.enum.optional(['text', 'code', 'image'] as const),
     language: schema.string.optional({ trim: true }),
     status: schema.enum.optional(['active', 'deactivated'] as const),
-    isValid: schema.boolean.optional()
+    isValid: schema.boolean.optional(),
   })
 
-  public messages: CustomMessages = {
-  }
+  public messages: CustomMessages = {}
 }

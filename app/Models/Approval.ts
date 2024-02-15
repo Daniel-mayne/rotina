@@ -22,7 +22,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *                 type: array
  *                 items:
  *                   $ref: '#/components/schemas/Approval'
- * 
+ *
  *     post:
  *       tags:
  *        - Approval
@@ -40,7 +40,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
- * 
+ *
  *   /approvals/{id}:
  *     get:
  *       tags:
@@ -61,7 +61,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
- * 
+ *
  *     put:
  *       tags:
  *        - Approval
@@ -98,7 +98,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
- * 
+ *
  *     delete:
  *       tags:
  *        - Approval
@@ -114,7 +114,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *       responses:
  *         '204':
  *           description: Approval deletado com sucesso.
- * 
+ *
  *   /approvals/{id}/restore:
  *     put:
  *       tags:
@@ -135,7 +135,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Approval'
- *     
+ *
  * components:
  *   schemas:
  *     Approval:
@@ -204,7 +204,6 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  */
 
 export default class Approval extends compose(BaseModel, Filterable) {
-
   public static $filter = () => ApprovalFilter
 
   @column({ isPrimary: true })

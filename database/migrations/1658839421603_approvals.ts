@@ -8,7 +8,10 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name', 255).notNullable()
       table.string('url', 255).notNullable()
-      table.enum('status', ['waiting_approval', 'approved', 'disapproved', 'deleted']).notNullable().defaultTo('waiting_approval')
+      table
+        .enum('status', ['waiting_approval', 'approved', 'disapproved', 'deleted'])
+        .notNullable()
+        .defaultTo('waiting_approval')
       table.timestamp('approval_date', { useTz: true }).nullable()
       table.timestamp('reproved_date', { useTz: true }).nullable()
       table

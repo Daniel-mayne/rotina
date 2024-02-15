@@ -9,7 +9,11 @@ export default class UserFilter extends BaseModelFilter {
   public static camelCase: boolean = true
 
   public search(word: string): void {
-    this.$query.andWhereRaw("(name LIKE ? OR email LIKE ? OR phone LIKE ?)", [`%${word}%`, `%${word}%`, `%${word}%`])
+    this.$query.andWhereRaw('(name LIKE ? OR email LIKE ? OR phone LIKE ?)', [
+      `%${word}%`,
+      `%${word}%`,
+      `%${word}%`,
+    ])
   }
 
   public status(status: string): void {

@@ -8,7 +8,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *   /apiKeys:
  *     post:
  *       tags:
- *         - Apikey  
+ *         - Apikey
  *       summary: Cria uma nova ApiKey
  *       requestBody:
  *         required: true
@@ -29,7 +29,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *        - Apikey
  *       summary: Atualiza um ApiKey por ID
  *       parameters:
-*         - in: path
+ *         - in: path
  *           name: id
  *           required: true
  *           schema:
@@ -62,7 +62,7 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *                 $ref: '#/components/schemas/Apikey'
  *     delete:
  *       tags:
- *        - Apikey 
+ *        - Apikey
  *       summary: Deleta uma ApiKey por ID
  *       parameters:
  *         - in : path
@@ -75,11 +75,11 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *       responses:
  *         '204':
  *           description: ApiKey deletada com sucesso
- * 
- * 
+ *
+ *
  * components:
  *   schemas:
- *     Apikey: 
+ *     Apikey:
  *       type: object
  *       properties:
  *         id:
@@ -126,7 +126,6 @@ import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
  *         updatedAt: "30/10/2023 20:05:15"
  */
 
-
 export default class Apikey extends BaseModel {
   public static namingStrategy = new CamelCaseNamingStrategy()
 
@@ -151,7 +150,7 @@ export default class Apikey extends BaseModel {
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public createdAt: DateTime
@@ -160,7 +159,7 @@ export default class Apikey extends BaseModel {
     autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public updatedAt: DateTime

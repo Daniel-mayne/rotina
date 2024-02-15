@@ -5,10 +5,7 @@ import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ApprovalItemFilter } from './Filters'
 
-
-
 export default class ApprovalItemFile extends compose(BaseModel, Filterable) {
-
   public static $filter = () => ApprovalItemFilter
 
   @column({ isPrimary: true })
@@ -26,7 +23,7 @@ export default class ApprovalItemFile extends compose(BaseModel, Filterable) {
   @column.dateTime({
     autoCreate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public createdAt: DateTime
@@ -35,7 +32,7 @@ export default class ApprovalItemFile extends compose(BaseModel, Filterable) {
     autoCreate: true,
     autoUpdate: true,
     serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss');
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public updatedAt: DateTime

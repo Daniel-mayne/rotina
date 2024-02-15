@@ -20,15 +20,19 @@ export default class PersonaController {
       .paginate(page, limit)
   }
 
-
   public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
 
     const persona = await new Persona()
-      .merge({ ...data, companyId: auth.user!.companyId, customerId: data.customerId, status: 'active' })
+      .merge({
+        ...data,
+        companyId: auth.user!.companyId,
+        customerId: data.customerId,
+        status: 'active',
+      })
       .save()
 
-    await persona.load(loader => {
+    await persona.load((loader) => {
       loader.preload('customer')
     })
 
@@ -55,16 +59,14 @@ export default class PersonaController {
 
     await persona.merge(data).save()
 
-    await persona.load(loader => {
+    await persona.load((loader) => {
       loader.preload('customer')
     })
 
     return persona
-
   }
 
   public async restore({ params, auth }: HttpContextContract) {
-
     const data = await Persona.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
@@ -73,7 +75,6 @@ export default class PersonaController {
     await data.merge({ status: 'active' }).save()
 
     return data
-
   }
 
   public async destroy({ params, auth }: HttpContextContract) {

@@ -1,7 +1,28 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, afterCreate, BaseModel, belongsTo, BelongsTo, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Company, Apikey, Customer, Persona, Approval, ApprovalItem, File, CustomerInformation, PostComment, Notification, ProjectTemplate } from 'App/Models'
+import {
+  column,
+  beforeSave,
+  afterCreate,
+  BaseModel,
+  belongsTo,
+  BelongsTo,
+  HasMany,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
+import {
+  Company,
+  Apikey,
+  Customer,
+  Persona,
+  Approval,
+  ApprovalItem,
+  File,
+  CustomerInformation,
+  PostComment,
+  Notification,
+  ProjectTemplate,
+} from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
 import { compose } from '@ioc:Adonis/Core/Helpers'
@@ -50,7 +71,7 @@ import { UserFilter } from './Filters'
  *         updatedAt:
  *           type: string
  *         apiKey:
- *           $ref: '#/components/schemas/Apikey'        
+ *           $ref: '#/components/schemas/Apikey'
  *         customer:
  *           $ref: '#/components/schemas/Customer'
  *         persona:
@@ -65,13 +86,13 @@ import { UserFilter } from './Filters'
  *           $ref: '#/components/schemas/Company'
  *       required:
  *         - id
- *         - name 
- *         - email 
- *         - password 
- *         - passwordConfirmation 
+ *         - name
+ *         - email
+ *         - password
+ *         - passwordConfirmation
  *         - status   [active, deactivated]
  *         - type  [user, guest, administrator]
- *         - companyId 
+ *         - companyId
  *       example:
  *         id: 1
  *         name: "Usuário Rotina 1"
@@ -236,7 +257,7 @@ export default class User extends compose(BaseModel, Filterable) {
   @column.dateTime({
     serialize: (value?: DateTime) => {
       return value.toFormat('HH:mm:ss')
-    }
+    },
   })
   public workLoad: DateTime
 
@@ -260,7 +281,7 @@ export default class User extends compose(BaseModel, Filterable) {
     autoCreate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    }
+    },
   })
   public createdAt: DateTime
 
@@ -269,7 +290,7 @@ export default class User extends compose(BaseModel, Filterable) {
     autoUpdate: true,
     serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    }
+    },
   })
   public updatedAt: DateTime
 
@@ -326,9 +347,7 @@ export default class User extends compose(BaseModel, Filterable) {
       value: Encryption.encrypt({ id: user.id }),
       status: 'active',
       companyId: user.companyId,
-      title: 'ApiKey'
+      title: 'ApiKey',
     })
-
   }
 }
-

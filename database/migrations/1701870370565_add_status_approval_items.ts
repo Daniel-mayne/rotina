@@ -5,7 +5,11 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.enum('status', ['waiting_approval', 'approved', 'disapproved', 'deleted']).notNullable().defaultTo('waiting_approval').alter()
+      table
+        .enum('status', ['waiting_approval', 'approved', 'disapproved', 'deleted'])
+        .notNullable()
+        .defaultTo('waiting_approval')
+        .alter()
     })
   }
 

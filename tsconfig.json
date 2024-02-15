@@ -1,16 +1,9 @@
 {
   "extends": "adonis-preset-ts/tsconfig.json",
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ],
+  "include": ["**/*"],
+  "exclude": ["node_modules", "build"],
   "compilerOptions": {
-    "lib": [
-      "ES2021.String"
-    ],
+    "lib": ["ES2021.String"],
     "skipLibCheck": true,
     "outDir": "build",
     "baseUrl": "./",
@@ -18,18 +11,10 @@
     "checkJs": false,
     "sourceMap": true,
     "paths": {
-      "App/*": [
-        "./app/*"
-      ],
-      "Config/*": [
-        "./config/*"
-      ],
-      "Contracts/*": [
-        "./contracts/*"
-      ],
-      "Database/*": [
-        "./database/*"
-      ]
+      "App/*": ["./app/*"],
+      "Config/*": ["./config/*"],
+      "Contracts/*": ["./contracts/*"],
+      "Database/*": ["./database/*"]
     },
     "types": [
       "@adonisjs/core",

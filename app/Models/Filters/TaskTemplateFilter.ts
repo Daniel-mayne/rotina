@@ -3,12 +3,15 @@ import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import TaskTemplate from 'App/Models/TaskTemplate'
 
-
 export default class TaskTemplateFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof TaskTemplate, TaskTemplate>
 
   public search(word: string): void {
-    this.$query.andWhereRaw("(title LIKE ? OR task_title LIKE ? OR task_description LIKE)", [`%${word}%`, `%${word}%`, `%${word}%`])
+    this.$query.andWhereRaw('(title LIKE ? OR task_title LIKE ? OR task_description LIKE)', [
+      `%${word}%`,
+      `%${word}%`,
+      `%${word}%`,
+    ])
   }
 
   public title(title: string): void {

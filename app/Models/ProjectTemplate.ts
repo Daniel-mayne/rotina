@@ -5,10 +5,7 @@ import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { ProjectTemplateFilter } from './Filters'
 import { Company, Project, TaskProjectTemplate, User } from 'App/Models'
 
-
-
 export default class ProjectTemplate extends compose(BaseModel, Filterable) {
-
   public static $filter = () => ProjectTemplateFilter
 
   @column({ isPrimary: true })
@@ -28,7 +25,6 @@ export default class ProjectTemplate extends compose(BaseModel, Filterable) {
 
   @column()
   public companyId: number
-
 
   @column.dateTime({
     autoCreate: true,
@@ -55,10 +51,9 @@ export default class ProjectTemplate extends compose(BaseModel, Filterable) {
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @hasMany(()=> Project)
-  public  projects: HasMany<typeof Project>
+  @hasMany(() => Project)
+  public projects: HasMany<typeof Project>
 
   @hasMany(() => TaskProjectTemplate)
   public taskProjectTemplates: HasMany<typeof TaskProjectTemplate>
-
 }
