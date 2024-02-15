@@ -87,7 +87,7 @@ export default class ApprovalItemsController {
       loader.preload('postsComents', (query) => query.preload('user'))
       loader.preload('files', query => query.preload('file'))
     })
-    return { approvalItem }
+    return approvalItem
   }
 
   public async show({ params, auth }: HttpContextContract) {
