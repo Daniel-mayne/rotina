@@ -25,6 +25,7 @@ export default class ApprovalItemsController {
       .orderBy(orderColumn, orderDirection)
       .preload('approval')
       .preload('user')
+      .preload('files')
       .preload('persona', (query) => query.preload('customer'))
       .if(auth.user!.type === 'guest', (query) =>
         query.whereHas('approval', (query) => query.where('customer_id', auth.user!.customerId))
