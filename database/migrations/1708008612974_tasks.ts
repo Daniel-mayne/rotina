@@ -17,7 +17,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.date('due_date')
       table.integer('approval_user_id').unsigned().nullable().references('id').inTable('users')
-      table.time('estimated_time').unsigned().nullable()
+      table.time('estimated_time').nullable()
       table.integer('task_template_id').unsigned().nullable()
       table.text('taskDescription', 'longtext')
       table

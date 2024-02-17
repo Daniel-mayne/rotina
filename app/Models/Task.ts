@@ -1,7 +1,16 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { TaskFilter } from './Filters'
+import Company from './Company'
+import Customer from './Customer'
+import Project from './Project'
+import User from './User'
 
-export default class Task extends BaseModel {
+export default class Task extends compose(BaseModel, Filterable) {
+  public static $filter = () => TaskFilter
+
   @column({ isPrimary: true })
   public id: number
 
@@ -88,4 +97,16 @@ export default class Task extends BaseModel {
     },
   })
   public updatedAt: DateTime
+
+  @belongsTo(() => Company)
+  public company: BelongsTo<typeof Company>
+
+  @belongsTo(() => Customer)
+  public customer: BelongsTo<typeof Customer>
+
+  @belongsTo(() => Project)
+  public project: BelongsTo<typeof Project>
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }
