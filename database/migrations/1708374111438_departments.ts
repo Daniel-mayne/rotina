@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.enu('status', ['active', 'inactive']).notNullable().defaultTo('active')
       table.integer('department_leader_id').unsigned().references('id').inTable('users')
       table.integer('Department _coordinator_id').unsigned().references('id').inTable('users')
-      table.integer('userId').unsigned().references('id').inTable('users')
+      table.integer('userId').unsigned().references('id').inTable('users').onUpdate('cascade')
 
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
