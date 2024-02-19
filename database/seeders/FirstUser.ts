@@ -28,9 +28,9 @@ export default class extends BaseSeeder {
 
     const user = await company.related('users').create({
       name: 'Daniel',
-      password: '08109250',
+      password: '16022012',
       phone: '(17) 99206-1486',
-      email: 'Daniel@rotina.com.br',
+      email: 'Daniel@rotina.digital',
       type: 'owner',
     })
 
