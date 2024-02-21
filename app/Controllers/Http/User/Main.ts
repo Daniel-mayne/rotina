@@ -19,6 +19,7 @@ export default class UserController {
       .if(orderColumn && orderDirection, (query) => query.orderBy(orderColumn, orderDirection))
       .preload('company')
       .preload('customer')
+      .preload('departments')
       .paginate(page, limit)
   }
 

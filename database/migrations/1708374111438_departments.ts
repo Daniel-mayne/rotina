@@ -15,13 +15,6 @@ export default class extends BaseSchema {
         .inTable('companies')
         .onUpdate('cascade')
       table.enu('status', ['active', 'inactive']).notNullable().defaultTo('active')
-      table
-        .integer('user_id')
-        .unsigned()
-        .nullable()
-        .references('id')
-        .inTable('users')
-        .onUpdate('cascade')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

@@ -6,7 +6,6 @@ export class UpdateValidator {
 
   public schema = schema.create({
     name: schema.string.optional({ trim: true }),
-    userId: schema.number.optional([rules.exists({ table: 'users', column: 'id' })]),
   })
 
   public messages: CustomMessages = {}
