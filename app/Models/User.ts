@@ -332,8 +332,8 @@ export default class User extends compose(BaseModel, Filterable) {
   @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
 
-  @hasMany(() => Department)
-  public departments: HasMany<typeof Department>
+  @belongsTo(() => Department)
+  public departments: BelongsTo<typeof Department>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
