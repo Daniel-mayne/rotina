@@ -22,6 +22,7 @@ import {
   PostComment,
   Notification,
   ProjectTemplate,
+  Department,
 } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -270,6 +271,9 @@ export default class User extends compose(BaseModel, Filterable) {
   @column()
   public customerId: number
 
+  @column()
+  public departmentId: number
+
   @column({
     serialize: (value?: Number) => {
       return Boolean(value)
@@ -327,6 +331,9 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
+
+  @belongsTo(() => Department)
+  public departments: BelongsTo<typeof Department>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

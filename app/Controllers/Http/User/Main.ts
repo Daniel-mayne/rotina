@@ -19,6 +19,7 @@ export default class UserController {
       .if(orderColumn && orderDirection, (query) => query.orderBy(orderColumn, orderDirection))
       .preload('company')
       .preload('customer')
+      .preload('departments')
       .paginate(page, limit)
   }
 
@@ -43,6 +44,7 @@ export default class UserController {
 
     await user.load((loader) => {
       loader.preload('company')
+      loader.preload('departments')
     })
     return user
   }
@@ -52,6 +54,7 @@ export default class UserController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
+      .preload('departments')
       .firstOrFail()
 
     const userTypeShow = auth.user?.type
@@ -109,6 +112,7 @@ export default class UserController {
 
     await user.load((loader) => {
       loader.preload('company')
+      loader.preload('departments')
     })
     return user
   }

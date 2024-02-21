@@ -3,18 +3,18 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class StoreValidator {
   constructor(protected ctx: HttpContextContract) {}
+  public refs = schema.refs({
+    companyId: this.ctx.auth.user!.companyId,
+  })
 
   public schema = schema.create({
-    title: schema.string({ trim: true }, [
+    name: schema.string({ trim: true }, [
       rules.unique({
-        table: 'projects',
-        column: 'title',
+        table: 'departments',
+        column: 'name',
+        where: { company_id: this.refs.companyId },
       }),
     ]),
-    projectDescription: schema.string({ trim: true }),
-    projectTemplateId: schema.number(),
-    customerId: schema.number(),
-    estimatedDelivery: schema.date({ format: 'dd/MM/yyyy' }),
   })
 
   public messages: CustomMessages = {

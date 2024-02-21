@@ -21,6 +21,7 @@ export class UpdateValidator {
     workEnd: schema.date.optional({}),
     lunchStart: schema.date.optional({}),
     lunchEnd: schema.date.optional({}),
+    departmentId: schema.number.optional([rules.exists({ table: 'departments', column: 'id' })]),
   })
 
   public messages: CustomMessages = {
