@@ -22,6 +22,7 @@ import {
   PostComment,
   Notification,
   ProjectTemplate,
+  Department,
 } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -327,6 +328,9 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
+
+  @hasMany(() => Department)
+  public departments: HasMany<typeof Department>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
