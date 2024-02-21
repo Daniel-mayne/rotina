@@ -5,16 +5,8 @@ export class StoreValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    title: schema.string({ trim: true }, [
-      rules.unique({
-        table: 'projects',
-        column: 'title',
-      }),
-    ]),
-    projectDescription: schema.string({ trim: true }),
-    projectTemplateId: schema.number(),
-    customerId: schema.number(),
-    estimatedDelivery: schema.date({ format: 'dd/MM/yyyy' }),
+    name: schema.string({ trim: true }),
+    userId: schema.number.optional([rules.exists({ table: 'users', column: 'id' })]),
   })
 
   public messages: CustomMessages = {
