@@ -271,6 +271,9 @@ export default class User extends compose(BaseModel, Filterable) {
   @column()
   public customerId: number
 
+  @column()
+  public departmentId: number
+
   @column({
     serialize: (value?: Number) => {
       return Boolean(value)
