@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Department } from 'App/Models'
-import { StoreValidator } from 'App/Validators/Department'
+import { StoreValidator, UpdateValidator } from 'App/Validators/Department'
 
 export default class DepartmentController {
   public async index({ request, auth }: HttpContextContract) {
@@ -38,9 +38,37 @@ export default class DepartmentController {
     return department
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ params, auth }: HttpContextContract) {
+    const data = await Department.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .preload('company')
+      .preload('users')
+      .firstOrFail()
 
-  public async update({}: HttpContextContract) {}
+    return data
+  }
 
-  public async destroy({}: HttpContextContract) {}
+  public async update({ params, request, auth }: HttpContextContract) {
+    const data = await request.validate(UpdateValidator)
+    const department = await Department.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.id)
+      .firstOrFail()
+    await department.merge(data).save()
+    await department.load((loader) => {
+      loader.preload('company')
+      loader.preload('users')
+    })
+    return department
+  }
+
+  public async destroy({ params, auth }: HttpContextContract) {
+    const data = await Department.query()
+      .where('id', params.id)
+      .andWhere('companyId', auth.user!.companyId)
+      .firstOrFail()
+    await data.delete()
+    return
+  }
 }
