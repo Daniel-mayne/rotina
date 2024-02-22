@@ -18,10 +18,7 @@ export default class Department extends compose(BaseModel, Filterable) {
   public companyId: number
 
   @column()
-  public userId: number
-
-  @column()
-  public status: 'active' | 'inactive'
+  public status: 'active' | 'deactivated' | 'deleted'
 
   @column.dateTime({
     autoCreate: true,

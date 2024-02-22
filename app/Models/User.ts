@@ -9,6 +9,8 @@ import {
   BelongsTo,
   HasMany,
   hasMany,
+  manyToMany,
+  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import {
   Company,
@@ -338,8 +340,8 @@ export default class User extends compose(BaseModel, Filterable) {
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @belongsTo(() => Customer)
-  public customer: BelongsTo<typeof Customer>
+  @manyToMany(() => Customer)
+  public customer: ManyToMany<typeof Customer>
 
   @beforeSave()
   public static async hashPassword(user: User) {

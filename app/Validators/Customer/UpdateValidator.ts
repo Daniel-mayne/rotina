@@ -7,7 +7,7 @@ export class UpdateValidator {
   public schema = schema.create({
     name: schema.string.optional({ trim: true }),
     logo: schema.string.optional({ trim: true }),
-    status: schema.enum.optional(['active', 'deactivated'] as const),
+    status: schema.enum.optional(['active', 'deactivated', 'deleted'] as const),
     fillingPercentage: schema.number.optional(),
   })
 

@@ -1,5 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  ManyToMany,
+  belongsTo,
+  column,
+  hasMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import { Company, User, Persona, Approval, CustomerInformation } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
@@ -184,6 +193,9 @@ export default class Customer extends compose(BaseModel, Filterable) {
   public companyId: number
 
   @column()
+  public userId: number
+
+  @column()
   public accountManagerId: number
 
   @column()
@@ -212,8 +224,8 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  @manyToMany(() => User)
+  public users: ManyToMany<typeof User>
 
   @belongsTo(() => User, {
     foreignKey: 'accountManagerId',

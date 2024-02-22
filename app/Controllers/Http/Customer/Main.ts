@@ -20,6 +20,7 @@ export default class CustomersController {
       .orderBy(orderColumn, orderDirection)
       .preload('company')
       .preload('accountManager')
+      .preload('users')
       .paginate(page, limit)
   }
 
@@ -93,6 +94,7 @@ export default class CustomersController {
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('accountManager')
+      .preload('users')
       .firstOrFail()
     return data
   }
@@ -105,7 +107,9 @@ export default class CustomersController {
       .firstOrFail()
     await customer.merge(data).save()
     await customer.load((loader) => {
-      loader.preload('company').preload('accountManager')
+      loader.preload('company')
+      loader.preload('accountManager')
+      loader.preload('users')
     })
 
     return customer
