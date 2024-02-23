@@ -17,9 +17,9 @@ export default class UserController {
     return await User.filter(input)
       .where('companyId', auth.user!.companyId)
       .if(orderColumn && orderDirection, (query) => query.orderBy(orderColumn, orderDirection))
+      .preload('customerUsers')
       .preload('company')
       .preload('departments')
-      .preload('customerUsers')
       .paginate(page, limit)
   }
 
@@ -43,9 +43,9 @@ export default class UserController {
     // }
 
     await user.load((loader) => {
+      loader.preload('customerUsers')
       loader.preload('company')
       loader.preload('departments')
-      loader.preload('customerUsers')
     })
     return user
   }
@@ -54,9 +54,9 @@ export default class UserController {
     const user = await User.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
+      .preload('customerUsers')
       .preload('company')
       .preload('departments')
-      .preload('customerUsers')
       .firstOrFail()
 
     const userTypeShow = auth.user?.type
@@ -112,16 +112,19 @@ export default class UserController {
 
     await user.merge(data).save()
 
-    await user?.related('customerUsers').sync([user.id])
+    if (customerIds) {
+      const validCustomerIds = customerIds.filter((id): id is number => id !== undefined)
+      await user.related('customerUsers').sync(validCustomerIds)
+    }
 
     if (data.status) {
       await auth.user?.load('company', (query) => query.preload('users'))
     }
 
     await user.load((loader) => {
+      loader.preload('customerUsers')
       loader.preload('company')
       loader.preload('departments')
-      loader.preload('customerUsers')
     })
     return user
   }
