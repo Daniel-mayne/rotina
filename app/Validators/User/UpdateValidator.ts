@@ -21,6 +21,9 @@ export class UpdateValidator {
     workEnd: schema.date.optional({}),
     lunchStart: schema.date.optional({}),
     lunchEnd: schema.date.optional({}),
+    customerIds: schema.array
+      .optional()
+      .members(schema.number.optional([rules.exists({ table: 'customers', column: 'id' })])),
     departmentId: schema.number.optional([rules.exists({ table: 'departments', column: 'id' })]),
   })
 

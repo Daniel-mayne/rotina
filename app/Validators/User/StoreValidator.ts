@@ -17,7 +17,6 @@ export class StoreValidator {
     phone: schema.string({ trim: true }, [rules.mobile({ locale: ['pt-BR'] })]),
     type: schema.enum(['user', 'guest', 'administrator'] as const),
     theme: schema.enum.optional(['white', 'black'] as const),
-    customerId: schema.number.optional([rules.exists({ table: 'customer', column: 'id' })]),
     workLoad: schema.date.optional({}),
     departmentId: schema.number.optional([rules.exists({ table: 'departments', column: 'id' })]),
   })

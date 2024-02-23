@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Customer } from 'App/Models'
+import { Customer, User } from 'App/Models'
 import { StoreValidator, UpdateValidator, StoreTemporaryValidator } from 'App/Validators/Customer'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Env from '@ioc:Adonis/Core/Env'
@@ -20,7 +20,7 @@ export default class CustomersController {
       .orderBy(orderColumn, orderDirection)
       .preload('company')
       .preload('accountManager')
-      .preload('users')
+      .preload('userCustomers')
       .paginate(page, limit)
   }
 
@@ -38,7 +38,9 @@ export default class CustomersController {
       .save()
 
     await customer.load((loader) => {
-      loader.preload('company').preload('accountManager')
+      loader.preload('company')
+      loader.preload('accountManager')
+      loader.preload('userCustomers')
     })
     return customer
   }
@@ -94,22 +96,25 @@ export default class CustomersController {
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('accountManager')
-      .preload('users')
+      .preload('userCustomers')
       .firstOrFail()
     return data
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
+    const { userIds: userIds, ...data } = await request.validate(UpdateValidator)
     const customer = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     await customer.merge(data).save()
+
+    await customer?.related('userCustomers').sync([customer.id])
+
     await customer.load((loader) => {
       loader.preload('company')
       loader.preload('accountManager')
-      loader.preload('users')
+      loader.preload('userCustomers')
     })
 
     return customer

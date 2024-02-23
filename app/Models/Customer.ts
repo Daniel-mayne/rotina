@@ -224,9 +224,6 @@ export default class Customer extends compose(BaseModel, Filterable) {
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @manyToMany(() => User)
-  public users: ManyToMany<typeof User>
-
   @belongsTo(() => User, {
     foreignKey: 'accountManagerId',
   })
@@ -240,4 +237,7 @@ export default class Customer extends compose(BaseModel, Filterable) {
 
   @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
+
+  @manyToMany(() => User)
+  public userCustomers: ManyToMany<typeof User>
 }

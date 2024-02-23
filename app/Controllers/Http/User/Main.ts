@@ -18,8 +18,8 @@ export default class UserController {
       .where('companyId', auth.user!.companyId)
       .if(orderColumn && orderDirection, (query) => query.orderBy(orderColumn, orderDirection))
       .preload('company')
-      .preload('customer')
       .preload('departments')
+      .preload('customerUsers')
       .paginate(page, limit)
   }
 
@@ -45,6 +45,7 @@ export default class UserController {
     await user.load((loader) => {
       loader.preload('company')
       loader.preload('departments')
+      loader.preload('customerUsers')
     })
     return user
   }
@@ -55,6 +56,7 @@ export default class UserController {
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('departments')
+      .preload('customerUsers')
       .firstOrFail()
 
     const userTypeShow = auth.user?.type
@@ -68,7 +70,11 @@ export default class UserController {
   }
 
   public async update({ params, auth, request, response }: HttpContextContract) {
-    const { oldPassword: oldPassword, ...data } = await request.validate(UpdateValidator)
+    const {
+      oldPassword: oldPassword,
+      customerIds: customerIds,
+      ...data
+    } = await request.validate(UpdateValidator)
 
     const user = await User.query()
       .where('id', params.id)
@@ -106,6 +112,8 @@ export default class UserController {
 
     await user.merge(data).save()
 
+    await user?.related('customerUsers').sync([user.id])
+
     if (data.status) {
       await auth.user?.load('company', (query) => query.preload('users'))
     }
@@ -113,6 +121,7 @@ export default class UserController {
     await user.load((loader) => {
       loader.preload('company')
       loader.preload('departments')
+      loader.preload('customerUsers')
     })
     return user
   }

@@ -341,7 +341,7 @@ export default class User extends compose(BaseModel, Filterable) {
   public company: BelongsTo<typeof Company>
 
   @manyToMany(() => Customer)
-  public customer: ManyToMany<typeof Customer>
+  public customerUsers: ManyToMany<typeof Customer>
 
   @beforeSave()
   public static async hashPassword(user: User) {

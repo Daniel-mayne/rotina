@@ -3,8 +3,8 @@ import { test } from '@japa/runner'
 test.group('Authentication', () => {
   test('Should login success', async ({ client }) => {
     const response = await client.post('/auth/login').json({
-      email: 'Daniel@rotina.com.br',
-      password: '08109250',
+      email: 'Danielmayne2021@gmail.com',
+      password: 'Bryan16022012',
     })
 
     response.assertStatus(200)
