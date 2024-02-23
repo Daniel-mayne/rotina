@@ -3,6 +3,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export class UpdateValidator {
   constructor(protected ctx: HttpContextContract) {}
+  public refs = schema.refs({
+    companyId: this.ctx.auth.user!.companyId,
+  })
 
   public schema = schema.create({
     name: schema.string.optional({ trim: true }),
@@ -21,9 +24,15 @@ export class UpdateValidator {
     workEnd: schema.date.optional({}),
     lunchStart: schema.date.optional({}),
     lunchEnd: schema.date.optional({}),
-    customerIds: schema.array
-      .optional()
-      .members(schema.number.optional([rules.exists({ table: 'customers', column: 'id' })])),
+    customerIds: schema.array.optional().members(
+      schema.number.optional([
+        rules.exists({
+          table: 'customers',
+          column: 'id',
+          where: { company_id: this.refs.companyId },
+        }),
+      ])
+    ),
     departmentId: schema.number.optional([rules.exists({ table: 'departments', column: 'id' })]),
   })
 

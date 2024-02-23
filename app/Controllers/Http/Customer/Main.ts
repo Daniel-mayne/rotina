@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Customer, User } from 'App/Models'
+import { Customer } from 'App/Models'
 import { StoreValidator, UpdateValidator, StoreTemporaryValidator } from 'App/Validators/Customer'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Env from '@ioc:Adonis/Core/Env'
