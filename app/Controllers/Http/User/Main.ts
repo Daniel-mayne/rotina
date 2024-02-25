@@ -24,7 +24,7 @@ export default class UserController {
   }
 
   public async store({ request, auth, response }: HttpContextContract) {
-    const data = await request.validate(StoreValidator)
+    const { departmentIds: departmentIds, ...data } = await request.validate(StoreValidator)
 
     if (auth.user?.type === 'user' && data.type === 'administrator') {
       return response.unauthorized({
@@ -35,6 +35,11 @@ export default class UserController {
     const user = await new User()
       .merge({ ...data, companyId: auth.user!.companyId, status: 'active', theme: 'white' })
       .save()
+
+    if (departmentIds) {
+      const validDepartmentIds = departmentIds.filter((id): id is number => id !== undefined)
+      await user.related('departments').sync(validDepartmentIds)
+    }
 
     // if(auth.user!.company.stripeSubscriptionId){
     //   const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
@@ -73,6 +78,7 @@ export default class UserController {
     const {
       oldPassword: oldPassword,
       customerIds: customerIds,
+      departmentIds: departmentIds,
       ...data
     } = await request.validate(UpdateValidator)
 
@@ -115,6 +121,11 @@ export default class UserController {
     if (customerIds) {
       const validCustomerIds = customerIds.filter((id): id is number => id !== undefined)
       await user.related('customerUsers').sync(validCustomerIds)
+    }
+
+    if (departmentIds) {
+      const validDepartmentIds = departmentIds.filter((id): id is number => id !== undefined)
+      await user.related('departments').sync(validDepartmentIds)
     }
 
     if (data.status) {

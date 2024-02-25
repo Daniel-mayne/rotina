@@ -15,6 +15,15 @@ export class StoreValidator {
         where: { company_id: this.refs.companyId },
       }),
     ]),
+    userIds: schema.array.optional().members(
+      schema.number.optional([
+        rules.exists({
+          table: 'users',
+          column: 'id',
+          where: { company_id: this.refs.companyId },
+        }),
+      ])
+    ),
   })
 
   public messages: CustomMessages = {

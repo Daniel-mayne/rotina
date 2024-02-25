@@ -15,13 +15,13 @@ export default class DepartmentController {
     return await Department.filter(input)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
-      .preload('company')
       .preload('users')
+      .preload('company')
       .paginate(page, limit)
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const data = await request.validate(StoreValidator)
+    const { userIds: userIds, ...data } = await request.validate(StoreValidator)
 
     const department = await new Department()
       .merge({
@@ -31,7 +31,16 @@ export default class DepartmentController {
       })
       .save()
 
+    console.log(userIds)
+    if (userIds) {
+      const validUserIds = userIds.filter((id): id is number => id !== undefined)
+      console.log(userIds)
+      console.log(validUserIds)
+      await department.related('users').sync(validUserIds)
+    }
+
     await department.load((loader) => {
+      loader.preload('users')
       loader.preload('company')
     })
 
@@ -50,15 +59,23 @@ export default class DepartmentController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
+    const { userIds: userIds, ...data } = await request.validate(UpdateValidator)
+    console.log(userIds)
+
     const department = await Department.query()
       .where('id', params.id)
-      .andWhere('companyId', auth.user!.id)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
+
     await department.merge(data).save()
+
+    if (userIds) {
+      const validUserIds = userIds.filter((id): id is number => id !== undefined)
+      await department.related('users').sync(validUserIds)
+    }
     await department.load((loader) => {
-      loader.preload('company')
       loader.preload('users')
+      loader.preload('company')
     })
     return department
   }

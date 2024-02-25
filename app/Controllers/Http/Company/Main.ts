@@ -147,6 +147,7 @@ export default class CompanyController {
       .where('id', params.id)
       .andWhere('id', auth.user!.companyId)
       .preload('users')
+      .preload('departments')
       .firstOrFail()
 
     return company
@@ -161,6 +162,7 @@ export default class CompanyController {
     await company.merge(data).save()
     await company.load((loader) => {
       loader.preload('users')
+      loader.preload('departments')
     })
     return company
   }

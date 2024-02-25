@@ -33,7 +33,15 @@ export class UpdateValidator {
         }),
       ])
     ),
-    departmentId: schema.number.optional([rules.exists({ table: 'departments', column: 'id' })]),
+    departmentIds: schema.array.optional().members(
+      schema.number.optional([
+        rules.exists({
+          table: 'departments',
+          column: 'id',
+          where: { company_id: this.refs.companyId },
+        }),
+      ])
+    ),
   })
 
   public messages: CustomMessages = {
