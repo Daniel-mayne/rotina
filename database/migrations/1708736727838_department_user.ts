@@ -11,16 +11,17 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('users')
-        .onUpdate('cascade')
-        .nullable(),
-        table
-          .integer('department_id')
-          .unsigned()
-          .references('id')
-          .inTable('departments')
-          .onUpdate('cascade')
-          .nullable(),
-        table.unique(['user_id', 'department_id'])
+        .nullable()
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+      table
+        .integer('department_id')
+        .unsigned()
+        .references('id')
+        .inTable('departments')
+        .nullable()
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

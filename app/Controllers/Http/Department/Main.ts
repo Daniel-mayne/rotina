@@ -21,7 +21,11 @@ export default class DepartmentController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const { userIds: userIds, ...data } = await request.validate(StoreValidator)
+    const {
+      userIds: userIds,
+      permissionIds: permissionIds,
+      ...data
+    } = await request.validate(StoreValidator)
 
     const department = await new Department()
       .merge({
@@ -31,15 +35,18 @@ export default class DepartmentController {
       })
       .save()
 
-    console.log(userIds)
     if (userIds) {
       const validUserIds = userIds.filter((id): id is number => id !== undefined)
-      console.log(userIds)
-      console.log(validUserIds)
       await department.related('users').sync(validUserIds)
     }
 
+    if (permissionIds) {
+      const validPermissionIds = permissionIds.filter((id): id is number => id !== undefined)
+      await department.related('permissions').sync(validPermissionIds)
+    }
+
     await department.load((loader) => {
+      loader.preload('permissions')
       loader.preload('users')
       loader.preload('company')
     })
@@ -53,13 +60,18 @@ export default class DepartmentController {
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('users')
+      .preload('permissions')
       .firstOrFail()
 
     return data
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const { userIds: userIds, ...data } = await request.validate(UpdateValidator)
+    const {
+      userIds: userIds,
+      permissionIds: permissionIds,
+      ...data
+    } = await request.validate(UpdateValidator)
     console.log(userIds)
 
     const department = await Department.query()
@@ -73,7 +85,14 @@ export default class DepartmentController {
       const validUserIds = userIds.filter((id): id is number => id !== undefined)
       await department.related('users').sync(validUserIds)
     }
+
+    if (permissionIds) {
+      const validPermissionIds = permissionIds.filter((id): id is number => id !== undefined)
+      await department.related('permissions').sync(validPermissionIds)
+    }
+
     await department.load((loader) => {
+      loader.preload('permissions')
       loader.preload('users')
       loader.preload('company')
     })

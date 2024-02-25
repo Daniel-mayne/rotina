@@ -25,6 +25,7 @@ import {
   Notification,
   ProjectTemplate,
   Department,
+  Team,
 } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -276,6 +277,9 @@ export default class User extends compose(BaseModel, Filterable) {
   @column()
   public departmentId: number
 
+  @column()
+  public teamId: number
+
   @column({
     serialize: (value?: Number) => {
       return Boolean(value)
@@ -342,6 +346,9 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @manyToMany(() => Department)
   public departments: ManyToMany<typeof Department>
+
+  @manyToMany(() => Team)
+  public teams: ManyToMany<typeof Team>
 
   @beforeSave()
   public static async hashPassword(user: User) {

@@ -7,7 +7,7 @@ import {
   column,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import { User, Company } from 'App/Models'
+import { User, Company, Permission } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { DepartmentFilter } from './Filters'
@@ -26,6 +26,9 @@ export default class Department extends compose(BaseModel, Filterable) {
 
   @column()
   public userId: number
+
+  @column()
+  public permissionId: number
 
   @column()
   public status: 'active' | 'deactivated' | 'deleted'
@@ -52,4 +55,7 @@ export default class Department extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+  @manyToMany(() => Permission)
+  public permissions: ManyToMany<typeof Permission>
 }

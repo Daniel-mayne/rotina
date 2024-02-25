@@ -14,6 +14,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('companies')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
         .integer('customer_id')
@@ -21,6 +22,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('customers')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
         .integer('created_by')
@@ -28,6 +30,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('users')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
         .integer('project_template_id')
@@ -35,6 +38,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('project_templates')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.date('estimated_delivery')
       table.enum('status', ['active', 'deactivated']).notNullable().defaultTo('active')

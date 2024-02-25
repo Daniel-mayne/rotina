@@ -9,20 +9,10 @@ export class UpdateValidator {
 
   public schema = schema.create({
     name: schema.string.optional({ trim: true }),
-    status: schema.enum.optional(['active', 'deactivated', 'deleted'] as const),
-    userIds: schema.array.optional().members(
+    departmentIds: schema.array.optional().members(
       schema.number.optional([
         rules.exists({
-          table: 'users',
-          column: 'id',
-          where: { company_id: this.refs.companyId },
-        }),
-      ])
-    ),
-    permissionIds: schema.array.optional().members(
-      schema.number.optional([
-        rules.exists({
-          table: 'permissions',
+          table: 'departments',
           column: 'id',
           where: { company_id: this.refs.companyId },
         }),
