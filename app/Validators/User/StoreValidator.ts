@@ -30,6 +30,15 @@ export class StoreValidator {
         }),
       ])
     ),
+    teamIds: schema.array.optional().members(
+      schema.number.optional([
+        rules.exists({
+          table: 'teams',
+          column: 'id',
+          where: { company_id: this.refs.companyId },
+        }),
+      ])
+    ),
   })
 
   public messages: CustomMessages = {

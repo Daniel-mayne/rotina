@@ -104,7 +104,7 @@ export default class DepartmentController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await data.delete()
+    await data.merge({ status: 'deleted' }).save()
     return
   }
 }

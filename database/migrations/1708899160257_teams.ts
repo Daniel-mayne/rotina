@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name').notNullable()
       table.string('color').nullable()
+      table.string('logo', 255).nullable()
       table.text('description', 'longtext').nullable()
       table.enum('status', ['active', 'deactivated', 'deleted']).notNullable().defaultTo('active')
       table

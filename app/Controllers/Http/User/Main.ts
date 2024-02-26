@@ -20,11 +20,16 @@ export default class UserController {
       .preload('customerUsers')
       .preload('company')
       .preload('departments')
+      .preload('teams')
       .paginate(page, limit)
   }
 
   public async store({ request, auth, response }: HttpContextContract) {
-    const { departmentIds: departmentIds, ...data } = await request.validate(StoreValidator)
+    const {
+      departmentIds: departmentIds,
+      teamIds: teamIds,
+      ...data
+    } = await request.validate(StoreValidator)
 
     if (auth.user?.type === 'user' && data.type === 'administrator') {
       return response.unauthorized({
@@ -41,6 +46,11 @@ export default class UserController {
       await user.related('departments').sync(validDepartmentIds)
     }
 
+    if (teamIds) {
+      const validTeamIds = teamIds.filter((id): id is number => id !== undefined)
+      await user.related('teams').sync(validTeamIds)
+    }
+
     // if(auth.user!.company.stripeSubscriptionId){
     //   const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
     //   const sub = await Stripe.subscriptions.retrieve(`${auth.user!.company.stripeSubscriptionId}`)
@@ -51,6 +61,7 @@ export default class UserController {
       loader.preload('customerUsers')
       loader.preload('company')
       loader.preload('departments')
+      loader.preload('teams')
     })
     return user
   }
@@ -62,6 +73,7 @@ export default class UserController {
       .preload('customerUsers')
       .preload('company')
       .preload('departments')
+      .preload('teams')
       .firstOrFail()
 
     const userTypeShow = auth.user?.type
@@ -79,6 +91,7 @@ export default class UserController {
       oldPassword: oldPassword,
       customerIds: customerIds,
       departmentIds: departmentIds,
+      teamIds: teamIds,
       ...data
     } = await request.validate(UpdateValidator)
 
@@ -128,6 +141,11 @@ export default class UserController {
       await user.related('departments').sync(validDepartmentIds)
     }
 
+    if (teamIds) {
+      const validTeamIds = teamIds.filter((id): id is number => id !== undefined)
+      await user.related('teams').sync(validTeamIds)
+    }
+
     if (data.status) {
       await auth.user?.load('company', (query) => query.preload('users'))
     }
@@ -136,6 +154,7 @@ export default class UserController {
       loader.preload('customerUsers')
       loader.preload('company')
       loader.preload('departments')
+      loader.preload('teams')
     })
     return user
   }

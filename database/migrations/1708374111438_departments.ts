@@ -7,6 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name').notNullable()
+      table.string('logo', 255).nullable()
+      table.text('description', 'longtext').nullable()
       table
         .integer('company_id')
         .notNullable()
