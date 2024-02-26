@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Department } from 'App/Models'
+import { Department, Permission } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Department'
 
 export default class DepartmentController {
@@ -12,11 +12,17 @@ export default class DepartmentController {
       ...input
     } = request.qs()
 
+    const departments = await auth.user!.related('departments').query()
+
+    const departmentIds = departments.map((department) => department.id)
+
     return await Department.filter(input)
+      .whereIn('id', departmentIds)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('users')
       .preload('company')
+      .preload('permissions')
       .paginate(page, limit)
   }
 
