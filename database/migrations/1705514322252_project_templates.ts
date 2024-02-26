@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('users')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
         .integer('company_id')
@@ -20,6 +21,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('companies')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.string('project_title', 255).notNullable()
       table.text('project_description', 'longtext')

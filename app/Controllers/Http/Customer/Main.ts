@@ -18,6 +18,7 @@ export default class CustomersController {
     return await Customer.filter(input)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
+      .preload('userCustomers')
       .preload('company')
       .preload('accountManager')
       .paginate(page, limit)
@@ -37,7 +38,9 @@ export default class CustomersController {
       .save()
 
     await customer.load((loader) => {
-      loader.preload('company').preload('accountManager')
+      loader.preload('userCustomers')
+      loader.preload('company')
+      loader.preload('accountManager')
     })
     return customer
   }
@@ -91,6 +94,7 @@ export default class CustomersController {
     const data = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
+      .preload('userCustomers')
       .preload('company')
       .preload('accountManager')
       .firstOrFail()
@@ -98,14 +102,22 @@ export default class CustomersController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
+    const { userIds: userIds, ...data } = await request.validate(UpdateValidator)
     const customer = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     await customer.merge(data).save()
+
+    if (userIds) {
+      const validUserIds = userIds.filter((id): id is number => id !== undefined)
+      await customer.related('userCustomers').sync(validUserIds)
+    }
+
     await customer.load((loader) => {
-      loader.preload('company').preload('accountManager')
+      loader.preload('userCustomers')
+      loader.preload('company')
+      loader.preload('accountManager')
     })
 
     return customer

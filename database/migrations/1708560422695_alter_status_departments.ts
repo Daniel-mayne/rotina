@@ -1,24 +1,21 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'users'
+  protected tableName = 'departments'
 
   public async up() {
     this.schema.alterTable(this.tableName, (table) => {
       table
-        .integer('department_id')
-        .unsigned()
-        .references('id')
-        .inTable('departments')
-        .onDelete('cascade')
-        .onUpdate('cascade')
-        .nullable()
+        .enum('status', ['active', 'deactivated', 'deleted'])
+        .notNullable()
+        .defaultTo('active')
+        .alter()
     })
   }
 
   public async down() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn('department_id')
+      table.dropColumn('status')
     })
   }
 }

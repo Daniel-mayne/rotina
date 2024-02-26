@@ -9,6 +9,8 @@ import {
   BelongsTo,
   HasMany,
   hasMany,
+  manyToMany,
+  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import {
   Company,
@@ -23,6 +25,7 @@ import {
   Notification,
   ProjectTemplate,
   Department,
+  Team,
 } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -274,6 +277,9 @@ export default class User extends compose(BaseModel, Filterable) {
   @column()
   public departmentId: number
 
+  @column()
+  public teamId: number
+
   @column({
     serialize: (value?: Number) => {
       return Boolean(value)
@@ -332,14 +338,17 @@ export default class User extends compose(BaseModel, Filterable) {
   @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
 
-  @belongsTo(() => Department)
-  public departments: BelongsTo<typeof Department>
-
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @belongsTo(() => Customer)
-  public customer: BelongsTo<typeof Customer>
+  @manyToMany(() => Customer)
+  public customerUsers: ManyToMany<typeof Customer>
+
+  @manyToMany(() => Department)
+  public departments: ManyToMany<typeof Department>
+
+  @manyToMany(() => Team)
+  public teams: ManyToMany<typeof Team>
 
   @beforeSave()
   public static async hashPassword(user: User) {

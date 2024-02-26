@@ -1,11 +1,11 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('/departments', 'Department/Main')
+Route.resource('/permissions', 'Permission/Main')
   .apiOnly()
   .middleware({
-    index: ['auth', 'acl:owner,administrator,user'],
+    index: ['auth', 'acl:owner,administrator'],
     store: ['auth', 'acl:owner,administrator'],
-    show: ['auth', 'acl:owner,administrator,user'],
+    show: ['auth', 'acl:owner,administrator'],
     update: ['auth', 'acl:owner,administrator'],
     destroy: ['auth', 'acl:owner,administrator'],
   })

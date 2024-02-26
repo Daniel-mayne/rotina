@@ -1,6 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { User, Company } from 'App/Models'
+import {
+  BaseModel,
+  BelongsTo,
+  ManyToMany,
+  belongsTo,
+  column,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
+import { User, Company, Permission } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { DepartmentFilter } from './Filters'
@@ -21,7 +28,10 @@ export default class Department extends compose(BaseModel, Filterable) {
   public userId: number
 
   @column()
-  public status: 'active' | 'inactive'
+  public permissionId: number
+
+  @column()
+  public status: 'active' | 'deactivated' | 'deleted'
 
   @column.dateTime({
     autoCreate: true,
@@ -40,9 +50,12 @@ export default class Department extends compose(BaseModel, Filterable) {
   })
   public updatedAt: DateTime
 
-  @hasMany(() => User)
-  public users: HasMany<typeof User>
+  @manyToMany(() => User)
+  public users: ManyToMany<typeof User>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+  @manyToMany(() => Permission)
+  public permissions: ManyToMany<typeof Permission>
 }

@@ -12,6 +12,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('task_templates')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
         .integer('project_template_id')
@@ -19,6 +20,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('project_templates')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.time('deadline_start').defaultTo('01:00:00')
       table.timestamp('created_at', { useTz: true })

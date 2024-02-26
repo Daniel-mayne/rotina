@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Department } from 'App/Models'
+import { Department, Permission } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Department'
 
 export default class DepartmentController {
@@ -12,16 +12,26 @@ export default class DepartmentController {
       ...input
     } = request.qs()
 
+    const departments = await auth.user!.related('departments').query()
+
+    const departmentIds = departments.map((department) => department.id)
+
     return await Department.filter(input)
+      .whereIn('id', departmentIds)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
-      .preload('company')
       .preload('users')
+      .preload('company')
+      .preload('permissions')
       .paginate(page, limit)
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const data = await request.validate(StoreValidator)
+    const {
+      userIds: userIds,
+      permissionIds: permissionIds,
+      ...data
+    } = await request.validate(StoreValidator)
 
     const department = await new Department()
       .merge({
@@ -31,7 +41,19 @@ export default class DepartmentController {
       })
       .save()
 
+    if (userIds) {
+      const validUserIds = userIds.filter((id): id is number => id !== undefined)
+      await department.related('users').sync(validUserIds)
+    }
+
+    if (permissionIds) {
+      const validPermissionIds = permissionIds.filter((id): id is number => id !== undefined)
+      await department.related('permissions').sync(validPermissionIds)
+    }
+
     await department.load((loader) => {
+      loader.preload('permissions')
+      loader.preload('users')
       loader.preload('company')
     })
 
@@ -44,21 +66,41 @@ export default class DepartmentController {
       .andWhere('companyId', auth.user!.companyId)
       .preload('company')
       .preload('users')
+      .preload('permissions')
       .firstOrFail()
 
     return data
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
+    const {
+      userIds: userIds,
+      permissionIds: permissionIds,
+      ...data
+    } = await request.validate(UpdateValidator)
+    console.log(userIds)
+
     const department = await Department.query()
       .where('id', params.id)
-      .andWhere('companyId', auth.user!.id)
+      .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
+
     await department.merge(data).save()
+
+    if (userIds) {
+      const validUserIds = userIds.filter((id): id is number => id !== undefined)
+      await department.related('users').sync(validUserIds)
+    }
+
+    if (permissionIds) {
+      const validPermissionIds = permissionIds.filter((id): id is number => id !== undefined)
+      await department.related('permissions').sync(validPermissionIds)
+    }
+
     await department.load((loader) => {
-      loader.preload('company')
+      loader.preload('permissions')
       loader.preload('users')
+      loader.preload('company')
     })
     return department
   }
@@ -68,7 +110,7 @@ export default class DepartmentController {
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
-    await data.delete()
+    await data.merge({ status: 'deleted' }).save()
     return
   }
 }
