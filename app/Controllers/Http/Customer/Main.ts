@@ -18,7 +18,7 @@ export default class CustomersController {
     return await Customer.filter(input)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
-      .preload('userCustomers')
+      .preload('users')
       .preload('company')
       .preload('accountManager')
       .paginate(page, limit)
@@ -38,7 +38,7 @@ export default class CustomersController {
       .save()
 
     await customer.load((loader) => {
-      loader.preload('userCustomers')
+      loader.preload('users')
       loader.preload('company')
       loader.preload('accountManager')
     })
@@ -94,7 +94,7 @@ export default class CustomersController {
     const data = await Customer.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
-      .preload('userCustomers')
+      .preload('users')
       .preload('company')
       .preload('accountManager')
       .firstOrFail()
@@ -111,11 +111,11 @@ export default class CustomersController {
 
     if (userIds) {
       const validUserIds = userIds.filter((id): id is number => id !== undefined)
-      await customer.related('userCustomers').sync(validUserIds)
+      await customer.related('users').sync(validUserIds)
     }
 
     await customer.load((loader) => {
-      loader.preload('userCustomers')
+      loader.preload('users')
       loader.preload('company')
       loader.preload('accountManager')
     })

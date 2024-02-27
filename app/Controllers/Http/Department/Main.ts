@@ -12,26 +12,7 @@ export default class DepartmentController {
       ...input
     } = request.qs()
 
-    const departments = await auth.user!.related('departments').query()
-    const departmentIds = departments.map((department) => department.id)
-
-    const permissions = await Permission.query().select('id').whereIn('id', departmentIds)
-
-    const permissionIds = permissions.map((permission) => permission.id)
-
-    const departmentPermissionIds = (
-      await Department.query()
-        .whereIn('id', departmentIds)
-        .where('companyId', auth.user!.companyId)
-        .whereHas('permissions', (query) => {
-          query.whereIn('permissions.id', permissionIds)
-        })
-        .select('id')
-        .exec()
-    ).map((department) => department.id)
-
     return await Department.filter(input)
-      .whereIn('departments.id', departmentPermissionIds)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('users')
