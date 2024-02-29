@@ -14,8 +14,8 @@ export default class ApprovalItemFilter extends BaseModelFilter {
     this.$query.whereLike('name', `%${name}%`)
   }
 
-  public approvalId(approvalIds: string) {
-    this.$query.whereIn('approval_id', approvalIds.split(','))
+  public approval(ids: string) {
+    this.$query.whereIn('approval_id', ids.split(','))
   }
 
   public createdBy(createdBys: string): void {
