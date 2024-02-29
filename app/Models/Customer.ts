@@ -239,5 +239,5 @@ export default class Customer extends compose(BaseModel, Filterable) {
   public customerInformations: HasMany<typeof CustomerInformation>
 
   @manyToMany(() => User)
-  public userCustomers: ManyToMany<typeof User>
+  public users: ManyToMany<typeof User>
 }

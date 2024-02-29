@@ -12,12 +12,7 @@ export default class DepartmentController {
       ...input
     } = request.qs()
 
-    const departments = await auth.user!.related('departments').query()
-
-    const departmentIds = departments.map((department) => department.id)
-
     return await Department.filter(input)
-      .whereIn('id', departmentIds)
       .where('companyId', auth.user!.companyId)
       .orderBy(orderColumn, orderDirection)
       .preload('users')
@@ -64,8 +59,6 @@ export default class DepartmentController {
     const data = await Department.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
-      .preload('company')
-      .preload('users')
       .preload('permissions')
       .firstOrFail()
 
@@ -99,8 +92,6 @@ export default class DepartmentController {
 
     await department.load((loader) => {
       loader.preload('permissions')
-      loader.preload('users')
-      loader.preload('company')
     })
     return department
   }
