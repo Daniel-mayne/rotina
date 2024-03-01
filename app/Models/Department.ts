@@ -25,9 +25,6 @@ export default class Department extends compose(BaseModel, Filterable) {
   public companyId: number
 
   @column()
-  public userId: number
-
-  @column()
   public permissionId: number
 
   @column()

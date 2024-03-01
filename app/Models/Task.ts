@@ -3,10 +3,7 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { TaskFilter } from './Filters'
-import Company from './Company'
-import Customer from './Customer'
-import Project from './Project'
-import User from './User'
+import { Company, Customer, Project, User } from 'App/Models'
 
 export default class Task extends compose(BaseModel, Filterable) {
   public static $filter = () => TaskFilter
@@ -24,7 +21,7 @@ export default class Task extends compose(BaseModel, Filterable) {
   public clientId: number
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy')
     },
   })
@@ -34,8 +31,8 @@ export default class Task extends compose(BaseModel, Filterable) {
   public approvalUserId: number
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
-      return value.toFormat('HH:mm:ss')
+    serialize: (value?: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
   public estimatedTime: DateTime
@@ -48,6 +45,9 @@ export default class Task extends compose(BaseModel, Filterable) {
 
   @column()
   public companyId: number
+
+  @column()
+  public customerId: number
 
   @column()
   public status: 'waiting_approval' | 'approved' | 'disapproved' | 'deleted'
@@ -65,14 +65,14 @@ export default class Task extends compose(BaseModel, Filterable) {
   public sentApprovalUserId: number
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy')
+    serialize: (value?: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
     },
   })
-  public sentApprovalDate: DateTime
+  public sent_approval_date: DateTime
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
+    serialize: (value?: DateTime) => {
       return value.toFormat('dd/MM/yyyy')
     },
   })
@@ -101,12 +101,16 @@ export default class Task extends compose(BaseModel, Filterable) {
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
-  @belongsTo(() => Customer)
+  @belongsTo(() => Customer, {
+    foreignKey: 'clientId',
+  })
   public customer: BelongsTo<typeof Customer>
 
   @belongsTo(() => Project)
   public project: BelongsTo<typeof Project>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'initialUserId',
+  })
   public user: BelongsTo<typeof User>
 }

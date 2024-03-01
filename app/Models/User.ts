@@ -26,6 +26,7 @@ import {
   ProjectTemplate,
   Department,
   Team,
+  Task,
 } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -275,10 +276,10 @@ export default class User extends compose(BaseModel, Filterable) {
   public customerId: number
 
   @column()
-  public departmentId: number
+  public teamId: number
 
   @column()
-  public teamId: number
+  public taskId: number
 
   @column({
     serialize: (value?: Number) => {
@@ -337,6 +338,11 @@ export default class User extends compose(BaseModel, Filterable) {
 
   @hasMany(() => ProjectTemplate)
   public projectTemplates: HasMany<typeof ProjectTemplate>
+
+  @hasMany(() => Task, {
+    foreignKey: 'initialUserId',
+  })
+  public tasks: HasMany<typeof Task>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

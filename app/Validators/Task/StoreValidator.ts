@@ -8,11 +8,10 @@ export class StoreValidator {
     title: schema.string({ trim: true }),
     taskDescription: schema.string.optional({ trim: true }),
     clientId: schema.number.optional(),
-    dueDate: schema.date.optional({ format: 'dd/MM/yyyy' }),
-    estimatedTime: schema.date.optional({ format: 'dd/MM/yyyy' }),
+    dueDate: schema.date.optional(),
+    estimatedTime: schema.date.optional(),
     taskTempateId: schema.number.optional(),
     projectId: schema.number.optional(),
-    initialUserId: schema.number.optional(),
   })
 
   public messages: CustomMessages = {
