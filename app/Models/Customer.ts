@@ -9,7 +9,7 @@ import {
   hasMany,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import { Company, User, Persona, Approval, CustomerInformation } from 'App/Models'
+import { Company, User, Persona, Approval, CustomerInformation, Task } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CustomerFilter } from './Filters'
@@ -196,6 +196,9 @@ export default class Customer extends compose(BaseModel, Filterable) {
   public userId: number
 
   @column()
+  public taskId: number
+
+  @column()
   public accountManagerId: number
 
   @column()
@@ -231,6 +234,11 @@ export default class Customer extends compose(BaseModel, Filterable) {
 
   @hasMany(() => Persona)
   public personas: HasMany<typeof Persona>
+
+  @hasMany(() => Task, {
+    foreignKey: 'clientId',
+  })
+  public tasks: HasMany<typeof Task>
 
   @hasMany(() => Approval)
   public approvals: HasMany<typeof Approval>

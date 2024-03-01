@@ -14,16 +14,16 @@ export default class TaskFilter extends BaseModelFilter {
     this.$query.whereLike('title', `%${title}%`)
   }
 
-  public task_description(task_description: string): void {
-    this.$query.whereLike('task_description', `%${task_description}%`)
+  public taskDescription(taskDescription: string): void {
+    this.$query.whereLike('task_description', `%${taskDescription}%`)
   }
 
   public createdAt(value: string) {
     const dates: string[] = value.split(',')
     const firstDate = DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').startOf('day').toSQL()
-    const seccondDate = dates[1]
+    const secondDate = dates[1]
       ? DateTime.fromFormat(dates[1], 'dd/MM/yyyy').endOf('day').toSQL()
       : DateTime.fromFormat(dates[0]!, 'dd/MM/yyyy').endOf('day').toSQL()
-    this.$query.whereBetween('created_at', [firstDate!, seccondDate!])
+    this.$query.whereBetween('created_at', [firstDate!, secondDate!])
   }
 }

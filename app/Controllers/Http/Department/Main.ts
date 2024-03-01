@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Department, Permission } from 'App/Models'
+import { Department } from 'App/Models'
 import { StoreValidator, UpdateValidator } from 'App/Validators/Department'
 
 export default class DepartmentController {
@@ -59,6 +59,7 @@ export default class DepartmentController {
     const data = await Department.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
+      .preload('users')
       .preload('permissions')
       .firstOrFail()
 
@@ -91,6 +92,7 @@ export default class DepartmentController {
     }
 
     await department.load((loader) => {
+      loader.preload('users')
       loader.preload('permissions')
     })
     return department
