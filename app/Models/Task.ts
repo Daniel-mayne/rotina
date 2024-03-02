@@ -15,27 +15,16 @@ export default class Task extends compose(BaseModel, Filterable) {
   public title: string
 
   @column()
+  public taskTitle: string
+
+  @column()
   public currentUserId: number
 
   @column()
   public clientId: number
 
-  @column.dateTime({
-    serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy')
-    },
-  })
-  public dueDate: DateTime
-
   @column()
   public approvalUserId: number
-
-  @column.dateTime({
-    serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    },
-  })
-  public estimatedTime: DateTime
 
   @column()
   public taskTempateId: number
@@ -64,22 +53,36 @@ export default class Task extends compose(BaseModel, Filterable) {
   @column()
   public sentApprovalUserId: number
 
-  @column.dateTime({
-    serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    },
-  })
-  public sent_approval_date: DateTime
+  @column()
+  public progress: number
 
   @column.dateTime({
-    serialize: (value?: DateTime) => {
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy')
+    },
+  })
+  public dueDate: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy')
     },
   })
   public approvaDate: DateTime
 
-  @column()
-  public progress: number
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+    },
+  })
+  public estimatedTime: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime | null) => {
+      return value ? value.toFormat('dd/MM/yyyy HH:mm:ss') : value
+    },
+  })
+  public sentApprovalDate: DateTime
 
   @column.dateTime({
     autoCreate: true,

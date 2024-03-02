@@ -11,7 +11,7 @@ export class UpdateValidator {
     name: schema.string.optional({ trim: true }),
     status: schema.enum.optional(['active', 'deactivated', 'deleted'] as const),
     userIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'users',
           column: 'id',
@@ -20,7 +20,7 @@ export class UpdateValidator {
       ])
     ),
     permissionIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'permissions',
           column: 'id',

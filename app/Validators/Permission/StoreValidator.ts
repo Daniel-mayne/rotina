@@ -16,7 +16,7 @@ export class StoreValidator {
       }),
     ]),
     departmentIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'departments',
           column: 'id',

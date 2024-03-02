@@ -16,7 +16,7 @@ export class StoreValidator {
       }),
     ]),
     userIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'users',
           column: 'id',
@@ -25,7 +25,7 @@ export class StoreValidator {
       ])
     ),
     permissionIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'permissions',
           column: 'id',

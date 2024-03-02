@@ -21,16 +21,14 @@ export default class PermisionsController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const { departmentIds: departmentIds, ...data } = await request.validate(StoreValidator)
+    const { departmentIds, ...data } = await request.validate(StoreValidator)
 
     const permission = await new Permission()
       .merge({ ...data, companyId: auth.user!.companyId })
       .save()
 
-    if (departmentIds) {
-      const validDepartmentIds = departmentIds.filter((id): id is number => id !== undefined)
-      await permission.related('departments').sync(validDepartmentIds)
-    }
+    if (departmentIds)
+      await permission.related('departments').sync(departmentIds.filter((id) => id))
 
     await permission.load((loader) => {
       loader.preload('departments')
@@ -51,17 +49,15 @@ export default class PermisionsController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const { departmentIds: departmentIds, ...data } = await request.validate(UpdateValidator)
+    const { departmentIds, ...data } = await request.validate(UpdateValidator)
     const permission = await Permission.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
       .firstOrFail()
     await permission.merge(data).save()
 
-    if (departmentIds) {
-      const validDepartmentIds = departmentIds.filter((id): id is number => id !== undefined)
-      await permission.related('departments').sync(validDepartmentIds)
-    }
+    if (departmentIds)
+      await permission.related('departments').sync(departmentIds.filter((id) => id))
 
     await permission.load((loader) => {
       loader.preload('departments')

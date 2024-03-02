@@ -33,9 +33,14 @@ export default class TaskController {
       .save()
     await task.load((loader) => {
       loader.preload('user')
-      loader.preload('customer')
-      loader.preload('project')
+      if (task.customer !== undefined) {
+        loader.preload('customer')
+      }
+      if (task.project !== undefined) {
+        loader.preload('project')
+      }
     })
+
     return task
   }
 

@@ -22,11 +22,7 @@ export default class DepartmentController {
   }
 
   public async store({ request, auth }: HttpContextContract) {
-    const {
-      userIds: userIds,
-      permissionIds: permissionIds,
-      ...data
-    } = await request.validate(StoreValidator)
+    const { userIds, permissionIds, ...data } = await request.validate(StoreValidator)
 
     const department = await new Department()
       .merge({
@@ -36,15 +32,8 @@ export default class DepartmentController {
       })
       .save()
 
-    if (userIds) {
-      const validUserIds = userIds.filter((id): id is number => id !== undefined)
-      await department.related('users').sync(validUserIds)
-    }
-
-    if (permissionIds) {
-      const validPermissionIds = permissionIds.filter((id): id is number => id !== undefined)
-      await department.related('permissions').sync(validPermissionIds)
-    }
+    if (userIds) await department.related('users').sync(userIds.filter((id) => id))
+    if (permissionIds) await department.related('users').sync(permissionIds.filter((id) => id))
 
     await department.load((loader) => {
       loader.preload('permissions')
@@ -67,12 +56,7 @@ export default class DepartmentController {
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
-    const {
-      userIds: userIds,
-      permissionIds: permissionIds,
-      ...data
-    } = await request.validate(UpdateValidator)
-    console.log(userIds)
+    const { userIds, permissionIds, ...data } = await request.validate(UpdateValidator)
 
     const department = await Department.query()
       .where('id', params.id)
@@ -81,15 +65,8 @@ export default class DepartmentController {
 
     await department.merge(data).save()
 
-    if (userIds) {
-      const validUserIds = userIds.filter((id): id is number => id !== undefined)
-      await department.related('users').sync(validUserIds)
-    }
-
-    if (permissionIds) {
-      const validPermissionIds = permissionIds.filter((id): id is number => id !== undefined)
-      await department.related('permissions').sync(validPermissionIds)
-    }
+    if (userIds) await department.related('users').sync(userIds.filter((id) => id))
+    if (permissionIds) await department.related('users').sync(permissionIds.filter((id) => id))
 
     await department.load((loader) => {
       loader.preload('users')
