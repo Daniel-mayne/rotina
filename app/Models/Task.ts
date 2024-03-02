@@ -3,7 +3,7 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { TaskFilter } from './Filters'
-import { Company, Customer, Project, User } from 'App/Models'
+import { Company, Customer, Project, TaskTemplate, User } from 'App/Models'
 
 export default class Task extends compose(BaseModel, Filterable) {
   public static $filter = () => TaskFilter
@@ -27,7 +27,7 @@ export default class Task extends compose(BaseModel, Filterable) {
   public approvalUserId: number
 
   @column()
-  public taskTempateId: number
+  public taskTemplateId: number
 
   @column()
   public taskDescription: string
@@ -103,6 +103,9 @@ export default class Task extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+  @belongsTo(() => TaskTemplate)
+  public taskTemplate: BelongsTo<typeof TaskTemplate>
 
   @belongsTo(() => Customer, {
     foreignKey: 'clientId',
