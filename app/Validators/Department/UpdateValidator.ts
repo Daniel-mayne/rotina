@@ -24,7 +24,6 @@ export class UpdateValidator {
         rules.exists({
           table: 'permissions',
           column: 'id',
-          where: { company_id: this.refs.companyId },
         }),
       ])
     ),

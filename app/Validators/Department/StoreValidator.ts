@@ -29,7 +29,6 @@ export class StoreValidator {
         rules.exists({
           table: 'permissions',
           column: 'id',
-          where: { company_id: this.refs.companyId },
         }),
       ])
     ),
