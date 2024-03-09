@@ -7,14 +7,6 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name').notNullable().unique()
-      table
-        .integer('company_id')
-        .notNullable()
-        .unsigned()
-        .references('id')
-        .inTable('companies')
-        .onUpdate('CASCADE')
-        .onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

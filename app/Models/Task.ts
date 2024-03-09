@@ -3,7 +3,7 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { TaskFilter } from './Filters'
-import { Company, Customer, Project, User } from 'App/Models'
+import { Company, Customer, Project, TaskTemplate, User } from 'App/Models'
 
 export default class Task extends compose(BaseModel, Filterable) {
   public static $filter = () => TaskFilter
@@ -15,30 +15,19 @@ export default class Task extends compose(BaseModel, Filterable) {
   public title: string
 
   @column()
+  public taskTitle: string
+
+  @column()
   public currentUserId: number
 
   @column()
   public clientId: number
 
-  @column.dateTime({
-    serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy')
-    },
-  })
-  public dueDate: DateTime
-
   @column()
   public approvalUserId: number
 
-  @column.dateTime({
-    serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    },
-  })
-  public estimatedTime: DateTime
-
   @column()
-  public taskTempateId: number
+  public taskTemplateId: number
 
   @column()
   public taskDescription: string
@@ -64,22 +53,36 @@ export default class Task extends compose(BaseModel, Filterable) {
   @column()
   public sentApprovalUserId: number
 
-  @column.dateTime({
-    serialize: (value?: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
-    },
-  })
-  public sent_approval_date: DateTime
+  @column()
+  public progress: number
 
   @column.dateTime({
-    serialize: (value?: DateTime) => {
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy')
+    },
+  })
+  public dueDate: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime) => {
       return value.toFormat('dd/MM/yyyy')
     },
   })
   public approvaDate: DateTime
 
-  @column()
-  public progress: number
+  @column.dateTime({
+    serialize: (value: DateTime) => {
+      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+    },
+  })
+  public estimatedTime: DateTime
+
+  @column.dateTime({
+    serialize: (value: DateTime | null) => {
+      return value ? value.toFormat('dd/MM/yyyy HH:mm:ss') : value
+    },
+  })
+  public sentApprovalDate: DateTime
 
   @column.dateTime({
     autoCreate: true,
@@ -100,6 +103,9 @@ export default class Task extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
+
+  @belongsTo(() => TaskTemplate)
+  public taskTemplate: BelongsTo<typeof TaskTemplate>
 
   @belongsTo(() => Customer, {
     foreignKey: 'clientId',

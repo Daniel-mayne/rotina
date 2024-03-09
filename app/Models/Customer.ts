@@ -196,9 +196,6 @@ export default class Customer extends compose(BaseModel, Filterable) {
   public userId: number
 
   @column()
-  public taskId: number
-
-  @column()
   public accountManagerId: number
 
   @column()

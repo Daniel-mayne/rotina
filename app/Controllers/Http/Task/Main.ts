@@ -33,9 +33,11 @@ export default class TaskController {
       .save()
     await task.load((loader) => {
       loader.preload('user')
-      loader.preload('customer')
-      loader.preload('project')
+      task.clientId && loader.preload('customer')
+      task.projectId && loader.preload('project')
+      task.taskTemplateId && loader.preload('taskTemplate')
     })
+
     return task
   }
 
@@ -46,6 +48,7 @@ export default class TaskController {
       .preload('user')
       .preload('customer')
       .preload('project')
+      .preload('taskTemplate')
       .firstOrFail()
     return data
   }
@@ -59,7 +62,10 @@ export default class TaskController {
 
     await task.merge(data).save()
     await task.load((loader) => {
-      loader.preload('user').preload('customer').preload('project')
+      loader.preload('user')
+      task.clientId && loader.preload('customer')
+      task.projectId && loader.preload('project')
+      task.taskTemplateId && loader.preload('taskTemplate')
     })
     return task
   }
