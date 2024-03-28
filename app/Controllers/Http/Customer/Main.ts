@@ -21,6 +21,7 @@ export default class CustomersController {
       .preload('users')
       .preload('company')
       .preload('accountManager')
+      .preload('atas')
       .paginate(page, limit)
   }
 
@@ -97,6 +98,7 @@ export default class CustomersController {
       .preload('users')
       .preload('company')
       .preload('accountManager')
+      .preload('atas')
       .firstOrFail()
     return data
   }
@@ -118,6 +120,7 @@ export default class CustomersController {
       loader.preload('users')
       loader.preload('company')
       loader.preload('accountManager')
+      loader.preload('atas')
     })
 
     return customer

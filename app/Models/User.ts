@@ -27,6 +27,7 @@ import {
   Department,
   Team,
   Task,
+  Ata,
 } from 'App/Models'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import CamelCaseNamingStrategy from 'App/Strategies/CamelCaseNamingStrategy'
@@ -343,6 +344,11 @@ export default class User extends compose(BaseModel, Filterable) {
     foreignKey: 'initialUserId',
   })
   public tasks: HasMany<typeof Task>
+
+  @hasMany(() => Ata, {
+    foreignKey: 'createdBy',
+  })
+  public atas: HasMany<typeof Ata>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>

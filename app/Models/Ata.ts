@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { User, Company, Customer } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
-import { ProjectFilter } from './Filters'
-import { ProjectTemplate } from 'App/Models'
+import { AtaFilter } from './Filters'
 
-export default class Project extends compose(BaseModel, Filterable) {
-  public static $filter = () => ProjectFilter
+export default class Ata extends compose(BaseModel, Filterable) {
+  public static $filter = () => AtaFilter
 
   @column({ isPrimary: true })
   public id: number
@@ -15,7 +15,7 @@ export default class Project extends compose(BaseModel, Filterable) {
   public title: string
 
   @column()
-  public projectDescription: string
+  public ataDescription: string
 
   @column()
   public companyId: number
@@ -25,19 +25,6 @@ export default class Project extends compose(BaseModel, Filterable) {
 
   @column()
   public createdBy: number
-
-  @column()
-  public projectTemplateId: number
-
-  @column()
-  public status: 'active' | 'deactivated'
-
-  @column.dateTime({
-    serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy')
-    },
-  })
-  public estimatedDelivery: DateTime
 
   @column.dateTime({
     autoCreate: true,
@@ -56,6 +43,14 @@ export default class Project extends compose(BaseModel, Filterable) {
   })
   public updatedAt: DateTime
 
-  @belongsTo(() => ProjectTemplate)
-  public projectTemplate: BelongsTo<typeof ProjectTemplate>
+  @belongsTo(() => User, {
+    foreignKey: 'createdBy',
+  })
+  public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Company)
+  public company: BelongsTo<typeof Company>
+
+  @belongsTo(() => Customer)
+  public customer: BelongsTo<typeof Customer>
 }

@@ -1,5 +1,6 @@
 export { default as ApprovalFilter } from './ApprovalFilter'
 export { default as ApprovalItemFilter } from './ApprovalItemFilter'
+export { default as AtaFilter } from './AtaFilter'
 export { default as CompanyFilter } from './CompanyFilter'
 export { default as CustomerFilter } from './CustomerFilter'
 export { default as DepartmentFilter } from './DepartmentFilter'

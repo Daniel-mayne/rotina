@@ -9,6 +9,7 @@ import {
   CustomerInformation,
   ProjectTemplate,
   Department,
+  Ata,
 } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
@@ -279,4 +280,7 @@ export default class Company extends compose(BaseModel, Filterable) {
 
   @hasMany(() => Department)
   public departments: HasMany<typeof Department>
+
+  @hasMany(() => Ata)
+  public atas: HasMany<typeof Ata>
 }

@@ -9,7 +9,7 @@ import {
   hasMany,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import { Company, User, Persona, Approval, CustomerInformation, Task } from 'App/Models'
+import { Company, User, Persona, Approval, CustomerInformation, Task, Ata } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { CustomerFilter } from './Filters'
@@ -242,6 +242,9 @@ export default class Customer extends compose(BaseModel, Filterable) {
 
   @hasMany(() => CustomerInformation)
   public customerInformations: HasMany<typeof CustomerInformation>
+
+  @hasMany(() => Ata)
+  public atas: HasMany<typeof Ata>
 
   @manyToMany(() => User)
   public users: ManyToMany<typeof User>
