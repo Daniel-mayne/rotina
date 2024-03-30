@@ -362,6 +362,9 @@ export default class User extends compose(BaseModel, Filterable) {
   @manyToMany(() => Team)
   public teams: ManyToMany<typeof Team>
 
+  @manyToMany(() => Ata)
+  public ataUsers: ManyToMany<typeof Ata>
+
   @beforeSave()
   public static async hashPassword(user: User) {
     if (user.$dirty.password) {

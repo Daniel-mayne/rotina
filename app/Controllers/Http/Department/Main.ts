@@ -33,6 +33,7 @@ export default class DepartmentController {
       .save()
 
     if (userIds) await department.related('users').sync(userIds.filter((id) => id))
+
     if (permissionIds)
       await department.related('permissions').sync(permissionIds.filter((id) => id))
 

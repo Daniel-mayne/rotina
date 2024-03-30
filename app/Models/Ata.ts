@@ -1,5 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  ManyToMany,
+  belongsTo,
+  column,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import { User, Company, Customer } from 'App/Models'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
@@ -15,7 +22,7 @@ export default class Ata extends compose(BaseModel, Filterable) {
   public title: string
 
   @column()
-  public ataDescription: string
+  public description: { [key: string]: any }
 
   @column()
   public companyId: number
@@ -46,11 +53,14 @@ export default class Ata extends compose(BaseModel, Filterable) {
   @belongsTo(() => User, {
     foreignKey: 'createdBy',
   })
-  public user: BelongsTo<typeof User>
+  public creator: BelongsTo<typeof User>
 
   @belongsTo(() => Company)
   public company: BelongsTo<typeof Company>
 
   @belongsTo(() => Customer)
   public customer: BelongsTo<typeof Customer>
+
+  @manyToMany(() => User)
+  public users: ManyToMany<typeof User>
 }

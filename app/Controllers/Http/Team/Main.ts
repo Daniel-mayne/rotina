@@ -20,7 +20,7 @@ export default class TeamsController {
       .paginate(page, limit)
   }
   public async store({ request, auth }: HttpContextContract) {
-    const { userIds: userIds, ...data } = await request.validate(StoreValidator)
+    const { userIds, ...data } = await request.validate(StoreValidator)
 
     const team = await new Team()
       .merge({
@@ -55,7 +55,7 @@ export default class TeamsController {
   }
 
   public async update({ params, auth, request }: HttpContextContract) {
-    const { userIds: userIds, ...data } = await request.validate(UpdateValidator)
+    const { userIds, ...data } = await request.validate(UpdateValidator)
 
     const team = await Team.query()
       .where('id', params.id)

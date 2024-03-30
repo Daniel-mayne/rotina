@@ -22,7 +22,7 @@ export class StoreValidator {
     theme: schema.enum.optional(['white', 'black'] as const),
     workLoad: schema.date.optional({}),
     departmentIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'departments',
           column: 'id',
@@ -31,9 +31,18 @@ export class StoreValidator {
       ])
     ),
     teamIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'teams',
+          column: 'id',
+          where: { company_id: this.refs.companyId },
+        }),
+      ])
+    ),
+    ataIds: schema.array.optional().members(
+      schema.number([
+        rules.exists({
+          table: 'atas',
           column: 'id',
           where: { company_id: this.refs.companyId },
         }),

@@ -21,15 +21,12 @@ export default class UserController {
       .preload('company')
       .preload('departments')
       .preload('teams')
+      .preload('ataUsers')
       .paginate(page, limit)
   }
 
   public async store({ request, auth, response }: HttpContextContract) {
-    const {
-      departmentIds: departmentIds,
-      teamIds: teamIds,
-      ...data
-    } = await request.validate(StoreValidator)
+    const { departmentIds, teamIds, ...data } = await request.validate(StoreValidator)
 
     if (auth.user?.type === 'user' && data.type === 'administrator') {
       return response.unauthorized({
@@ -41,15 +38,9 @@ export default class UserController {
       .merge({ ...data, companyId: auth.user!.companyId, status: 'active', theme: 'white' })
       .save()
 
-    if (departmentIds) {
-      const validDepartmentIds = departmentIds.filter((id): id is number => id !== undefined)
-      await user.related('departments').sync(validDepartmentIds)
-    }
+    if (departmentIds) await user.related('departments').sync(departmentIds.filter((id) => id))
 
-    if (teamIds) {
-      const validTeamIds = teamIds.filter((id): id is number => id !== undefined)
-      await user.related('teams').sync(validTeamIds)
-    }
+    if (teamIds) await user.related('teams').sync(teamIds.filter((id) => id))
 
     // if(auth.user!.company.stripeSubscriptionId){
     //   const userQuantity = auth.user!.company.users.filter((u) => u.status === 'active').length
@@ -74,6 +65,7 @@ export default class UserController {
       .preload('company')
       .preload('departments')
       .preload('teams')
+      .preload('ataUsers')
       .firstOrFail()
 
     const userTypeShow = auth.user?.type
@@ -87,13 +79,8 @@ export default class UserController {
   }
 
   public async update({ params, auth, request, response }: HttpContextContract) {
-    const {
-      oldPassword: oldPassword,
-      customerIds: customerIds,
-      departmentIds: departmentIds,
-      teamIds: teamIds,
-      ...data
-    } = await request.validate(UpdateValidator)
+    const { oldPassword, customerIds, departmentIds, teamIds, ataIds, ...data } =
+      await request.validate(UpdateValidator)
 
     const user = await User.query()
       .where('id', params.id)
@@ -131,20 +118,10 @@ export default class UserController {
 
     await user.merge(data).save()
 
-    if (customerIds) {
-      const validCustomerIds = customerIds.filter((id): id is number => id !== undefined)
-      await user.related('customerUsers').sync(validCustomerIds)
-    }
-
-    if (departmentIds) {
-      const validDepartmentIds = departmentIds.filter((id): id is number => id !== undefined)
-      await user.related('departments').sync(validDepartmentIds)
-    }
-
-    if (teamIds) {
-      const validTeamIds = teamIds.filter((id): id is number => id !== undefined)
-      await user.related('teams').sync(validTeamIds)
-    }
+    if (customerIds) await user.related('customerUsers').sync(customerIds.filter((id) => id))
+    if (departmentIds) await user.related('departments').sync(departmentIds.filter((id) => id))
+    if (teamIds) await user.related('teams').sync(teamIds.filter((id) => id))
+    if (ataIds) await user.related('ataUsers').sync(ataIds.filter((id) => id))
 
     if (data.status) {
       await auth.user?.load('company', (query) => query.preload('users'))
@@ -155,6 +132,7 @@ export default class UserController {
       loader.preload('company')
       loader.preload('departments')
       loader.preload('teams')
+      loader.preload('ataUsers')
     })
     return user
   }

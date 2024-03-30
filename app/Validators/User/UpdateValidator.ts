@@ -25,7 +25,7 @@ export class UpdateValidator {
     lunchStart: schema.date.optional({}),
     lunchEnd: schema.date.optional({}),
     customerIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'customers',
           column: 'id',
@@ -34,7 +34,7 @@ export class UpdateValidator {
       ])
     ),
     departmentIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'departments',
           column: 'id',
@@ -43,9 +43,18 @@ export class UpdateValidator {
       ])
     ),
     teamIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'teams',
+          column: 'id',
+          where: { company_id: this.refs.companyId },
+        }),
+      ])
+    ),
+    ataIds: schema.array.optional().members(
+      schema.number([
+        rules.exists({
+          table: 'atas',
           column: 'id',
           where: { company_id: this.refs.companyId },
         }),
