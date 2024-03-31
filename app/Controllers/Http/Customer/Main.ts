@@ -75,10 +75,7 @@ export default class CustomersController {
     const customer = await Customer.findOrFail(params.id)
     await customer.merge({ logo: updatedUrl }).save()
 
-    return {
-      updatedUrl,
-      newName,
-    }
+    return customer
   }
 
   public async show({ params, auth }: HttpContextContract) {
