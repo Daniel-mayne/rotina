@@ -15,7 +15,7 @@ Route.put('/customers/:id/restore', 'Customer/Main.restore').middleware([
   'acl:owner,administrator,user',
 ])
 
-Route.post('/customers/logo', 'Customer/Main.uploadLogo').middleware([
+Route.post('/customers/:id/logo', 'Customer/Main.uploadLogo').middleware([
   'auth',
   'acl:owner,administrator,user',
 ])

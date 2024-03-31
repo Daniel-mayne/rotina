@@ -46,7 +46,7 @@ export default class CustomersController {
     return customer
   }
 
-  public async uploadLogo({ request, auth }: HttpContextContract) {
+  public async uploadLogo({ request, auth, params }: HttpContextContract) {
     const fileData = await request.validate(StoreTemporaryValidator)
 
     const fs = require('fs')
@@ -62,28 +62,18 @@ export default class CustomersController {
     const contentType = fileData.file.headers['content-type']
     const acl = 'public'
 
-    await Drive.put(
-      `companies/${auth.user!.id}/tmp/uploads/${newName}`,
-      fs.createReadStream(fileData.file.tmpPath),
-      {
-        contentType,
-        acl,
-        'Content-Length': fileData.file.size,
-      }
-    )
+    const destinationPath = `companies/${auth.user!.companyId}/customer/${params.id}/${newName}`
 
-    const sourcePath = `companies/${auth.user!.id}/tmp/uploads/${newName}`
-    const destinationPath = `companies/${auth.user!.companyId}/user/${auth.user!.id}/${newName}`
+    await Drive.put(destinationPath, fs.createReadStream(fileData.file.tmpPath), {
+      contentType,
+      acl,
+      'Content-Length': fileData.file.size,
+    })
 
-    await Drive.move(sourcePath, destinationPath)
     const updatedUrl = `${Env.get('S3_DOMAIN')}/${destinationPath}`
 
-    const customer = await Customer.query()
-      .andWhere('companyId', auth.user!.companyId)
-      .firstOrFail()
+    const customer = await Customer.findOrFail(params.id)
     await customer.merge({ logo: updatedUrl }).save()
-
-    await Drive.delete(sourcePath)
 
     return {
       updatedUrl,
