@@ -20,7 +20,6 @@ import './projectTemplate'
 import './task'
 import './taskTemplate'
 import './team'
-import './uploadLogoCustomer'
 import './user'
 
 Route.get('/', async () => {
