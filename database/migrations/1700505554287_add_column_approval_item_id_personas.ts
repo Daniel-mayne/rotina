@@ -16,8 +16,6 @@ export default class extends BaseSchema {
   }
 
   public async down() {
-    this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn('approval_item_id')
-    })
+    this.schema.alterTable(this.tableName, (table) => {})
   }
 }
