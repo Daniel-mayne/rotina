@@ -30,10 +30,7 @@ export default class TeamsController {
       })
       .save()
 
-    if (userIds) {
-      const validUserIds = userIds.filter((id): id is number => id !== undefined)
-      await team.related('users').sync(validUserIds)
-    }
+    if (userIds) await team.related('users').sync(userIds.filter((id) => id))
 
     await team.load((loader) => {
       loader.preload('users')
@@ -64,10 +61,7 @@ export default class TeamsController {
 
     await team.merge(data).save()
 
-    if (userIds) {
-      const validUserIds = userIds.filter((id): id is number => id !== undefined)
-      await team.related('users').sync(validUserIds)
-    }
+    if (userIds) await team.related('users').sync(userIds.filter((id) => id))
 
     await team.load((loader) => {
       loader.preload('users')

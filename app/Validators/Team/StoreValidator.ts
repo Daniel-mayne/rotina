@@ -20,7 +20,7 @@ export class StoreValidator {
     logo: schema.string.optional({ trim: true }),
     description: schema.string.optional({ trim: true }),
     userIds: schema.array.optional().members(
-      schema.number.optional([
+      schema.number([
         rules.exists({
           table: 'users',
           column: 'id',
