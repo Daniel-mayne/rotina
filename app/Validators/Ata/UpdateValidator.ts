@@ -10,7 +10,7 @@ export class UpdateValidator {
   public schema = schema.create({
     title: schema.string.optional({ trim: true }),
     description: schema.object.optional().anyMembers(),
-    customerId: schema.number([
+    customerId: schema.number.optional([
       rules.exists({
         table: 'customers',
         column: 'id',
