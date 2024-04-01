@@ -2,37 +2,54 @@ import { test } from '@japa/runner'
 
 test.group('Ata', () => {
   let token
-  test('Should login success', async ({ client }) => {
+  test('Should log in successfully.', async ({ client }) => {
     const response = await client.post('/auth/login').json({
       email: 'Daniel@rotina.digital',
       password: '16022012',
     })
 
-    response.assertBody
+    const responseBody = response.body()
+    token = responseBody.token
   })
 
-  test('create', async ({ client }) => {
-    const response = await client.post('/atas').json({
-      title: 'Título da Nova Ata',
-      description: { key1: 'Ata de JAPA', key2: 'Teste' },
-      customer_id: 1,
-      created_by: 1,
-    })
+  test('Should create ATA.', async ({ client }) => {
+    const response = await client
+      .post('/atas')
+      .header('Authorization', `Bearer ${token}`)
+      .json({
+        title: 'Título da Nova Ata',
+        description: { key1: 'Ata de JAPA', key2: 'Teste' },
+        customerId: 1,
+        createdBy: 1,
+      })
 
     response.assertStatus(200)
   })
 
-  test('Get in All Atas', async ({ client }) => {
-    const response = await client.get('/atas')
+  test('Should get all ATAs.', async ({ client }) => {
+    const response = await client.get('/atas').header('Authorization', `Bearer ${token}`)
 
-    console.log(response.body())
-    console.log(response.status())
+    response.assertStatus(200)
   })
 
-  test('Get Ata by ID', async ({ client }) => {
-    const response = await client.get('/atas/1')
+  test('Should get ATA by ID', async ({ client }) => {
+    const response = await client.get('/atas/1').header('Authorization', `Bearer ${token}`)
 
-    console.log(response.body())
-    console.log(response.status())
+    response.assertStatus(200)
+  })
+
+  test('Should put ATA by ID', async ({ client }) => {
+    const response = await client
+      .put('/atas/1')
+      .header('Authorization', `Bearer ${token}`)
+      .json({
+        title: 'Título da Nova Ata update',
+        description: { key1: 'Ata de JAPA', key2: 'Teste' },
+        customerId: 1,
+        createdBy: 1,
+      })
+
+    response.assertStatus(200)
+    response.dumpBody()
   })
 })

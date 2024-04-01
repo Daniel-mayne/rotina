@@ -1,5 +1,5 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { Company } from 'App/Models'
+import { Company, Customer } from 'App/Models'
 
 export default class extends BaseSeeder {
   public async run() {
@@ -59,5 +59,14 @@ export default class extends BaseSeeder {
     //   pipeId: pipe.id,
     //   userId: user.id,
     // })
+
+    const customer = await Customer.create({
+      name: 'Rotina',
+      accountManagerId: 1,
+      createdBy: 1,
+      companyId: 1,
+      fillingPercentage: 0.0,
+      status: 'active',
+    })
   }
 }
