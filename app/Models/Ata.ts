@@ -21,7 +21,9 @@ export default class Ata extends compose(BaseModel, Filterable) {
   @column()
   public title: string
 
-  @column()
+  @column({
+    prepare: (value: any) => JSON.stringify(value),
+  })
   public description: { [key: string]: any }
 
   @column()

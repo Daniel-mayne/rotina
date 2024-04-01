@@ -69,6 +69,7 @@ export default class AtaController {
 
   public async update({ params, request, auth }: HttpContextContract) {
     const { userIds, ...data } = await request.validate(UpdateValidator)
+
     const ata = await Ata.query()
       .where('id', params.id)
       .andWhere('companyId', auth.user!.companyId)
