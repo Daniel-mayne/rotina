@@ -8,7 +8,7 @@ export class UpdateValidator {
   })
 
   public schema = schema.create({
-    title: schema.string.optional({ trim: true }),
+    title: schema.string.optional({ trim: true }, [rules.minLength(4)]),
     description: schema.object.optional().anyMembers(),
     customerId: schema.number.optional([
       rules.exists({
@@ -28,5 +28,7 @@ export class UpdateValidator {
     ),
   })
 
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'title.minLength': 'O campo {{ field }} é obrigatório.',
+  }
 }

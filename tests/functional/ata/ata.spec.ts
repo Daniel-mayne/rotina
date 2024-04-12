@@ -1,21 +1,21 @@
 import { test } from '@japa/runner'
+import { User, Ata } from 'App/Models'
 
-test.group('Ata', () => {
-  let token
-  test('Should log in successfully.', async ({ client }) => {
-    const response = await client.post('/auth/login').json({
-      email: 'Daniel@rotina.digital',
-      password: '16022012',
+let user
+
+test.group('Ata', (group) => {
+  group
+    .tap((test) => test.tags(['@ata']))
+    .setup(async () => {
+      user = await User.find(1)
     })
 
-    const responseBody = response.body()
-    token = responseBody.token
-  })
+  const route = '/atas'
 
   test('Should create ATA.', async ({ client }) => {
     const response = await client
-      .post('/atas')
-      .header('Authorization', `Bearer ${token}`)
+      .post(route)
+      .loginAs(user!)
       .json({
         title: 'Título da Nova Ata',
         description: { key1: 'Ata de JAPA', key2: 'Teste' },
@@ -26,22 +26,46 @@ test.group('Ata', () => {
     response.assertStatus(200)
   })
 
+  test('Should not create ATA with invalid data.', async ({ client }) => {
+    const response = await client
+      .post(route)
+      .loginAs(user!)
+      .json({
+        title: '', // title is required
+        description: { key1: 'Ata de JAPA', key2: 'Teste' },
+        customerId: 1,
+        createdBy: 1,
+      })
+
+    response.assertStatus(422)
+  })
+
   test('Should get all ATAs.', async ({ client }) => {
-    const response = await client.get('/atas').header('Authorization', `Bearer ${token}`)
+    const response = await client.get(route).loginAs(user!)
 
     response.assertStatus(200)
   })
 
   test('Should get ATA by ID', async ({ client }) => {
-    const response = await client.get('/atas/1').header('Authorization', `Bearer ${token}`)
+    const ata = await Ata.firstOrFail()
+
+    const response = await client.get(`${route}/${ata.id}`).loginAs(user!)
 
     response.assertStatus(200)
   })
 
-  test('Should put ATA by ID', async ({ client }) => {
+  test('Should not get ATA by invalid ID', async ({ client }) => {
+    const response = await client.get(`${route}/999999`).loginAs(user!) // assuming 999999 does not exist
+
+    response.assertStatus(404)
+  })
+
+  test('Should update ATA by ID', async ({ client }) => {
+    const ata = await Ata.firstOrFail()
+
     const response = await client
-      .put('/atas/1')
-      .header('Authorization', `Bearer ${token}`)
+      .put(`${route}/${ata.id}`)
+      .loginAs(user!)
       .json({
         title: 'Título da Nova Ata update',
         description: { key1: 'Ata de JAPA', key2: 'Teste' },
@@ -50,6 +74,21 @@ test.group('Ata', () => {
       })
 
     response.assertStatus(200)
-    response.dumpBody()
+  })
+
+  test('Should not update ATA with invalid data', async ({ client }) => {
+    const ata = await Ata.firstOrFail()
+
+    const response = await client
+      .put(`${route}/${ata.id}`)
+      .loginAs(user!)
+      .json({
+        title: '1', // title is required
+        description: { key1: 'Ata de JAPA', key2: 'Teste' },
+        customerId: 1,
+        createdBy: 1,
+      })
+
+    response.assertStatus(422)
   })
 })
