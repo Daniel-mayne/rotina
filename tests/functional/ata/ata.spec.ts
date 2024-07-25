@@ -3,10 +3,10 @@ import { User, Ata } from 'App/Models'
 
 let user
 
-test.group('Ata', (group) => {
+test.group('Test - Ata', (group) => {
   group
     .tap((test) => test.tags(['@ata']))
-    .setup(async () => {
+    .each.setup(async () => {
       user = await User.find(1)
     })
 
@@ -55,7 +55,7 @@ test.group('Ata', (group) => {
   })
 
   test('Should not get ATA by invalid ID', async ({ client }) => {
-    const response = await client.get(`${route}/999999`).loginAs(user!) // assuming 999999 does not exist
+    const response = await client.get(`${route}/999999`).loginAs(user!)
 
     response.assertStatus(404)
   })
@@ -76,14 +76,46 @@ test.group('Ata', (group) => {
     response.assertStatus(200)
   })
 
-  test('Should not update ATA with invalid data', async ({ client }) => {
+  test('Should  update ATA with  data', async ({ client }) => {
     const ata = await Ata.firstOrFail()
 
     const response = await client
       .put(`${route}/${ata.id}`)
       .loginAs(user!)
       .json({
-        title: '1', // title is required
+        title: '',
+        description: { key1: 'Ata de JAPA', key2: 'Teste' },
+        customerId: 1,
+        createdBy: 1,
+      })
+
+    response.assertStatus(200)
+  })
+
+  test('Should update ATA with  data 2', async ({ client }) => {
+    const ata = await Ata.firstOrFail()
+
+    const response = await client
+      .put(`${route}/${ata.id}`)
+      .loginAs(user!)
+      .json({
+        title: 'Titulo valido',
+        description: { key1: 'Ata de JAPA', key2: 'Teste' },
+        customerId: 1,
+        createdBy: 1,
+      })
+
+    response.assertStatus(200)
+  })
+
+  test('Should not  update ATA with invalid data', async ({ client }) => {
+    const ata = await Ata.firstOrFail()
+
+    const response = await client
+      .put(`${route}/${ata.id}`)
+      .loginAs(user!)
+      .json({
+        title: 'AB',
         description: { key1: 'Ata de JAPA', key2: 'Teste' },
         customerId: 1,
         createdBy: 1,

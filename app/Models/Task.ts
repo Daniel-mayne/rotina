@@ -57,8 +57,8 @@ export default class Task extends compose(BaseModel, Filterable) {
   public progress: number
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy')
+    serialize: (value: DateTime | null | undefined) => {
+      return value instanceof DateTime ? value.toFormat('dd/MM/yyyy') : null
     },
   })
   public dueDate: DateTime
@@ -71,8 +71,8 @@ export default class Task extends compose(BaseModel, Filterable) {
   public approvaDate: DateTime
 
   @column.dateTime({
-    serialize: (value: DateTime) => {
-      return value.toFormat('dd/MM/yyyy HH:mm:ss')
+    serialize: (value: DateTime | null | undefined) => {
+      return value instanceof DateTime ? value.toFormat('dd/MM/yyyy') : null
     },
   })
   public estimatedTime: DateTime
